@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>২০২৬ ফিফা বিশ্বকাপ | Al Amin Onik</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --fifa-dark: #0a0e1a;
+  --fifa-navy: #0d1b2e;
+  --fifa-blue: #003d7a;
+  --fifa-gold: #c9a84c;
+  --fifa-gold-light: #e8c96a;
+  --fifa-red: #c0392b;
+  --fifa-green: #27ae60;
+  --fifa-white: #f0f4ff;
+  --fifa-gray: #8892a4;
+  --fifa-border: rgba(201,168,76,0.25);
+  --cell-bg: rgba(255,255,255,0.04);
+  --header-bg: rgba(0,61,122,0.6);
+  --win-color: #27ae60;
+  --draw-color: #f39c12;
+  --lose-color: #c0392b;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--fifa-dark);
+  color: var(--fifa-white);
+  font-family: 'Barlow Condensed', 'Tiro Bangla', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background pattern */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at 20% 0%, rgba(0,61,122,0.3) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(201,168,76,0.1) 0%, transparent 60%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 60px,
+      rgba(255,255,255,0.01) 60px,
+      rgba(255,255,255,0.01) 61px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== HEADER ===== */
+.site-header {
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(180deg, rgba(0,20,50,0.95) 0%, transparent 100%);
+  border-bottom: 1px solid var(--fifa-border);
+  padding: 0 2rem;
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.2rem 0;
+}
+
+.trophy-icon {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 0 12px rgba(201,168,76,0.6));
+}
+
+.header-text h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  letter-spacing: 2px;
+  color: var(--fifa-gold-light);
+  line-height: 1;
+  text-shadow: 0 0 30px rgba(201,168,76,0.4);
+}
+
+.header-text p {
+  font-size: 0.75rem;
+  color: var(--fifa-gray);
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+.header-badge {
+  margin-left: auto;
+  background: linear-gradient(135deg, var(--fifa-blue), #002855);
+  border: 1px solid var(--fifa-border);
+  border-radius: 6px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  color: var(--fifa-gold);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.live-dot {
+  width: 7px; height: 7px;
+  background: #27ae60;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* ===== NAV TABS ===== */
+.nav-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,14,26,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid var(--fifa-border);
+  display: flex;
+  padding: 0 2rem;
+  gap: 0;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  color: var(--fifa-gray);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 1rem 1.8rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  margin-bottom: -2px;
+}
+
+.tab-btn:hover { color: var(--fifa-white); }
+.tab-btn.active {
+  color: var(--fifa-gold-light);
+  border-bottom-color: var(--fifa-gold);
+}
+
+/* ===== MAIN CONTENT ===== */
+.main {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ===== SECTION TITLE ===== */
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 3px;
+  color: var(--fifa-gold-light);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--fifa-gold), transparent);
+}
+
+/* ===== GROUP TABLES ===== */
+.groups-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.group-card {
+  background: var(--fifa-navy);
+  border: 1px solid var(--fifa-border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.group-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+
+.group-header {
+  background: linear-gradient(135deg, var(--fifa-blue), #00306a);
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  border-bottom: 1px solid var(--fifa-border);
+}
+
+.group-letter {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  color: var(--fifa-gold-light);
+  line-height: 1;
+  text-shadow: 0 0 20px rgba(201,168,76,0.5);
+}
+
+.group-label {
+  font-size: 0.7rem;
+  color: var(--fifa-gray);
+  letter-spacing: 1px;
+}
+
+.group-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.group-table thead tr {
+  background: rgba(0,0,0,0.3);
+}
+
+.group-table th {
+  padding: 0.5rem 0.6rem;
+  text-align: center;
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  color: var(--fifa-gray);
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.group-table th:first-child { text-align: left; padding-left: 0.8rem; }
+
+.group-table td {
+  padding: 0.55rem 0.6rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.15s;
+}
+
+.group-table td:first-child {
+  text-align: left;
+  padding-left: 0.8rem;
+}
+
+.group-table tbody tr:hover { background: rgba(255,255,255,0.04); }
+.group-table tbody tr:last-child td { border-bottom: none; }
+
+.team-rank {
+  display: inline-block;
+  width: 18px; height: 18px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  text-align: center;
+  line-height: 18px;
+  font-size: 0.7rem;
+  color: var(--fifa-gray);
+  margin-right: 6px;
+}
+
+.team-name-cell { font-weight: 600; }
+
+.qualified { background: rgba(39,174,96,0.08) !important; }
+.qualified td:first-child { border-left: 3px solid var(--fifa-green); }
+.third-place { background: rgba(243,156,18,0.06) !important; }
+.third-place td:first-child { border-left: 3px solid #f39c12; }
+
+.pts-cell {
+  font-weight: 700;
+  color: var(--fifa-gold-light);
+  font-size: 0.95rem;
+}
+
+.gd-pos { color: var(--fifa-green); }
+.gd-neg { color: var(--fifa-red); }
+.gd-zero { color: var(--fifa-gray); }
+
+/* ===== MATCH SCHEDULE ===== */
+.schedule-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.filter-btn {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  padding: 0.4rem 1rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  color: var(--fifa-gray);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  background: var(--fifa-blue);
+  border-color: var(--fifa-gold);
+  color: var(--fifa-white);
+}
+
+.matches-list { display: flex; flex-direction: column; gap: 0.6rem; }
+
+.match-card {
+  background: var(--fifa-navy);
+  border: 1px solid var(--fifa-border);
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  display: grid;
+  grid-template-columns: 120px 1fr auto 1fr 80px;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.2s;
+}
+
+.match-card:hover {
+  border-color: var(--fifa-gold);
+  background: rgba(0,61,122,0.2);
+}
+
+.match-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.match-num {
+  font-size: 0.65rem;
+  color: var(--fifa-gray);
+  letter-spacing: 1px;
+}
+
+.match-date {
+  font-size: 0.78rem;
+  color: var(--fifa-white);
+  font-weight: 600;
+}
+
+.match-time {
+  font-size: 0.72rem;
+  color: var(--fifa-gold);
+}
+
+.match-group-badge {
+  display: inline-block;
+  font-size: 0.6rem;
+  padding: 2px 6px;
+  background: rgba(0,61,122,0.6);
+  border: 1px solid var(--fifa-border);
+  border-radius: 3px;
+  color: var(--fifa-gold-light);
+  letter-spacing: 1px;
+  margin-top: 2px;
+  width: fit-content;
+}
+
+.match-team {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.match-team.right { text-align: right; align-items: flex-end; }
+
+.team-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--fifa-white);
+}
+
+.team-flag { font-size: 1.1rem; }
+
+.match-score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.score-box {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  width: 34px; height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem;
+  color: var(--fifa-white);
+}
+
+.score-vs {
+  font-size: 0.7rem;
+  color: var(--fifa-gray);
+  letter-spacing: 1px;
+}
+
+.score-played .score-box { 
+  border-color: var(--fifa-border);
+  background: rgba(0,61,122,0.3);
+}
+
+.match-status {
+  text-align: center;
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+}
+
+.status-upcoming { color: var(--fifa-gray); }
+.status-live { color: #2ecc71; animation: pulse 1s infinite; }
+.status-finished { color: var(--fifa-gold); }
+
+/* ===== KNOCKOUT BRACKET ===== */
+.bracket-container {
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.bracket-wrapper {
+  display: flex;
+  gap: 0;
+  min-width: 1200px;
+  align-items: flex-start;
+}
+
+.bracket-round {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+}
+
+.round-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  color: var(--fifa-gold);
+  text-align: center;
+  padding: 0.8rem;
+  background: rgba(0,61,122,0.3);
+  border: 1px solid var(--fifa-border);
+  border-radius: 6px 6px 0 0;
+  margin-bottom: 0.5rem;
+}
+
+.round-matches {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex: 1;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.bracket-match {
+  background: var(--fifa-navy);
+  border: 1px solid var(--fifa-border);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.bracket-match:hover {
+  border-color: var(--fifa-gold);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.bracket-team {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.78rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.15s;
+}
+
+.bracket-team:last-child { border-bottom: none; }
+.bracket-team:hover { background: rgba(255,255,255,0.04); }
+
+.bracket-team-name { 
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bracket-score {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  min-width: 24px;
+  text-align: right;
+  color: var(--fifa-gold-light);
+}
+
+.bracket-match-date {
+  text-align: center;
+  font-size: 0.6rem;
+  color: var(--fifa-gray);
+  padding: 3px;
+  background: rgba(0,0,0,0.2);
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+.bracket-winner { background: rgba(39,174,96,0.12) !important; font-weight: 700; }
+
+/* ===== LOADING STATE ===== */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--fifa-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  z-index: 9999;
+  transition: opacity 0.5s;
+}
+
+.loading-overlay.hidden { opacity: 0; pointer-events: none; }
+
+.loading-trophy {
+  font-size: 4rem;
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.loading-text {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 3px;
+  color: var(--fifa-gold);
+  font-size: 1.1rem;
+}
+
+.loading-bar {
+  width: 200px;
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--fifa-gold), var(--fifa-gold-light));
+  animation: load 1.5s infinite;
+}
+
+@keyframes load {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+/* ===== DATA SOURCE INFO ===== */
+.data-source-info {
+  background: rgba(0,61,122,0.2);
+  border: 1px solid var(--fifa-border);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: var(--fifa-gray);
+}
+
+.data-source-info strong { color: var(--fifa-gold-light); }
+
+.refresh-btn {
+  margin-left: auto;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  padding: 0.4rem 1rem;
+  background: var(--fifa-blue);
+  border: 1px solid var(--fifa-border);
+  border-radius: 5px;
+  color: var(--fifa-white);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.refresh-btn:hover { background: #004d9a; }
+
+/* ===== THIRD PLACE ===== */
+.third-place-section {
+  background: var(--fifa-navy);
+  border: 1px solid var(--fifa-border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.third-place-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  color: #f39c12;
+  margin-bottom: 1rem;
+}
+
+.third-place-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.5rem;
+}
+
+.third-team-card {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(243,156,18,0.2);
+  border-radius: 6px;
+  padding: 0.6rem;
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.third-team-pts {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem;
+  color: #f39c12;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .main { padding: 1rem; }
+  
+  .match-card {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .groups-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== ERROR STATE ===== */
+.error-box {
+  background: rgba(192,57,43,0.1);
+  border: 1px solid rgba(192,57,43,0.4);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--fifa-white);
+}
+
+.error-box h3 { color: #e74c3c; margin-bottom: 0.5rem; }
+
+/* ===== STATS ===== */
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, var(--fifa-navy), rgba(0,61,122,0.3));
+  border: 1px solid var(--fifa-border);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.2rem;
+  color: var(--fifa-gold-light);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.68rem;
+  letter-spacing: 1px;
+  color: var(--fifa-gray);
+  margin-top: 4px;
+}
+</style>
+</head>
+<body>
+
+<!-- Loading -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-trophy">🏆</div>
+  <div class="loading-text">ডেটা লোড হচ্ছে...</div>
+  <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+</div>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="trophy-icon">🏆</div>
+    <div class="header-text">
+      <h1>FIFA WORLD CUP 2026</h1>
+      <p>২০২৬ ফিফা বিশ্বকাপ টুর্নামেন্ট সূচি • Al Amin Onik</p>
+    </div>
+    <div class="header-badge">
+      <div class="live-dot"></div>
+      <span>LIVE TRACKER</span>
+    </div>
+  </div>
+</header>
+
+<!-- Navigation -->
+<nav class="nav-tabs">
+  <button class="tab-btn active" onclick="switchTab('schedule')">📅 ম্যাচ সূচি</button>
+  <button class="tab-btn" onclick="switchTab('groups')">📊 গ্রুপ টেবিল</button>
+  <button class="tab-btn" onclick="switchTab('knockout')">🏅 নকআউট</button>
+  <button class="tab-btn" onclick="switchTab('thirdplace')">🥉 তৃতীয় স্থান</button>
+</nav>
+
+<!-- Main Content -->
+<main class="main">
+
+  <!-- Data Source Info -->
+  <div class="data-source-info">
+    <span>📡</span>
+    <span>ডেটা সোর্স: <strong id="dataSourceLabel">লোড হচ্ছে...</strong></span>
+    <span id="lastUpdated" style="margin-left:auto;margin-right:1rem;font-size:0.72rem;"></span>
+    <button class="refresh-btn" onclick="loadData()">🔄 রিফ্রেশ</button>
+  </div>
+
+  <!-- SCHEDULE TAB -->
+  <div id="tab-schedule" class="tab-content active">
+    <div class="stat-cards" id="statCards"></div>
+    <h2 class="section-title">ম্যাচ সূচি</h2>
+    <div class="schedule-filters" id="scheduleFilters"></div>
+    <div class="matches-list" id="matchesList"></div>
+  </div>
+
+  <!-- GROUPS TAB -->
+  <div id="tab-groups" class="tab-content">
+    <h2 class="section-title">গ্রুপ পর্যায়</h2>
+    <div class="groups-grid" id="groupsGrid"></div>
+  </div>
+
+  <!-- KNOCKOUT TAB -->
+  <div id="tab-knockout" class="tab-content">
+    <h2 class="section-title">নকআউট রাউন্ড</h2>
+    <div class="bracket-container">
+      <div class="bracket-wrapper" id="knockoutBracket"></div>
+    </div>
+  </div>
+
+  <!-- THIRD PLACE TAB -->
+  <div id="tab-thirdplace" class="tab-content">
+    <h2 class="section-title">তৃতীয় স্থান নির্ধারণী</h2>
+    <div id="thirdPlaceContent"></div>
+  </div>
+
+</main>
+
+<script>
+// ============================================================
+//  CONFIG — Google Sheets থেকে ডেটা নেওয়ার জন্য এখানে পরিবর্তন করো
+// ============================================================
+const CONFIG = {
+  // Google Sheets Published CSV URL
+  // File → Share → Publish to web → CSV format → link paste করো
+  SHEETS_CSV_URL: '',  // এখানে তোমার Google Sheets CSV URL দাও
+  
+  // Fallback: Static data (Sheets URL না থাকলে এটা ব্যবহার হবে)
+  USE_STATIC_FALLBACK: true,
+};
+
+// ============================================================
+//  STATIC DATA (Excel থেকে এক্সট্র্যাক্ট করা)
+// ============================================================
+const STATIC_DATA = {
+  groups: {
+    'A': {
+      teams: [
+        { name: '১৫. মেক্সিকো', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '২৫. কোরিয়া প্রজাতন্ত্র', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৪১. চেক প্রজাতন্ত্র', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৬০. দক্ষিণ আফ্রিকা', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+      ]
+    },
+    'B': {
+      teams: [
+        { name: '১৯. সুইজারল্যান্ড', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৩০. কানাডা', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৫৫. কাতার', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৬৫. বসনিয়া ও হার্জেগোভিনা', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+      ]
+    },
+    'C': {
+      teams: [
+        { name: '৬. ব্রাজিল', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৮. মরক্কো', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৪৩. স্কটল্যান্ড', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৮৩. হাইতি', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+      ]
+    },
+    'D': {
+      teams: [
+        { name: '১৬. যুক্তরাষ্ট্র', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '২২. তুরস্ক', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '২৭. অস্ট্রেলিয়া', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৪০. প্যারাগুয়ে', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+      ]
+    },
+    'E': {
+      teams: [
+        { name: '১০. জার্মানি', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '২৩. ইকুয়েডর', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৩৪. আইভরি কোস্ট', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৮২. কুরাসাও', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+      ]
+    },
+    'F': {
+      teams: [
+        { name: '৭. নেদারল্যান্ডস', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '১৮. জাপান', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৩৮. সুইডেন', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৪৪. তিউনিসিয়া', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+      ]
+    },
+    'G': {
+      teams: [
+        { name: '৯. বেলজিয়াম', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '২১. ইরান', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '২৯. মিশর', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৮৫. নিউজিল্যান্ড', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+      ]
+    },
+    'H': {
+      teams: [
+        { name: '২. স্পেন', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '১৭. উরুগুয়ে', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৬১. সৌদি আরব', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৬৯. কেপ ভার্দে', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+      ]
+    },
+    'I': {
+      teams: [
+        { name: '১. ফ্রান্স', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '১৪. সেনেগাল', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৩১. নরওয়ে', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৫৭. ইরাক', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+      ]
+    },
+    'J': {
+      teams: [
+        { name: '৩. আর্জেন্টিনা', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '২৪. অস্ট্রিয়া', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '২৮. আলজেরিয়া', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৬৩. জর্ডান', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+      ]
+    },
+    'K': {
+      teams: [
+        { name: '৫. পর্তুগাল', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '১৩. কলম্বিয়া', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৪৬. ডিআর কঙ্গো', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৫০. উজবেকিস্তান', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+      ]
+    },
+    'L': {
+      teams: [
+        { name: '৪. ইংল্যান্ড', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '১১. ক্রোয়েশিয়া', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৩৩. পানামা', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+        { name: '৭৪. ঘানা', pl:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 },
+      ]
+    },
+  },
+
+  matches: [
+    {id:1, day:'শুক্র', date:'জুন 12, 2026', time:'01:00', team1:'১৫. মেক্সিকো', team2:'৬০. দক্ষিণ আফ্রিকা', group:'A', s1:null, s2:null},
+    {id:2, day:'শুক্র', date:'জুন 12, 2026', time:'08:00', team1:'২৫. কোরিয়া প্রজাতন্ত্র', team2:'৪১. চেক প্রজাতন্ত্র', group:'A', s1:null, s2:null},
+    {id:3, day:'শনি', date:'জুন 13, 2026', time:'01:00', team1:'৩০. কানাডা', team2:'৬৫. বসনিয়া ও হার্জেগোভিনা', group:'B', s1:null, s2:null},
+    {id:4, day:'শনি', date:'জুন 13, 2026', time:'07:00', team1:'১৬. যুক্তরাষ্ট্র', team2:'৪০. প্যারাগুয়ে', group:'D', s1:null, s2:null},
+    {id:5, day:'রবি', date:'জুন 14, 2026', time:'07:00', team1:'৮৩. হাইতি', team2:'৪৩. স্কটল্যান্ড', group:'C', s1:null, s2:null},
+    {id:6, day:'রবি', date:'জুন 14, 2026', time:'10:00', team1:'২৭. অস্ট্রেলিয়া', team2:'২২. তুরস্ক', group:'D', s1:null, s2:null},
+    {id:7, day:'রবি', date:'জুন 14, 2026', time:'04:00', team1:'৬. ব্রাজিল', team2:'৮. মরক্কো', group:'C', s1:null, s2:null},
+    {id:8, day:'রবি', date:'জুন 14, 2026', time:'01:00', team1:'৫৫. কাতার', team2:'১৯. সুইজারল্যান্ড', group:'B', s1:null, s2:null},
+    {id:9, day:'সোম', date:'জুন 15, 2026', time:'05:00', team1:'৩৪. আইভরি কোস্ট', team2:'২৩. ইকুয়েডর', group:'E', s1:null, s2:null},
+    {id:10, day:'রবি', date:'জুন 14, 2026', time:'23:00', team1:'১০. জার্মানি', team2:'৮২. কুরাসাও', group:'E', s1:null, s2:null},
+    {id:11, day:'সোম', date:'জুন 15, 2026', time:'02:00', team1:'৭. নেদারল্যান্ডস', team2:'১৮. জাপান', group:'F', s1:null, s2:null},
+    {id:12, day:'সোম', date:'জুন 15, 2026', time:'08:00', team1:'৩৮. সুইডেন', team2:'৪৪. তিউনিসিয়া', group:'F', s1:null, s2:null},
+    {id:13, day:'মঙ্গল', date:'জুন 16, 2026', time:'04:00', team1:'৬১. সৌদি আরব', team2:'১৭. উরুগুয়ে', group:'H', s1:null, s2:null},
+    {id:14, day:'সোম', date:'জুন 15, 2026', time:'22:00', team1:'২. স্পেন', team2:'৬৯. কেপ ভার্দে', group:'H', s1:null, s2:null},
+    {id:15, day:'মঙ্গল', date:'জুন 16, 2026', time:'07:00', team1:'২১. ইরান', team2:'৮৫. নিউজিল্যান্ড', group:'G', s1:null, s2:null},
+    {id:16, day:'মঙ্গল', date:'জুন 16, 2026', time:'01:00', team1:'৯. বেলজিয়াম', team2:'২৯. মিশর', group:'G', s1:null, s2:null},
+    {id:17, day:'বুধ', date:'জুন 17, 2026', time:'01:00', team1:'১. ফ্রান্স', team2:'১৪. সেনেগাল', group:'I', s1:null, s2:null},
+    {id:18, day:'বুধ', date:'জুন 17, 2026', time:'04:00', team1:'৫৭. ইরাক', team2:'৩১. নরওয়ে', group:'I', s1:null, s2:null},
+    {id:19, day:'বুধ', date:'জুন 17, 2026', time:'07:00', team1:'৩. আর্জেন্টিনা', team2:'২৮. আলজেরিয়া', group:'J', s1:null, s2:null},
+    {id:20, day:'বুধ', date:'জুন 17, 2026', time:'10:00', team1:'২৪. অস্ট্রিয়া', team2:'৬৩. জর্ডান', group:'J', s1:null, s2:null},
+    {id:21, day:'বৃহঃ', date:'জুন 18, 2026', time:'05:00', team1:'৭৪. ঘানা', team2:'৩৩. পানামা', group:'L', s1:null, s2:null},
+    {id:22, day:'বৃহঃ', date:'জুন 18, 2026', time:'02:00', team1:'৪. ইংল্যান্ড', team2:'১১. ক্রোয়েশিয়া', group:'L', s1:null, s2:null},
+    {id:23, day:'বুধ', date:'জুন 17, 2026', time:'23:00', team1:'৫. পর্তুগাল', team2:'৪৬. ডিআর কঙ্গো', group:'K', s1:null, s2:null},
+    {id:24, day:'বৃহঃ', date:'জুন 18, 2026', time:'08:00', team1:'৫০. উজবেকিস্তান', team2:'১৩. কলম্বিয়া', group:'K', s1:null, s2:null},
+    {id:25, day:'বৃহঃ', date:'জুন 18, 2026', time:'22:00', team1:'৪১. চেক প্রজাতন্ত্র', team2:'৬০. দক্ষিণ আফ্রিকা', group:'A', s1:null, s2:null},
+    {id:26, day:'শুক্র', date:'জুন 19, 2026', time:'01:00', team1:'১৯. সুইজারল্যান্ড', team2:'৬৫. বসনিয়া ও হার্জেগোভিনা', group:'B', s1:null, s2:null},
+    {id:27, day:'শুক্র', date:'জুন 19, 2026', time:'04:00', team1:'৩০. কানাডা', team2:'৫৫. কাতার', group:'B', s1:null, s2:null},
+    {id:28, day:'শুক্র', date:'জুন 19, 2026', time:'07:00', team1:'১৫. মেক্সিকো', team2:'২৫. কোরিয়া প্রজাতন্ত্র', group:'A', s1:null, s2:null},
+    {id:29, day:'শনি', date:'জুন 20, 2026', time:'06:30', team1:'৬. ব্রাজিল', team2:'৮৩. হাইতি', group:'C', s1:null, s2:null},
+    {id:30, day:'শনি', date:'জুন 20, 2026', time:'04:00', team1:'৪৩. স্কটল্যান্ড', team2:'৮. মরক্কো', group:'C', s1:null, s2:null},
+    {id:31, day:'শনি', date:'জুন 20, 2026', time:'09:00', team1:'১৬. যুক্তরাষ্ট্র', team2:'২৭. অস্ট্রেলিয়া', group:'D', s1:null, s2:null},
+    {id:32, day:'শনি', date:'জুন 20, 2026', time:'01:00', team1:'২২. তুরস্ক', team2:'৪০. প্যারাগুয়ে', group:'D', s1:null, s2:null},
+    {id:33, day:'রবি', date:'জুন 21, 2026', time:'02:00', team1:'১০. জার্মানি', team2:'৩৪. আইভরি কোস্ট', group:'E', s1:null, s2:null},
+    {id:34, day:'রবি', date:'জুন 21, 2026', time:'06:00', team1:'২৩. ইকুয়েডর', team2:'৮২. কুরাসাও', group:'E', s1:null, s2:null},
+    {id:35, day:'শনি', date:'জুন 20, 2026', time:'23:00', team1:'৭. নেদারল্যান্ডস', team2:'৩৮. সুইডেন', group:'F', s1:null, s2:null},
+    {id:36, day:'রবি', date:'জুন 21, 2026', time:'10:00', team1:'৪৪. তিউনিসিয়া', team2:'১৮. জাপান', group:'F', s1:null, s2:null},
+    {id:37, day:'সোম', date:'জুন 22, 2026', time:'04:00', team1:'১৭. উরুগুয়ে', team2:'৬৯. কেপ ভার্দে', group:'H', s1:null, s2:null},
+    {id:38, day:'রবি', date:'জুন 21, 2026', time:'22:00', team1:'২. স্পেন', team2:'৬১. সৌদি আরব', group:'H', s1:null, s2:null},
+    {id:39, day:'সোম', date:'জুন 22, 2026', time:'01:00', team1:'৯. বেলজিয়াম', team2:'২১. ইরান', group:'G', s1:null, s2:null},
+    {id:40, day:'সোম', date:'জুন 22, 2026', time:'07:00', team1:'৮৫. নিউজিল্যান্ড', team2:'২৯. মিশর', group:'G', s1:null, s2:null},
+    {id:41, day:'মঙ্গল', date:'জুন 23, 2026', time:'06:00', team1:'৩১. নরওয়ে', team2:'১৪. সেনেগাল', group:'I', s1:null, s2:null},
+    {id:42, day:'মঙ্গল', date:'জুন 23, 2026', time:'02:00', team1:'১. ফ্রান্স', team2:'৫৭. ইরাক', group:'I', s1:null, s2:null},
+    {id:43, day:'সোম', date:'জুন 22, 2026', time:'23:00', team1:'৩. আর্জেন্টিনা', team2:'২৪. অস্ট্রিয়া', group:'J', s1:null, s2:null},
+    {id:44, day:'মঙ্গল', date:'জুন 23, 2026', time:'09:00', team1:'৬৩. জর্ডান', team2:'২৮. আলজেরিয়া', group:'J', s1:null, s2:null},
+    {id:45, day:'বুধ', date:'জুন 24, 2026', time:'02:00', team1:'৪. ইংল্যান্ড', team2:'৭৪. ঘানা', group:'L', s1:null, s2:null},
+    {id:46, day:'বুধ', date:'জুন 24, 2026', time:'05:00', team1:'৩৩. পানামা', team2:'১১. ক্রোয়েশিয়া', group:'L', s1:null, s2:null},
+    {id:47, day:'মঙ্গল', date:'জুন 23, 2026', time:'23:00', team1:'৫. পর্তুগাল', team2:'৫০. উজবেকিস্তান', group:'K', s1:null, s2:null},
+    {id:48, day:'বুধ', date:'জুন 24, 2026', time:'08:00', team1:'১৩. কলম্বিয়া', team2:'৪৬. ডিআর কঙ্গো', group:'K', s1:null, s2:null},
+    {id:49, day:'বৃহঃ', date:'জুন 25, 2026', time:'04:00', team1:'৪৩. স্কটল্যান্ড', team2:'৬. ব্রাজিল', group:'C', s1:null, s2:null},
+    {id:50, day:'বৃহঃ', date:'জুন 25, 2026', time:'04:00', team1:'৮. মরক্কো', team2:'৮৩. হাইতি', group:'C', s1:null, s2:null},
+    {id:51, day:'বৃহঃ', date:'জুন 25, 2026', time:'01:00', team1:'১৯. সুইজারল্যান্ড', team2:'৩০. কানাডা', group:'B', s1:null, s2:null},
+    {id:52, day:'বৃহঃ', date:'জুন 25, 2026', time:'01:00', team1:'৬৫. বসনিয়া ও হার্জেগোভিনা', team2:'৫৫. কাতার', group:'B', s1:null, s2:null},
+    {id:53, day:'বৃহঃ', date:'জুন 25, 2026', time:'07:00', team1:'৪১. চেক প্রজাতন্ত্র', team2:'১৫. মেক্সিকো', group:'A', s1:null, s2:null},
+    {id:54, day:'বৃহঃ', date:'জুন 25, 2026', time:'07:00', team1:'৬০. দক্ষিণ আফ্রিকা', team2:'২৫. কোরিয়া প্রজাতন্ত্র', group:'A', s1:null, s2:null},
+    {id:55, day:'শুক্র', date:'জুন 26, 2026', time:'02:00', team1:'৮২. কুরাসাও', team2:'৩৪. আইভরি কোস্ট', group:'E', s1:null, s2:null},
+    {id:56, day:'শুক্র', date:'জুন 26, 2026', time:'02:00', team1:'২৩. ইকুয়েডর', team2:'১০. জার্মানি', group:'E', s1:null, s2:null},
+    {id:57, day:'শুক্র', date:'জুন 26, 2026', time:'05:00', team1:'১৮. জাপান', team2:'৩৮. সুইডেন', group:'F', s1:null, s2:null},
+    {id:58, day:'শুক্র', date:'জুন 26, 2026', time:'05:00', team1:'৪৪. তিউনিসিয়া', team2:'৭. নেদারল্যান্ডস', group:'F', s1:null, s2:null},
+    {id:59, day:'শুক্র', date:'জুন 26, 2026', time:'08:00', team1:'২২. তুরস্ক', team2:'১৬. যুক্তরাষ্ট্র', group:'D', s1:null, s2:null},
+    {id:60, day:'শুক্র', date:'জুন 26, 2026', time:'08:00', team1:'৪০. প্যারাগুয়ে', team2:'২৭. অস্ট্রেলিয়া', group:'D', s1:null, s2:null},
+    {id:61, day:'শনি', date:'জুন 27, 2026', time:'01:00', team1:'৩১. নরওয়ে', team2:'১. ফ্রান্স', group:'I', s1:null, s2:null},
+    {id:62, day:'শনি', date:'জুন 27, 2026', time:'01:00', team1:'১৪. সেনেগাল', team2:'৫৭. ইরাক', group:'I', s1:null, s2:null},
+    {id:63, day:'শনি', date:'জুন 27, 2026', time:'09:00', team1:'২৯. মিশর', team2:'২১. ইরান', group:'G', s1:null, s2:null},
+    {id:64, day:'শনি', date:'জুন 27, 2026', time:'09:00', team1:'৮৫. নিউজিল্যান্ড', team2:'৯. বেলজিয়াম', group:'G', s1:null, s2:null},
+    {id:65, day:'শনি', date:'জুন 27, 2026', time:'06:00', team1:'৬৯. কেপ ভার্দে', team2:'৬১. সৌদি আরব', group:'H', s1:null, s2:null},
+    {id:66, day:'শনি', date:'জুন 27, 2026', time:'06:00', team1:'১৭. উরুগুয়ে', team2:'২. স্পেন', group:'H', s1:null, s2:null},
+    {id:67, day:'রবি', date:'জুন 28, 2026', time:'03:00', team1:'৩৩. পানামা', team2:'৪. ইংল্যান্ড', group:'L', s1:null, s2:null},
+    {id:68, day:'রবি', date:'জুন 28, 2026', time:'03:00', team1:'১১. ক্রোয়েশিয়া', team2:'৭৪. ঘানা', group:'L', s1:null, s2:null},
+    {id:69, day:'রবি', date:'জুন 28, 2026', time:'08:00', team1:'২৮. আলজেরিয়া', team2:'২৪. অস্ট্রিয়া', group:'J', s1:null, s2:null},
+    {id:70, day:'রবি', date:'জুন 28, 2026', time:'08:00', team1:'৬৩. জর্ডান', team2:'৩. আর্জেন্টিনা', group:'J', s1:null, s2:null},
+    {id:71, day:'রবি', date:'জুন 28, 2026', time:'05:30', team1:'১৩. কলম্বিয়া', team2:'৫. পর্তুগাল', group:'K', s1:null, s2:null},
+    {id:72, day:'রবি', date:'জুন 28, 2026', time:'05:30', team1:'৪৬. ডিআর কঙ্গো', team2:'৫০. উজবেকিস্তান', group:'K', s1:null, s2:null},
+  ],
+
+  knockout: {
+    'শেষ বত্রিশ': [
+      {date:'জুন 29, 2026', time:'01:00', slot1:'1A', slot2:'3rd C/D/F/G/H', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুন 29, 2026', time:'23:00', slot1:'1C', slot2:'2F', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুন 30, 2026', time:'02:30', slot1:'1E', slot2:'3rd A/B/C/D/F', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুন 30, 2026', time:'07:00', slot1:'1F', slot2:'2C', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুন 30, 2026', time:'23:00', slot1:'2E', slot2:'2I', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 1, 2026', time:'03:00', slot1:'1I', slot2:'3rd C/D/F/G/H', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 1, 2026', time:'07:00', slot1:'1A', slot2:'3rd C/E/F/H/I', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 1, 2026', time:'22:00', slot1:'1L', slot2:'3rd E/H/I/J/K', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 2, 2026', time:'02:00', slot1:'1G', slot2:'3rd A/E/H/I/J', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 2, 2026', time:'06:00', slot1:'1D', slot2:'3rd B/E/F/I/J', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 3, 2026', time:'01:00', slot1:'1H', slot2:'2J', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 3, 2026', time:'05:00', slot1:'2K', slot2:'2L', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 3, 2026', time:'09:00', slot1:'2D', slot2:'2G', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 4, 2026', time:'00:00', slot1:'2D', slot2:'2G', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 4, 2026', time:'04:00', slot1:'1J', slot2:'2H', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 4, 2026', time:'07:30', slot1:'1K', slot2:'3rd D/E/I/J/L', t1:null, t2:null, s1:null, s2:null},
+    ],
+    'শেষ ষোলো': [
+      {date:'জুলাই 5, 2026', time:'03:00', slot1:'W73', slot2:'W74', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 4, 2026', time:'23:00', slot1:'W74', slot2:'W75', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 6, 2026', time:'02:00', slot1:'W76', slot2:'W77', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 6, 2026', time:'06:00', slot1:'W78', slot2:'W79', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 7, 2026', time:'01:00', slot1:'W80', slot2:'W81', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 7, 2026', time:'06:00', slot1:'W82', slot2:'W83', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 7, 2026', time:'22:00', slot1:'W84', slot2:'W85', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 8, 2026', time:'02:00', slot1:'W86', slot2:'W87', t1:null, t2:null, s1:null, s2:null},
+    ],
+    'কোয়ার্টার ফাইনাল': [
+      {date:'জুলাই 10, 2026', time:'02:00', slot1:'W89', slot2:'W90', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 11, 2026', time:'01:00', slot1:'W91', slot2:'W92', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 12, 2026', time:'03:00', slot1:'W93', slot2:'W94', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 12, 2026', time:'07:00', slot1:'W95', slot2:'W96', t1:null, t2:null, s1:null, s2:null},
+    ],
+    'সেমি ফাইনাল': [
+      {date:'জুলাই 15, 2026', time:'01:00', slot1:'W97', slot2:'W98', t1:null, t2:null, s1:null, s2:null},
+      {date:'জুলাই 16, 2026', time:'01:00', slot1:'W99', slot2:'W100', t1:null, t2:null, s1:null, s2:null},
+    ],
+    'ফাইনাল': [
+      {date:'জুলাই 20, 2026', time:'01:00', slot1:'SF Winner 1', slot2:'SF Winner 2', t1:null, t2:null, s1:null, s2:null},
+    ],
+  }
+};
+
+// ============================================================
+//  STATE
+// ============================================================
+let appData = null;
+let activeGroupFilter = 'ALL';
+
+// ============================================================
+//  LOAD DATA
+// ============================================================
+async function loadData() {
+  try {
+    if (CONFIG.SHEETS_CSV_URL) {
+      document.getElementById('dataSourceLabel').textContent = 'Google Sheets থেকে লোড হচ্ছে...';
+      const resp = await fetch(CONFIG.SHEETS_CSV_URL);
+      if (resp.ok) {
+        const csv = await resp.text();
+        appData = parseGoogleSheetsCSV(csv);
+        document.getElementById('dataSourceLabel').innerHTML = '<strong style="color:var(--fifa-green)">✓ Google Sheets (Live)</strong>';
+      } else {
+        throw new Error('Sheets fetch failed');
+      }
+    } else {
+      throw new Error('No URL configured');
+    }
+  } catch(e) {
+    appData = JSON.parse(JSON.stringify(STATIC_DATA));
+    document.getElementById('dataSourceLabel').innerHTML = 
+      CONFIG.SHEETS_CSV_URL 
+        ? '<strong style="color:var(--fifa-red)">✗ Sheets ব্যর্থ — Static Data ব্যবহার হচ্ছে</strong>'
+        : '<strong style="color:var(--fifa-gold)">Static Data (Google Sheets URL সেট করুন)</strong>';
+  }
+
+  // Calculate group standings from match results
+  calculateGroupStandings();
+  document.getElementById('lastUpdated').textContent = 'আপডেট: ' + new Date().toLocaleTimeString('bn-BD');
+  renderAll();
+  hideLoading();
+}
+
+function parseGoogleSheetsCSV(csv) {
+  // Parse Google Sheets CSV format
+  // Expected columns: match_id, s1, s2 (score1, score2)
+  const lines = csv.trim().split('\n');
+  const data = JSON.parse(JSON.stringify(STATIC_DATA));
+  
+  for(let i = 1; i < lines.length; i++) {
+    const cols = lines[i].split(',');
+    const matchId = parseInt(cols[0]);
+    const s1 = cols[1] !== '' && cols[1] !== undefined ? parseInt(cols[1]) : null;
+    const s2 = cols[2] !== '' && cols[2] !== undefined ? parseInt(cols[2]) : null;
+    
+    const match = data.matches.find(m => m.id === matchId);
+    if(match) { match.s1 = s1; match.s2 = s2; }
+  }
+  return data;
+}
+
+// ============================================================
+//  CALCULATE GROUP STANDINGS FROM MATCH RESULTS
+// ============================================================
+function calculateGroupStandings() {
+  // Reset all team stats
+  for(const grp in appData.groups) {
+    for(const team of appData.groups[grp].teams) {
+      team.pl = 0; team.w = 0; team.d = 0; team.l = 0;
+      team.gf = 0; team.ga = 0; team.pts = 0;
+    }
+  }
+
+  // Process group matches
+  for(const m of appData.matches) {
+    if(m.s1 === null || m.s2 === null) continue;
+    if(!m.group) continue;
+
+    const grp = appData.groups[m.group];
+    if(!grp) continue;
+
+    const t1 = grp.teams.find(t => t.name === m.team1);
+    const t2 = grp.teams.find(t => t.name === m.team2);
+    if(!t1 || !t2) continue;
+
+    t1.pl++; t2.pl++;
+    t1.gf += m.s1; t1.ga += m.s2;
+    t2.gf += m.s2; t2.ga += m.s1;
+
+    if(m.s1 > m.s2) { t1.w++; t1.pts+=3; t2.l++; }
+    else if(m.s1 < m.s2) { t2.w++; t2.pts+=3; t1.l++; }
+    else { t1.d++; t1.pts++; t2.d++; t2.pts++; }
+  }
+
+  // Sort each group
+  for(const grp in appData.groups) {
+    appData.groups[grp].teams.sort((a, b) => {
+      if(b.pts !== a.pts) return b.pts - a.pts;
+      const gdB = b.gf - b.ga, gdA = a.gf - a.ga;
+      if(gdB !== gdA) return gdB - gdA;
+      return b.gf - a.gf;
+    });
+  }
+}
+
+// ============================================================
+//  RENDER
+// ============================================================
+function renderAll() {
+  renderStats();
+  renderScheduleFilters();
+  renderSchedule('ALL');
+  renderGroups();
+  renderKnockout();
+  renderThirdPlace();
+}
+
+function renderStats() {
+  const total = appData.matches.length;
+  const played = appData.matches.filter(m => m.s1 !== null).length;
+  const totalGoals = appData.matches.reduce((sum, m) => sum + (m.s1||0) + (m.s2||0), 0);
+  const upcoming = total - played;
+
+  document.getElementById('statCards').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${played}</div><div class="stat-label">খেলা হয়েছে</div></div>
+    <div class="stat-card"><div class="stat-num">${upcoming}</div><div class="stat-label">বাকি ম্যাচ</div></div>
+    <div class="stat-card"><div class="stat-num">${totalGoals}</div><div class="stat-label">মোট গোল</div></div>
+    <div class="stat-card"><div class="stat-num">${played ? (totalGoals/played).toFixed(1) : '0'}</div><div class="stat-label">গড় গোল/ম্যাচ</div></div>
+    <div class="stat-card"><div class="stat-num">12</div><div class="stat-label">মোট গ্রুপ</div></div>
+    <div class="stat-card"><div class="stat-num">48</div><div class="stat-label">মোট দল</div></div>
+  `;
+}
+
+function renderScheduleFilters() {
+  const groups = ['ALL', 'A','B','C','D','E','F','G','H','I','J','K','L'];
+  document.getElementById('scheduleFilters').innerHTML = groups.map(g =>
+    `<button class="filter-btn ${activeGroupFilter===g?'active':''}" onclick="filterSchedule('${g}')">
+      ${g==='ALL' ? 'সকল' : 'গ্রুপ '+g}
+    </button>`
+  ).join('');
+}
+
+function filterSchedule(group) {
+  activeGroupFilter = group;
+  renderScheduleFilters();
+  renderSchedule(group);
+}
+
+function renderSchedule(group) {
+  const filtered = group === 'ALL' ? appData.matches : appData.matches.filter(m => m.group === group);
+  
+  document.getElementById('matchesList').innerHTML = filtered.map(m => {
+    const played = m.s1 !== null && m.s2 !== null;
+    return `
+    <div class="match-card">
+      <div class="match-meta">
+        <span class="match-num">ম্যাচ #${m.id}</span>
+        <span class="match-date">${m.date}</span>
+        <span class="match-time">⏰ ${m.time} (GMT+6)</span>
+        <span class="match-group-badge">গ্রুপ ${m.group}</span>
+      </div>
+      <div class="match-team">
+        <span class="team-name">${m.team1}</span>
+      </div>
+      <div class="match-score ${played?'score-played':''}">
+        <div class="score-box">${played ? m.s1 : '-'}</div>
+        <span class="score-vs">VS</span>
+        <div class="score-box">${played ? m.s2 : '-'}</div>
+      </div>
+      <div class="match-team right">
+        <span class="team-name">${m.team2}</span>
+      </div>
+      <div class="match-status">
+        <span class="${played ? 'status-finished' : 'status-upcoming'}">
+          ${played ? '✓ শেষ' : '⏳ বাকি'}
+        </span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderGroups() {
+  const grid = document.getElementById('groupsGrid');
+  grid.innerHTML = Object.entries(appData.groups).map(([letter, grp]) => `
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-letter">${letter}</div>
+        <div>
+          <div class="group-label">GROUP ${letter}</div>
+          <div style="font-size:0.75rem; color:var(--fifa-white);">গ্রুপ ${letter}</div>
+        </div>
+      </div>
+      <table class="group-table">
+        <thead>
+          <tr>
+            <th>দল</th>
+            <th>খে</th>
+            <th>জ</th>
+            <th>ড্র</th>
+            <th>হা</th>
+            <th>GF</th>
+            <th>GA</th>
+            <th>GD</th>
+            <th>পয়েন্ট</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${grp.teams.map((t, i) => {
+            const gd = t.gf - t.ga;
+            const rowClass = i < 2 ? 'qualified' : i === 2 ? 'third-place' : '';
+            return `<tr class="${rowClass}">
+              <td class="team-name-cell"><span class="team-rank">${i+1}</span>${t.name}</td>
+              <td>${t.pl}</td>
+              <td>${t.w}</td>
+              <td>${t.d}</td>
+              <td>${t.l}</td>
+              <td>${t.gf}</td>
+              <td>${t.ga}</td>
+              <td class="${gd>0?'gd-pos':gd<0?'gd-neg':'gd-zero'}">${gd>0?'+'+gd:gd}</td>
+              <td class="pts-cell">${t.pts}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `).join('');
+}
+
+function renderKnockout() {
+  const rounds = Object.entries(appData.knockout);
+  document.getElementById('knockoutBracket').innerHTML = rounds.map(([roundName, matches]) => `
+    <div class="bracket-round">
+      <div class="round-title">${roundName}</div>
+      <div class="round-matches">
+        ${matches.map(m => `
+          <div class="bracket-match">
+            <div class="bracket-team ${m.s1!==null && m.s2!==null && m.s1>m.s2?'bracket-winner':''}">
+              <span class="bracket-team-name">${m.t1 || m.slot1}</span>
+              <span class="bracket-score">${m.s1!==null?m.s1:''}</span>
+            </div>
+            <div class="bracket-team ${m.s1!==null && m.s2!==null && m.s2>m.s1?'bracket-winner':''}">
+              <span class="bracket-team-name">${m.t2 || m.slot2}</span>
+              <span class="bracket-score">${m.s2!==null?m.s2:''}</span>
+            </div>
+            <div class="bracket-match-date">${m.date} ${m.time}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderThirdPlace() {
+  // Best 3rd place teams
+  const thirdTeams = [];
+  for(const [letter, grp] of Object.entries(appData.groups)) {
+    if(grp.teams.length >= 3) {
+      const t = grp.teams[2];
+      thirdTeams.push({ ...t, group: letter });
+    }
+  }
+  thirdTeams.sort((a,b) => {
+    if(b.pts !== a.pts) return b.pts - a.pts;
+    const gdB = b.gf-b.ga, gdA = a.gf-a.ga;
+    if(gdB !== gdA) return gdB - gdA;
+    return b.gf - a.gf;
+  });
+
+  const played = thirdTeams.filter(t => t.pl > 0);
+  const best8 = thirdTeams.slice(0, 8);
+
+  document.getElementById('thirdPlaceContent').innerHTML = `
+    <div style="background:var(--fifa-navy);border:1px solid var(--fifa-border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:#f39c12;margin-bottom:1rem;">
+        🥉 সেরা তৃতীয় স্থানের দলসমূহ (৮টি উত্তীর্ণ হবে)
+      </div>
+      <p style="font-size:0.8rem;color:var(--fifa-gray);margin-bottom:1rem;">
+        ১২টি গ্রুপের তৃতীয় স্থানের দলগুলোর মধ্যে সেরা ৮টি দল শেষ বত্রিশে অংশ নেবে। 
+        র‍্যাংকিং নির্ধারণ হবে পয়েন্ট → গোল পার্থক্য → গোল করা অনুযায়ী।
+      </p>
+      <table class="group-table" style="background:none;">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>দল</th>
+            <th>গ্রুপ</th>
+            <th>খে</th>
+            <th>পয়েন্ট</th>
+            <th>GF</th>
+            <th>GA</th>
+            <th>GD</th>
+            <th>মর্যাদা</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${thirdTeams.map((t, i) => {
+            const gd = t.gf - t.ga;
+            const qualified = i < 8;
+            return `<tr class="${qualified ? 'qualified' : ''}">
+              <td>${i+1}</td>
+              <td class="team-name-cell">${t.name}</td>
+              <td><span class="match-group-badge">গ্রুপ ${t.group}</span></td>
+              <td>${t.pl}</td>
+              <td class="pts-cell">${t.pts}</td>
+              <td>${t.gf}</td>
+              <td>${t.ga}</td>
+              <td class="${gd>0?'gd-pos':gd<0?'gd-neg':'gd-zero'}">${gd>0?'+'+gd:gd}</td>
+              <td style="font-size:0.75rem;color:${qualified?'var(--fifa-green)':'var(--fifa-gray)'}">
+                ${qualified ? '✓ উত্তীর্ণ' : '✗ বাদ'}
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+    
+    <div style="background:rgba(243,156,18,0.08);border:1px solid rgba(243,156,18,0.3);border-radius:8px;padding:1rem;font-size:0.8rem;color:var(--fifa-gray);">
+      <strong style="color:#f39c12;">📋 নিয়ম:</strong> গ্রুপ পর্যায় শেষ হলে ১২টি গ্রুপের ৩য় স্থানের দলের মধ্যে সেরা ৮টি দল পয়েন্ট, গোল পার্থক্য এবং গোল করার ভিত্তিতে বাছাই করা হবে।
+    </div>
+  `;
+}
+
+// ============================================================
+//  TAB SWITCHING
+// ============================================================
+function switchTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function hideLoading() {
+  setTimeout(() => {
+    document.getElementById('loadingOverlay').classList.add('hidden');
+    setTimeout(() => document.getElementById('loadingOverlay').remove(), 500);
+  }, 800);
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+loadData();
+</script>
+</body>
+</html>
