@@ -89,54 +89,120 @@ body::before{content:'';position:fixed;inset:0;
 .fb:hover,.fb.on{background:rgba(161,240,0,.18);border-color:var(--neon);color:var(--neon);box-shadow:0 0 8px var(--neon-glow)}
 
 /* ══ MATCH CARD — CARD STYLE ══ */
-.match-sections{display:flex;flex-direction:column;gap:1.8rem}
-.date-section{}
+.match-sections{display:flex;flex-direction:column;gap:1.2rem}
+
+/* Expand/Collapse controls */
+.match-controls{display:flex;align-items:center;gap:.5rem;margin-bottom:.8rem;flex-wrap:wrap}
+.ctrl-btn{font-family:'Bebas Neue',sans-serif;font-size:.78rem;letter-spacing:1.5px;padding:.35rem .9rem;background:rgba(161,240,0,.08);border:1px solid var(--border2);border-radius:20px;color:var(--neon);cursor:pointer;transition:all .2s}
+.ctrl-btn:hover{background:rgba(161,240,0,.18);border-color:var(--neon);box-shadow:0 0 8px var(--neon-glow)}
+
+/* Date section */
+.date-section{overflow:hidden}
 .date-section-title{
   font-family:'Bebas Neue',sans-serif;
   font-size:1rem;letter-spacing:2px;color:var(--neon);
-  margin-bottom:.8rem;
-  display:flex;align-items:center;gap:.6rem;
-  padding:.5rem .8rem;
+  margin-bottom:.7rem;
+  display:flex;align-items:center;gap:.7rem;
+  padding:.55rem .9rem;
   background:rgba(161,240,0,.05);
   border-left:3px solid var(--neon);
   border-radius:0 6px 6px 0;
+  cursor:pointer;
+  user-select:none;
+  transition:background .2s;
 }
-.match-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+.date-section-title:hover{background:rgba(161,240,0,.1)}
+.date-section-title .ds-arrow{margin-left:auto;font-size:.75rem;transition:transform .25s;display:inline-block}
+.date-section-title .ds-count{font-size:.65rem;color:rgba(255,255,255,.45);font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px}
+.date-section-title .ds-done{font-size:.6rem;padding:.1rem .45rem;background:rgba(161,240,0,.12);border:1px solid var(--border2);border-radius:10px;color:var(--neon)}
+.date-section-title .ds-past{font-size:.6rem;padding:.1rem .45rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:rgba(255,255,255,.4)}
+.date-section-body{
+  overflow:hidden;
+  transition:max-height .35s ease, opacity .25s ease;
+  max-height:2000px;
+  opacity:1;
+}
+.date-section-body.collapsed{max-height:0;opacity:0}
+
+.match-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding-bottom:.3rem}
+
+/* Card */
 .mc{background:var(--card);border:1px solid var(--border2);border-radius:14px;overflow:hidden;transition:all .2s;display:flex;flex-direction:column}
-.mc:hover{border-color:var(--neon);box-shadow:0 8px 28px var(--shadow);transform:translateY(-2px)}
+.mc:hover{border-color:var(--neon);box-shadow:0 0 20px var(--neon-glow),0 8px 28px var(--shadow);transform:translateY(-2px)}
+
 /* Card header */
-.mc-hdr{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;border-bottom:1px solid var(--border2)}
-.mc-grp-badge{font-size:.62rem;font-weight:700;letter-spacing:1px;padding:.22rem .6rem;border-radius:20px;background:rgba(161,240,0,.1);color:var(--neon);border:1px solid var(--border2)}
-.mc-matchday{font-size:.62rem;color:var(--gray);letter-spacing:.5px}
-/* Card body — teams */
-.mc-body{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1rem .7rem;gap:.5rem}
+.mc-hdr{display:flex;align-items:center;justify-content:space-between;padding:.65rem 1rem;border-bottom:1px solid var(--border2)}
+.mc-grp-badge{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:.82rem;letter-spacing:1px;
+  padding:.2rem .65rem;border-radius:20px;
+  background:rgba(161,240,0,.1);color:var(--neon);
+  border:1px solid var(--border2);
+}
+.mc-matchday{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:.78rem;letter-spacing:.5px;
+  color:rgba(255,255,255,.45);
+}
+
+/* Card body */
+.mc-body{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1rem .75rem;gap:.5rem}
 .mc-team{display:flex;flex-direction:column;align-items:center;gap:.55rem;flex:1;min-width:0}
-.mc-flag-big{width:80px;height:60px;object-fit:cover;border-radius:8px;box-shadow:0 3px 10px var(--shadow)}
+.mc-flag-big{width:80px;height:60px;object-fit:cover;border-radius:8px;box-shadow:0 0 14px rgba(161,240,0,.12),0 3px 10px var(--shadow)}
 .mc-flag-ph{width:80px;height:60px;background:var(--bg3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--gray)}
-.mc-tname{font-size:.88rem;font-weight:700;color:var(--text);text-align:center;line-height:1.25;max-width:105px}
+.mc-tname{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1rem;letter-spacing:.5px;
+  color:var(--text);text-align:center;line-height:1.2;max-width:110px;
+}
+
 /* Score center */
-.mc-score-center{display:flex;align-items:center;gap:.5rem;flex-shrink:0;padding:0 .4rem}
-.mc-vs{font-size:1rem;font-weight:700;color:var(--gray);letter-spacing:2px}
-.mc-sc{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;color:var(--neon);line-height:1;min-width:24px;text-align:center}
-.mc-sc-sep{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--neon);margin:0 .1rem}
+.mc-score-center{display:flex;align-items:center;gap:.4rem;flex-shrink:0;padding:0 .4rem}
+.mc-vs{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.1rem;font-weight:700;
+  color:rgba(161,240,0,.35);letter-spacing:3px;
+}
+.mc-sc{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--neon);line-height:1;min-width:26px;text-align:center;text-shadow:0 0 15px var(--neon-glow)}
+.mc-sc-sep{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:rgba(161,240,0,.5);margin:0 .1rem}
+
 /* Card footer */
-.mc-footer{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;border-top:1px solid var(--border2);font-size:.67rem;color:var(--gray);margin-top:auto}
-.mc-footer-date{display:flex;align-items:center;gap:.3rem;flex-shrink:0}
-.mc-footer-stadium{display:flex;align-items:center;gap:.3rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:58%;text-align:right}
+.mc-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.6rem 1rem;border-top:1px solid var(--border2);
+  margin-top:auto;
+}
+.mc-footer-date{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:.8rem;letter-spacing:.5px;
+  color:rgba(255,255,255,.5);
+  flex-shrink:0;
+}
+.mc-footer-stadium{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:.78rem;letter-spacing:.3px;
+  color:rgba(255,255,255,.45);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:55%;text-align:right;
+}
+
 /* Goals */
 .mc-goals{padding:.5rem 1rem;display:flex;gap:1.5rem;border-top:1px solid var(--border2);background:rgba(161,240,0,.03)}
 .mc-goals-side{flex:1}
 .mc-goals-side.right{text-align:right}
-.goal-item{font-size:.7rem;color:var(--text2);padding:1px 0}
+.goal-item{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:.78rem;color:var(--text2);padding:1px 0;
+}
 .goal-item .gmin{color:var(--neon);font-weight:700}
-.goal-item .gpen{color:var(--orange);font-size:.62rem}
+.goal-item .gpen{color:var(--orange);font-size:.68rem}
 
 @media(max-width:900px){.match-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:580px){
   .match-grid{grid-template-columns:1fr}
   .mc-flag-big{width:64px;height:48px}
-  .mc-tname{font-size:.8rem;max-width:85px}
+  .mc-tname{font-size:.88rem}
   .mc-sc{font-size:2rem}
+  .mc-footer-date,.mc-footer-stadium{font-size:.72rem}
 }
 
 /* GROUP */
@@ -336,6 +402,11 @@ body::before{content:'';position:fixed;inset:0;
     <div class="stats-strip" id="statStrip"></div>
     <div class="sec-title">ম্যাচ সূচি</div>
     <div class="filters" id="schedFilters"></div>
+    <div class="match-controls">
+      <button class="ctrl-btn" onclick="expandAll()">▼ Expand All</button>
+      <button class="ctrl-btn" onclick="collapseAll()">▲ Collapse All</button>
+      <span id="expandInfo" style="font-size:.68rem;color:var(--gray);margin-left:.3rem"></span>
+    </div>
     <div class="match-sections" id="matchList"></div>
   </div>
 
@@ -544,11 +615,13 @@ window._sfg=function(g){schedGrp=g;renderSchedFilters();renderMatches(g);};
 
 function renderMatches(grp){
   const list=grp==='ALL'?MATCHES:MATCHES.filter(m=>m.grp===grp);
+
   function bigFlag(name){
     const t=TEAMS[name];
     if(!t)return`<div class="mc-flag-ph">?</div>`;
     return`<img class="mc-flag-big" src="https://flagcdn.com/80x60/${t.code}.png" loading="lazy" onerror="this.style.display='none'" alt="${t.en}">`;
   }
+
   function cardHTML(m){
     const sc=scores[m.id]||{};
     const done=sc.s1!==undefined&&sc.s1!==null;
@@ -558,14 +631,14 @@ function renderMatches(grp){
     return`<div class="mc">
       <div class="mc-hdr">
         <span class="mc-grp-badge">Group ${m.grp}</span>
-        <span class="mc-matchday">Match #${m.id} · Matchday ${m.md||1}</span>
+        <span class="mc-matchday">Match #${m.id} · MD${m.md||1}</span>
       </div>
       <div class="mc-body">
         <div class="mc-team">
           ${bigFlag(m.t1)}
           <div class="mc-tname">${enName(m.t1)}</div>
         </div>
-        <div class="mc-score-center ${done?'mc-score-done':''}">
+        <div class="mc-score-center">
           ${done
             ?`<span class="mc-sc">${sc.s1}</span><span class="mc-sc-sep">-</span><span class="mc-sc">${sc.s2}</span>`
             :`<span class="mc-vs">VS</span>`
@@ -581,7 +654,7 @@ function renderMatches(grp){
         <div class="mc-goals-side right">${g2.map(g=>`<div class="goal-item">${g.pen?`<span class="gpen">(P) </span>`:''}<span class="gmin">${esc(g.min)}'</span> ${esc(g.name)} ⚽</div>`).join('')}</div>
       </div>`:''}
       <div class="mc-footer">
-        <span class="mc-footer-date">⏰ ${mo}/${dy}/${yr} ${m.time}</span>
+        <span class="mc-footer-date">⏰ ${fT(m.time)}</span>
         <span class="mc-footer-stadium">🏟 ${m.stadium||''}</span>
       </div>
     </div>`;
@@ -596,18 +669,94 @@ function renderMatches(grp){
   const sortedDates=Object.keys(byDate).sort();
   const DAYS=['রবি','সোম','মঙ্গল','বুধ','বৃহঃ','শুক্র','শনি'];
   const MON_BN=['জানু','ফেব','মার্চ','এপ্রি','মে','জুন','জুলাই','আগ','সেপ্ট','অক্টো','নভে','ডিসে'];
+
   function dateTitle(d){
     const dt=new Date(d+'T00:00:00');
     return`${DAYS[dt.getDay()]}, ${dt.getDate()} ${MON_BN[dt.getMonth()]} ${dt.getFullYear()}`;
   }
 
-  document.getElementById('matchList').innerHTML=sortedDates.map(date=>`
-    <div class="date-section">
-      <div class="date-section-title">📅 ${dateTitle(date)}</div>
-      <div class="match-grid">${byDate[date].map(m=>cardHTML(m)).join('')}</div>
-    </div>
-  `).join('');
+  // Determine today's date string
+  const now=new Date();
+  const todayStr=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+
+  // Check if all matches in a date are finished
+  function isDatePast(date){return date<todayStr;}
+  function isDateAllDone(date){
+    return byDate[date].every(m=>scores[m.id]?.s1!==undefined);
+  }
+  function getDoneCount(date){
+    return byDate[date].filter(m=>scores[m.id]?.s1!==undefined).length;
+  }
+
+  document.getElementById('matchList').innerHTML=sortedDates.map(date=>{
+    const past=isDatePast(date);
+    const allDone=isDateAllDone(date);
+    const doneCount=getDoneCount(date);
+    const total=byDate[date].length;
+    // Auto-collapse past dates where all matches done
+    const collapsed=past&&allDone;
+    const isToday=date===todayStr;
+
+    const statusBadge=allDone
+      ?`<span class="ds-done">✓ ${doneCount}/${total} শেষ</span>`
+      :doneCount>0
+        ?`<span class="ds-done">${doneCount}/${total} শেষ</span>`
+        :`<span class="ds-past">${total}টি ম্যাচ</span>`;
+
+    const todayBadge=isToday?`<span style="background:rgba(161,240,0,.2);border:1px solid var(--neon);border-radius:10px;font-size:.6rem;padding:.1rem .5rem;color:var(--neon);font-family:'Barlow Condensed',sans-serif">আজ</span>`:'';
+
+    return`<div class="date-section" data-date="${date}">
+      <div class="date-section-title" onclick="toggleSection(this)">
+        <span style="font-size:.85rem">📅</span>
+        <span>${dateTitle(date)}</span>
+        ${todayBadge}
+        ${statusBadge}
+        <span class="ds-arrow" style="${collapsed?'transform:rotate(-90deg)':''}">▼</span>
+      </div>
+      <div class="date-section-body ${collapsed?'collapsed':''}">
+        <div class="match-grid">${byDate[date].map(m=>cardHTML(m)).join('')}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Update expand info
+  const total=sortedDates.length;
+  const collapsed=document.querySelectorAll('.date-section-body.collapsed').length;
+  const info=document.getElementById('expandInfo');
+  if(info)info.textContent=`${total-collapsed}টি খোলা · ${collapsed}টি বন্ধ`;
 }
+
+// Toggle individual section
+window.toggleSection=function(titleEl){
+  const body=titleEl.nextElementSibling;
+  const arrow=titleEl.querySelector('.ds-arrow');
+  const isCollapsed=body.classList.contains('collapsed');
+  body.classList.toggle('collapsed',!isCollapsed);
+  if(arrow)arrow.style.transform=isCollapsed?'':'rotate(-90deg)';
+  // Update info
+  const total=document.querySelectorAll('.date-section-body').length;
+  const collapsed=document.querySelectorAll('.date-section-body.collapsed').length;
+  const info=document.getElementById('expandInfo');
+  if(info)info.textContent=`${total-collapsed}টি খোলা · ${collapsed}টি বন্ধ`;
+};
+
+// Expand All
+window.expandAll=function(){
+  document.querySelectorAll('.date-section-body').forEach(b=>b.classList.remove('collapsed'));
+  document.querySelectorAll('.ds-arrow').forEach(a=>a.style.transform='');
+  const total=document.querySelectorAll('.date-section-body').length;
+  const info=document.getElementById('expandInfo');
+  if(info)info.textContent=`${total}টি খোলা · 0টি বন্ধ`;
+};
+
+// Collapse All
+window.collapseAll=function(){
+  document.querySelectorAll('.date-section-body').forEach(b=>b.classList.add('collapsed'));
+  document.querySelectorAll('.ds-arrow').forEach(a=>a.style.transform='rotate(-90deg)');
+  const total=document.querySelectorAll('.date-section-body').length;
+  const info=document.getElementById('expandInfo');
+  if(info)info.textContent=`0টি খোলা · ${total}টি বন্ধ`;
+};
 
 // Groups
 function renderGroups(grps){
