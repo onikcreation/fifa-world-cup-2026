@@ -440,13 +440,14 @@ function buildB3MapAdmin(grps){
     .filter(t=>t&&t.pl>0)
     .sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
   const map={};
+  const used=new Set();
   for(const m of KO_ROUNDS[0].matches){
     ['s1','s2'].forEach(side=>{
       const slot=m[side];
       if(!slot||!slot.startsWith('3rd '))return;
-      const groups=slot.replace('3rd ','').split('');
-      const candidate=allThirds.find(t=>groups.includes(t.group));
-      if(candidate)map[`${m.id}_${side}`]=candidate.name;
+      const allowedGroups=slot.replace('3rd ','').split('');
+      const candidate=allThirds.find(t=>allowedGroups.includes(t.group)&&!used.has(t.name));
+      if(candidate){map[`${m.id}_${side}`]=candidate.name;used.add(candidate.name);}
     });
   }
   return map;
@@ -457,6 +458,7 @@ function normalizeWinKey(raw){
 }
 function buildWinnerMapAdmin(grps,b3map){
   const winners={};
+  const losers={};
   const allMatches=KO_ROUNDS.flatMap(r=>r.matches);
   for(const m of allMatches){
     const sc=dbSc[m.id]||{};
@@ -467,7 +469,10 @@ function buildWinnerMapAdmin(grps,b3map){
       else{
         const rs=resolveSlotAdmin(m.s1,grps);
         if(rs)t1=rs;
-        else{const wm=m.s1?.match(/^W\s+(.+)$/i);if(wm)t1=winners[normalizeWinKey(wm[1])]||'';}
+        else{
+          const wm=m.s1?.match(/^W\s+(.+)$/i);if(wm)t1=winners[normalizeWinKey(wm[1])]||'';
+          if(!t1){const lm=m.s1?.match(/^L\s+(.+)$/i);if(lm)t1=losers[normalizeWinKey(lm[1])]||'';}
+        }
       }
     }
     if(!t2){
@@ -475,24 +480,30 @@ function buildWinnerMapAdmin(grps,b3map){
       else{
         const rs=resolveSlotAdmin(m.s2,grps);
         if(rs)t2=rs;
-        else{const wm=m.s2?.match(/^W\s+(.+)$/i);if(wm)t2=winners[normalizeWinKey(wm[1])]||'';}
+        else{
+          const wm=m.s2?.match(/^W\s+(.+)$/i);if(wm)t2=winners[normalizeWinKey(wm[1])]||'';
+          if(!t2){const lm=m.s2?.match(/^L\s+(.+)$/i);if(lm)t2=losers[normalizeWinKey(lm[1])]||'';}
+        }
       }
     }
     const s1=Number(sc.s1),s2=Number(sc.s2);
     const pen1=sc.pen1!==undefined?Number(sc.pen1):null,pen2=sc.pen2!==undefined?Number(sc.pen2):null;
     const et1=sc.et1!==undefined?Number(sc.et1):null,et2=sc.et2!==undefined?Number(sc.et2):null;
-    let winner='';
-    if(pen1!==null&&pen2!==null){winner=pen1>pen2?t1:t2;}
-    else if(et1!==null&&et2!==null){winner=(s1+et1)>(s2+et2)?t1:t2;}
-    else{winner=s1>s2?t1:s2>s1?t2:'';}
+    let winner='',loser='';
+    if(pen1!==null&&pen2!==null){winner=pen1>pen2?t1:t2;loser=pen1>pen2?t2:t1;}
+    else if(et1!==null&&et2!==null){const w=(s1+et1)>(s2+et2);winner=w?t1:t2;loser=w?t2:t1;}
+    else{winner=s1>s2?t1:s2>s1?t2:'';loser=s1>s2?t2:s2>s1?t1:'';}
     if(winner)winners[m.id]=winner;
+    if(loser)losers[m.id]=loser;
   }
-  return winners;
+  return{winners,losers};
 }
-function resolveWinSlot(slot,winnerMap){
+function resolveWinSlot(slot,wmap){
   if(!slot)return'';
   const wm=slot.match(/^W\s+(.+)$/i);
-  if(wm)return winnerMap[normalizeWinKey(wm[1])]||'';
+  if(wm)return(wmap.winners||{})[normalizeWinKey(wm[1])]||'';
+  const lm=slot.match(/^L\s+(.+)$/i);
+  if(lm)return(wmap.losers||{})[normalizeWinKey(lm[1])]||'';
   return'';
 }
 
