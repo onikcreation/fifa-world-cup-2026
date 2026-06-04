@@ -329,9 +329,8 @@ body::before{content:'';position:fixed;inset:0;
 .stats-empty{padding:1.5rem;text-align:center;color:var(--gray);font-size:.8rem}
 
 /* Stats team filter */
-.team-filter-wrap{padding:.7rem .9rem;border-bottom:1px solid var(--border2)}
-.team-select{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:.4rem .6rem;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:.82rem;outline:none;cursor:pointer}
-.team-select:focus{border-color:var(--neon)}
+/* team filter buttons — in .filters already styled */
+#statsTeamFilters .fb{display:inline-flex;align-items:center;gap:3px}
 
 /* Third place */
 .tp-card{background:var(--card);border:1px solid var(--border2);border-radius:10px;overflow:hidden;padding:1rem}
@@ -436,6 +435,7 @@ body::before{content:'';position:fixed;inset:0;
   <div id="p-stats" class="panel">
     <div class="sec-title">📈 Stats</div>
     <div class="filters" id="statsGrpFilters"></div>
+    <div class="filters" id="statsTeamFilters" style="margin-top:-.4rem"></div>
     <div class="stats-grid" id="statsGrid"></div>
   </div>
 
@@ -481,7 +481,21 @@ function fImg(name,w=40,h=30){
   const fw=nearestFlag(w);const fh=Math.round(fw*0.75);
   return`<img src="https://flagcdn.com/${fw}x${fh}/${t.code}.png" style="width:${w}px;height:${h}px;object-fit:cover;border-radius:3px;box-shadow:0 1px 4px var(--shadow)" loading="lazy" onerror="this.style.display='none'" alt="${t.en}">`;
 }
+// Extract rank from Bengali name like "১৫. মেক্সিকো" → rank=15
+function getRank(name){
+  const m=name.match(/^([\d০-৯]+)\./);
+  if(!m)return'';
+  // Convert Bengali digits to Arabic
+  const bn='০১২৩৪৫৬৭৮৯';
+  return m[1].split('').map(c=>{const i=bn.indexOf(c);return i>=0?i:c;}).join('');
+}
 function enName(name){return TEAMS[name]?.en||name}
+// Name with rank prefix: "15. Mexico"
+function enNameRanked(name){
+  const rank=getRank(name);
+  const en=TEAMS[name]?.en||name;
+  return rank?`${rank}. ${en}`:en;
+}
 
 let scores={};
 let schedGrp='ALL';
@@ -636,7 +650,7 @@ function renderMatches(grp){
       <div class="mc-body">
         <div class="mc-team">
           ${bigFlag(m.t1)}
-          <div class="mc-tname">${enName(m.t1)}</div>
+          <div class="mc-tname">${enNameRanked(m.t1)}</div>
         </div>
         <div class="mc-score-center">
           ${done
@@ -646,7 +660,7 @@ function renderMatches(grp){
         </div>
         <div class="mc-team">
           ${bigFlag(m.t2)}
-          <div class="mc-tname">${enName(m.t2)}</div>
+          <div class="mc-tname">${enNameRanked(m.t2)}</div>
         </div>
       </div>
       ${hasGoals?`<div class="mc-goals">
@@ -1069,74 +1083,102 @@ window._bktab=function(i){
 
 // ══ STATS ══
 function renderStats(grps){
-  // Group filter buttons
+  // ── Group filter buttons ──
   const gs=['ALL','A','B','C','D','E','F','G','H','I','J','K','L'];
   document.getElementById('statsGrpFilters').innerHTML=gs.map(g=>
     `<button class="fb ${statsGrp===g?'on':''}" onclick="window._stg('${g}')">${g==='ALL'?'সকল':'Group '+g}</button>`
   ).join('');
 
-  // Top scorers
+  // ── Team buttons sorted by FIFA rank ──
+  // Get teams for current group filter, sorted by rank number
+  const teamPool=statsGrp==='ALL'
+    ? Object.keys(TEAMS)
+    : GROUPS[statsGrp]||[];
+  // Sort by rank (numeric part of Bengali name)
+  const sortedTeams=[...teamPool].sort((a,b)=>{
+    const ra=parseInt(getRank(a))||999;
+    const rb=parseInt(getRank(b))||999;
+    return ra-rb;
+  });
+
+  const teamBtns=`<button class="fb ${statsTeam==='ALL'?'on':''}" onclick="window._stt('ALL')">সকল দল</button>`
+    +sortedTeams.map(n=>{
+      const rank=getRank(n);
+      const en=TEAMS[n]?.en||n;
+      const code=TEAMS[n]?.code||'';
+      const flagHtml=code?`<img src="https://flagcdn.com/20x15/${code}.png" style="width:18px;height:13px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:3px" loading="lazy">`:'';
+      return`<button class="fb ${statsTeam===n?'on':''}" onclick="window._stt('${n.replace(/'/g,"\\'")}')">
+        ${flagHtml}<span style="font-size:.6rem;opacity:.6;margin-right:2px">${rank}</span>${en}
+      </button>`;
+    }).join('');
+  document.getElementById('statsTeamFilters').innerHTML=teamBtns;
+
+  // ── Top scorers ──
   const scorerMap={};
   for(const m of MATCHES){
     const sc=scores[m.id]||{};
     for(const g of(sc.goals1||[])){const k=`${g.name}||${m.t1}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:m.t1,goals:0,grp:m.grp};scorerMap[k].goals++;}
     for(const g of(sc.goals2||[])){const k=`${g.name}||${m.t2}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:m.t2,goals:0,grp:m.grp};scorerMap[k].goals++;}
   }
-  // KO scorers
   for(const round of KO_ROUNDS){for(const m of round.matches){
     const sc=scores[m.id]||{};
-    const t1=sc.t1||'';const t2=sc.t2||'';
+    const t1=sc.t1||'',t2=sc.t2||'';
     for(const g of(sc.goals1||[])){if(t1){const k=`${g.name}||${t1}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:t1,goals:0,grp:'KO'};scorerMap[k].goals++;}}
     for(const g of(sc.goals2||[])){if(t2){const k=`${g.name}||${t2}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:t2,goals:0,grp:'KO'};scorerMap[k].goals++;}}
   }}
 
   let scorers=Object.values(scorerMap).sort((a,b)=>b.goals-a.goals);
-  if(statsGrp!=='ALL')scorers=scorers.filter(s=>s.grp===statsGrp||GROUPS[statsGrp]?.includes(s.team));
+  // Filter scorers by group or team
+  if(statsTeam!=='ALL'){
+    scorers=scorers.filter(s=>s.team===statsTeam);
+  } else if(statsGrp!=='ALL'){
+    scorers=scorers.filter(s=>GROUPS[statsGrp]?.includes(s.team));
+  }
 
-  // Team goals
+  // ── Team goals ──
   const teamGoals={};
   for(const m of MATCHES){
     const sc=scores[m.id]||{};if(sc.s1===undefined)continue;
-    const grp=m.grp;
-    if(!teamGoals[m.t1])teamGoals[m.t1]={goals:0,grp};
-    if(!teamGoals[m.t2])teamGoals[m.t2]={goals:0,grp};
+    if(!teamGoals[m.t1])teamGoals[m.t1]={goals:0,grp:m.grp};
+    if(!teamGoals[m.t2])teamGoals[m.t2]={goals:0,grp:m.grp};
     teamGoals[m.t1].goals+=Number(sc.s1||0);
     teamGoals[m.t2].goals+=Number(sc.s2||0);
   }
   let teamList=Object.entries(teamGoals).sort((a,b)=>b[1].goals-a[1].goals);
-  if(statsGrp!=='ALL')teamList=teamList.filter(([n,v])=>GROUPS[statsGrp]?.includes(n));
-  if(statsTeam!=='ALL')teamList=teamList.filter(([n])=>n===statsTeam);
+  if(statsTeam!=='ALL') teamList=teamList.filter(([n])=>n===statsTeam);
+  else if(statsGrp!=='ALL') teamList=teamList.filter(([n,v])=>GROUPS[statsGrp]?.includes(n));
   const maxG=teamList[0]?teamList[0][1].goals:1;
 
-  // Team select dropdown options
-  const allTeamNames=Object.keys(teamGoals).sort((a,b)=>enName(a).localeCompare(enName(b)));
-  const teamOptions=`<option value="ALL">সকল দল</option>`+allTeamNames.map(n=>`<option value="${n}" ${statsTeam===n?'selected':''}>${enName(n)} (${n})</option>`).join('');
+  // ── Render ──
+  const titleSuffix=statsTeam!=='ALL'
+    ?`· ${enNameRanked(statsTeam)}`
+    :statsGrp!=='ALL'?`· Group ${statsGrp}`:'';
 
   document.getElementById('statsGrid').innerHTML=`
     <div class="stats-card">
-      <div class="stats-card-title">⚽ সর্বোচ্চ গোলদাতা</div>
+      <div class="stats-card-title">⚽ সর্বোচ্চ গোলদাতা ${titleSuffix}</div>
       ${scorers.length===0
         ?`<div class="stats-empty">এখনো গোলের তথ্য নেই</div>`
         :scorers.slice(0,20).map((s,i)=>`
           <div class="scorer-row">
             <div class="sr-rank ${i===0?'g1':i===1?'g2':i===2?'g3':''}">${i+1}</div>
             ${fImg(s.team,26,19)}
-            <div class="sr-info"><div class="sr-name">${s.name}</div><div class="sr-team">${enName(s.team)}</div></div>
+            <div class="sr-info">
+              <div class="sr-name">${esc(s.name)}</div>
+              <div class="sr-team">${enNameRanked(s.team)}</div>
+            </div>
             <div class="sr-goals">${s.goals}</div>
           </div>`).join('')
       }
     </div>
     <div class="stats-card">
-      <div class="stats-card-title">🏳️ দলীয় গোল ${statsGrp!=='ALL'?'· Group '+statsGrp:''}</div>
-      <div class="team-filter-wrap">
-        <select class="team-select" onchange="window._stt(this.value)">${teamOptions}</select>
-      </div>
+      <div class="stats-card-title">🏳️ দলীয় গোল ${titleSuffix}</div>
       ${teamList.length===0
         ?`<div class="stats-empty">এখনো গোলের তথ্য নেই</div>`
         :teamList.map(([name,v])=>`
           <div class="team-row">
             ${fImg(name,28,21)}
-            <div class="tr-name">${enName(name)}</div>
+            <div class="tr-name">${enNameRanked(name)}</div>
             <div class="tr-bar-wrap"><div class="tr-bar" style="width:${Math.round(v.goals/maxG*100)}%"></div></div>
             <div class="tr-goals">${v.goals}</div>
           </div>`).join('')
