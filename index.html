@@ -61,34 +61,44 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .fb{font-size:.72rem;letter-spacing:.5px;padding:.3rem .75rem;background:var(--card);border:1px solid var(--border2);border-radius:20px;color:var(--gray);cursor:pointer;transition:all .2s;white-space:nowrap}
 .fb:hover,.fb.on{background:var(--blue);border-color:var(--gold);color:#fff}
 
-/* MATCH CARD */
-.match-list{display:flex;flex-direction:column;gap:.5rem}
-.mc{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:all .2s}
-.mc:hover{border-color:rgba(201,168,76,.4);box-shadow:0 4px 20px var(--shadow)}
-.mc-top{display:flex;align-items:stretch;min-height:76px}
-.mc-meta{padding:.65rem .9rem;display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:125px;border-right:1px solid var(--border2);flex-shrink:0}
-.mc-num{font-size:.58rem;color:var(--gray);letter-spacing:1px}
-.mc-date{font-size:.8rem;font-weight:700;color:var(--text)}
-.mc-time{font-size:.76rem;color:var(--gold);font-weight:600}
-.mc-grp{display:inline-block;font-size:.58rem;padding:2px 5px;background:rgba(0,61,122,.3);border:1px solid var(--border);border-radius:3px;color:var(--gold-l);letter-spacing:1px;margin-top:2px;width:fit-content}
-.mc-body{flex:1;display:flex;align-items:center;padding:.65rem .9rem;gap:.5rem;min-width:0}
-.mc-team{flex:1;display:flex;align-items:center;gap:.55rem;min-width:0}
-.mc-team.right{flex-direction:row-reverse;text-align:right}
-.mc-flag{width:38px;height:28px;object-fit:cover;border-radius:3px;box-shadow:0 1px 4px var(--shadow);flex-shrink:0}
-.mc-tname{font-size:.85rem;font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mc-ten{font-size:.62rem;color:var(--gray)}
-.mc-score{display:flex;align-items:center;justify-content:center;gap:.3rem;flex-shrink:0;padding:0 .4rem}
-.sb{width:34px;height:34px;background:var(--sbg);border:1px solid var(--border2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.25rem;flex-shrink:0}
-.sb.done{background:rgba(0,61,122,.25);border-color:var(--border)}
-.score-vs{font-size:.62rem;color:var(--gray)}
-.mc-status{font-size:.58rem;letter-spacing:1px;padding:0 .4rem;flex-shrink:0;text-align:center}
-.st-d{color:var(--gold)}.st-w{color:var(--gray)}
-.mc-goals{background:var(--bg3);border-top:1px solid var(--border2);padding:.45rem 1rem;display:flex;gap:2rem}
+/* ══ MATCH CARD — NEW STYLE ══ */
+.match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.mc{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all .2s;display:flex;flex-direction:column}
+.mc:hover{border-color:rgba(201,168,76,.4);box-shadow:0 6px 24px var(--shadow);transform:translateY(-1px)}
+/* Card header */
+.mc-hdr{display:flex;align-items:center;justify-content:space-between;padding:.55rem .85rem;border-bottom:1px solid var(--border2)}
+.mc-grp-badge{font-size:.6rem;font-weight:700;letter-spacing:1px;padding:.2rem .55rem;border-radius:20px;background:rgba(201,168,76,.18);color:var(--gold-l);border:1px solid rgba(201,168,76,.3)}
+.mc-matchday{font-size:.62rem;color:var(--gray);letter-spacing:.5px}
+/* Card body — teams */
+.mc-body{display:flex;align-items:center;justify-content:space-between;padding:.9rem .85rem .5rem;gap:.5rem}
+.mc-team{display:flex;flex-direction:column;align-items:center;gap:.45rem;flex:1;min-width:0}
+.mc-flag-big{width:64px;height:48px;object-fit:cover;border-radius:6px;box-shadow:0 2px 8px var(--shadow)}
+.mc-flag-ph{width:64px;height:48px;background:var(--bg3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--gray)}
+.mc-tname{font-size:.8rem;font-weight:700;color:var(--text);text-align:center;line-height:1.2;max-width:90px}
+/* Score center */
+.mc-score-center{display:flex;align-items:center;gap:.5rem;flex-shrink:0;padding:0 .3rem}
+.mc-vs{font-size:.85rem;font-weight:700;color:var(--gray);letter-spacing:1px}
+.mc-sc{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold-l);line-height:1;min-width:22px;text-align:center}
+.mc-sc-sep{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold);margin:0 .1rem}
+.mc-score-done .mc-sc{color:var(--gold-l)}
+/* Card footer */
+.mc-footer{display:flex;align-items:center;justify-content:space-between;padding:.5rem .85rem;border-top:1px solid var(--border2);font-size:.65rem;color:var(--gray);margin-top:auto}
+.mc-footer-date{display:flex;align-items:center;gap:.3rem}
+.mc-footer-stadium{display:flex;align-items:center;gap:.3rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:55%}
+/* Goals */
+.mc-goals{padding:.4rem .85rem;display:flex;gap:1.5rem;border-top:1px solid var(--border2);background:rgba(0,0,0,.08)}
 .mc-goals-side{flex:1}
 .mc-goals-side.right{text-align:right}
-.goal-item{font-size:.7rem;color:var(--text2);padding:1px 0}
+.goal-item{font-size:.68rem;color:var(--text2);padding:1px 0}
 .goal-item .gmin{color:var(--gold);font-weight:700}
-.goal-item .gpen{color:var(--orange);font-size:.62rem}
+.goal-item .gpen{color:var(--orange);font-size:.6rem}
+
+@media(max-width:600px){
+  .match-grid{grid-template-columns:1fr}
+  .mc-flag-big{width:52px;height:39px}
+  .mc-tname{font-size:.72rem;max-width:75px}
+  .mc-sc{font-size:1.7rem}
+}
 
 /* GROUP */
 .grp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:1rem}
@@ -293,7 +303,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="stats-strip" id="statStrip"></div>
     <div class="sec-title">ম্যাচ সূচি</div>
     <div class="filters" id="schedFilters"></div>
-    <div class="match-list" id="matchList"></div>
+    <div class="match-grid" id="matchList"></div>
   </div>
 
   <!-- GROUPS -->
@@ -428,34 +438,48 @@ window._sfg=function(g){schedGrp=g;renderSchedFilters();renderMatches(g);};
 
 function renderMatches(grp){
   const list=grp==='ALL'?MATCHES:MATCHES.filter(m=>m.grp===grp);
+  function bigFlag(name){
+    const t=TEAMS[name];
+    if(!t)return`<div class="mc-flag-ph">?</div>`;
+    return`<img class="mc-flag-big" src="https://flagcdn.com/64x48/${t.code}.png" loading="lazy" onerror="this.style.display='none'" alt="${t.en}">`;
+  }
   document.getElementById('matchList').innerHTML=list.map(m=>{
     const sc=scores[m.id]||{};
     const done=sc.s1!==undefined&&sc.s1!==null;
     const g1=sc.goals1||[],g2=sc.goals2||[];
     const hasGoals=g1.length>0||g2.length>0;
+    // Format date as MM/DD/YYYY HH:MM
+    const [yr,mo,dy]=m.date.split('-');
+    const dateStr=`${mo}/${dy}/${yr} ${m.time}`;
     return`<div class="mc">
-      <div class="mc-top">
-        <div class="mc-meta">
-          <span class="mc-num">MATCH #${m.id}</span>
-          <span class="mc-date">${fD(m.date)}</span>
-          <span class="mc-time">⏰ ${fT(m.time)}</span>
-          <span class="mc-grp">GROUP ${m.grp}</span>
+      <div class="mc-hdr">
+        <span class="mc-grp-badge">Group ${m.grp}</span>
+        <span class="mc-matchday">Matchday ${m.md||1}</span>
+      </div>
+      <div class="mc-body">
+        <div class="mc-team">
+          ${bigFlag(m.t1)}
+          <div class="mc-tname">${enName(m.t1)}</div>
         </div>
-        <div class="mc-body">
-          <div class="mc-team">${fImg(m.t1)}<div><div class="mc-tname">${m.t1}</div><div class="mc-ten">${enName(m.t1)}</div></div></div>
-          <div class="mc-score">
-            <div class="sb ${done?'done':''}">${done?sc.s1:'–'}</div>
-            <span class="score-vs">VS</span>
-            <div class="sb ${done?'done':''}">${done?sc.s2:'–'}</div>
-          </div>
-          <div class="mc-team right"><div><div class="mc-tname">${m.t2}</div><div class="mc-ten">${enName(m.t2)}</div></div>${fImg(m.t2)}</div>
+        <div class="mc-score-center ${done?'mc-score-done':''}">
+          ${done
+            ?`<span class="mc-sc">${sc.s1}</span><span class="mc-sc-sep">-</span><span class="mc-sc">${sc.s2}</span>`
+            :`<span class="mc-vs">VS</span>`
+          }
         </div>
-        <div class="mc-status"><span class="${done?'st-d':'st-w'}">${done?'✓ শেষ':'⏳ বাকি'}</span></div>
+        <div class="mc-team">
+          ${bigFlag(m.t2)}
+          <div class="mc-tname">${enName(m.t2)}</div>
+        </div>
       </div>
       ${hasGoals?`<div class="mc-goals">
         <div class="mc-goals-side">${g1.map(g=>`<div class="goal-item">⚽ ${g.name} <span class="gmin">${g.min}'</span>${g.pen?` <span class="gpen">(P)</span>`:''}</div>`).join('')}</div>
         <div class="mc-goals-side right">${g2.map(g=>`<div class="goal-item">${g.pen?`<span class="gpen">(P) </span>`:''}<span class="gmin">${g.min}'</span> ${g.name} ⚽</div>`).join('')}</div>
       </div>`:''}
+      <div class="mc-footer">
+        <span class="mc-footer-date">📅 ${dateStr}</span>
+        <span class="mc-footer-stadium">🏟 ${m.stadium||''}</span>
+      </div>
     </div>`;
   }).join('');
 }

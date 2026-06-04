@@ -74,32 +74,37 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-
 .bbtn-clear{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.4);color:var(--red)}
 .save-progress{font-size:.72rem;color:var(--gray);min-width:120px}
 
-/* TABLE */
-.tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;overflow-x:auto;margin-bottom:1.2rem}
-.mtbl{width:100%;border-collapse:collapse}
-.mtbl thead tr{background:rgba(0,61,122,.25);border-bottom:2px solid var(--border)}
-.mtbl th{padding:.5rem .6rem;text-align:left;font-size:.6rem;letter-spacing:1.5px;color:var(--gray);white-space:nowrap}
-.mtbl th.c{text-align:center}
-.mtbl tbody tr{border-bottom:1px solid var(--border2);transition:background .15s}
-.mtbl tbody tr:hover{background:rgba(255,255,255,.02)}
-.mtbl td{padding:.45rem .6rem;font-size:.78rem;vertical-align:middle}
-.mtbl td.c{text-align:center}
-.m-id{font-size:.58rem;color:var(--gray);font-weight:600}
-.grp-tag{display:inline-block;font-size:.57rem;padding:1px 5px;background:rgba(0,61,122,.4);border:1px solid var(--border);border-radius:3px;color:var(--gold-l);letter-spacing:1px}
-.flag-sm{width:22px;height:16px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:3px}
-.sc-in{width:38px;height:30px;background:var(--inp);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-family:'Bebas Neue',sans-serif;font-size:1rem;text-align:center;outline:none;transition:border .2s}
-.sc-in:focus{border-color:var(--gold)}
-.sc-in.filled{border-color:rgba(39,174,96,.5);background:rgba(39,174,96,.07)}
-.sc-in.changed{border-color:rgba(243,156,18,.6);background:rgba(243,156,18,.07)}
-.vsep{color:var(--gray);font-size:.62rem;padding:0 2px}
-.sv-btn{font-size:.72rem;letter-spacing:1px;padding:.28rem .7rem;background:var(--blue);border:1px solid var(--border);border-radius:5px;color:#fff;cursor:pointer;transition:all .2s;white-space:nowrap}
+/* ══ ADMIN MATCH CARDS ══ */
+.adm-match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:.8rem;margin-bottom:1.2rem}
+.amc{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border .15s}
+.amc:hover{border-color:rgba(201,168,76,.35)}
+.amc.changed-card{border-color:rgba(243,156,18,.5)!important}
+.amc-hdr{display:flex;justify-content:space-between;align-items:center;padding:.42rem .7rem;border-bottom:1px solid var(--border2);background:rgba(0,0,0,.1)}
+.amc-grp{font-size:.57rem;font-weight:700;letter-spacing:1px;padding:.15rem .4rem;border-radius:12px;background:rgba(201,168,76,.15);color:var(--gold-l);border:1px solid rgba(201,168,76,.25)}
+.amc-meta{font-size:.57rem;color:var(--gray)}
+.amc-body{padding:.6rem .7rem}
+.amc-teams{display:flex;align-items:center;gap:.4rem;margin-bottom:.55rem}
+.amc-team{flex:1;display:flex;align-items:center;gap:.35rem;min-width:0}
+.amc-team.right{flex-direction:row-reverse;text-align:right}
+.amc-flag{width:22px;height:16px;object-fit:cover;border-radius:2px;flex-shrink:0}
+.amc-tname{font-size:.7rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+.amc-scores{display:flex;align-items:center;justify-content:center;gap:.3rem;flex-shrink:0}
+.asc{width:34px;height:28px;background:var(--inp);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-family:'Bebas Neue',sans-serif;font-size:.95rem;text-align:center;outline:none;transition:border .15s}
+.asc:focus{border-color:var(--gold)}
+.asc.filled{border-color:rgba(39,174,96,.5);background:rgba(39,174,96,.07)}
+.asc.changed{border-color:rgba(243,156,18,.6);background:rgba(243,156,18,.07)}
+.asc-sep{font-size:.65rem;color:var(--gray);font-weight:700}
+.amc-footer{display:flex;align-items:center;gap:.4rem;padding:.4rem .7rem;border-top:1px solid var(--border2);background:rgba(0,0,0,.06)}
+.amc-stadium{font-size:.57rem;color:var(--gray);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.amc-actions{display:flex;gap:.3rem;flex-shrink:0}
+.sv-btn{font-size:.65rem;letter-spacing:.5px;padding:.23rem .55rem;background:var(--blue);border:1px solid var(--border);border-radius:5px;color:#fff;cursor:pointer;transition:all .2s}
 .sv-btn:hover{background:var(--blue2)}
 .sv-btn.saving{background:rgba(243,156,18,.2);border-color:var(--orange);color:var(--orange);pointer-events:none}
 .sv-btn.saved{background:rgba(39,174,96,.15);border-color:var(--green);color:var(--green);pointer-events:none}
-.cl-btn{font-size:.68rem;padding:.25rem .45rem;background:rgba(231,76,60,.07);border:1px solid rgba(231,76,60,.22);border-radius:4px;color:var(--red);cursor:pointer}
-.goal-btn{font-size:.68rem;padding:.25rem .55rem;background:rgba(201,168,76,.1);border:1px solid var(--border);border-radius:4px;color:var(--gold);cursor:pointer;white-space:nowrap}
+.cl-btn{font-size:.62rem;padding:.23rem .4rem;background:rgba(231,76,60,.07);border:1px solid rgba(231,76,60,.22);border-radius:4px;color:var(--red);cursor:pointer}
+.goal-btn{font-size:.62rem;padding:.23rem .48rem;background:rgba(201,168,76,.1);border:1px solid var(--border);border-radius:4px;color:var(--gold);cursor:pointer}
 .goal-btn:hover{background:rgba(201,168,76,.2)}
-.changed-dot{display:inline-block;width:6px;height:6px;background:var(--orange);border-radius:50%;margin-left:4px;vertical-align:middle}
+.changed-dot{display:inline-block;width:5px;height:5px;background:var(--orange);border-radius:50%;margin-left:3px;vertical-align:middle}
 
 /* GOAL MODAL */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem}
@@ -189,18 +194,7 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-
 
       <div class="sec-title">গ্রুপ পর্যায় স্কোর</div>
       <div class="filters" id="gFilters"></div>
-      <div class="tbl-wrap">
-        <table class="mtbl">
-          <thead>
-            <tr>
-              <th>#</th><th>তারিখ / সময়</th><th class="c">GRP</th>
-              <th>দল ১</th><th class="c" colspan="3">স্কোর</th><th>দল ২</th>
-              <th class="c">গোল</th><th class="c">Action</th>
-            </tr>
-          </thead>
-          <tbody id="mTbody"></tbody>
-        </table>
-      </div>
+      <div class="adm-match-grid" id="mTbody"></div>
     </div>
 
     <!-- KNOCKOUT PANEL -->
@@ -330,21 +324,42 @@ function renderTable(grp){
     const s2=sc.s2!==undefined?sc.s2:'';
     const hg=(sc.goals1?.length||0)+(sc.goals2?.length||0);
     const isPending=pendingChanges.has(m.id);
-    return`<tr>
-      <td><span class="m-id">#${m.id}</span>${isPending?'<span class="changed-dot" title="সেভ হয়নি"></span>':''}</td>
-      <td style="white-space:nowrap"><div style="font-size:.73rem;font-weight:600">${fD(m.date)}</div><div style="font-size:.66rem;color:var(--gold)">${fT(m.time)}</div></td>
-      <td class="c"><span class="grp-tag">${m.grp}</span></td>
-      <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600">${flag(m.t1)}${m.t1}</td>
-      <td class="c"><input class="sc-in ${s1!==''?'filled':''} ${isPending?'changed':''}" type="number" min="0" max="30" id="s1_${m.id}" value="${s1}" placeholder="-" oninput="markChanged(${m.id});this.classList.toggle('filled',this.value!=='')"></td>
-      <td class="c"><span class="vsep">VS</span></td>
-      <td class="c"><input class="sc-in ${s2!==''?'filled':''} ${isPending?'changed':''}" type="number" min="0" max="30" id="s2_${m.id}" value="${s2}" placeholder="-" oninput="markChanged(${m.id});this.classList.toggle('filled',this.value!=='')"></td>
-      <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600">${flag(m.t2)}${m.t2}</td>
-      <td class="c"><button class="goal-btn" onclick="openGoalModal(${m.id},false)">${hg?`⚽ ${hg}`:'+ গোল'}</button></td>
-      <td class="c"><div style="display:flex;gap:.3rem;justify-content:center">
-        <button class="sv-btn" id="sb_${m.id}" onclick="window.saveOne(${m.id})">Save</button>
-        <button class="cl-btn" onclick="window.clearOne(${m.id})">✕</button>
-      </div></td>
-    </tr>`;
+    const [yr,mo,dy]=m.date.split('-');
+    return`<div class="amc ${isPending?'changed-card':''}" id="tr-${m.id}">
+      <div class="amc-hdr">
+        <span class="amc-grp">Group ${m.grp} · MD${m.md||1}${isPending?'<span class="changed-dot"></span>':''}</span>
+        <span class="amc-meta">${mo}/${dy} · ${fT(m.time)}</span>
+      </div>
+      <div class="amc-body">
+        <div class="amc-teams">
+          <div class="amc-team">
+            <img class="amc-flag" src="https://flagcdn.com/24x18/${TEAMS[m.t1]?.code||'un'}.png" loading="lazy" onerror="this.style.display='none'">
+            <span class="amc-tname">${TEAMS[m.t1]?.en||m.t1}</span>
+          </div>
+          <div class="amc-scores">
+            <input class="asc ${s1!==''?'filled':''} ${isPending?'changed':''}" type="number" min="0" max="30"
+              id="s1_${m.id}" value="${s1}" placeholder="-"
+              oninput="markChanged(${m.id});this.classList.toggle('filled',this.value!=='')">
+            <span class="asc-sep">-</span>
+            <input class="asc ${s2!==''?'filled':''} ${isPending?'changed':''}" type="number" min="0" max="30"
+              id="s2_${m.id}" value="${s2}" placeholder="-"
+              oninput="markChanged(${m.id});this.classList.toggle('filled',this.value!=='')">
+          </div>
+          <div class="amc-team right">
+            <img class="amc-flag" src="https://flagcdn.com/24x18/${TEAMS[m.t2]?.code||'un'}.png" loading="lazy" onerror="this.style.display='none'">
+            <span class="amc-tname">${TEAMS[m.t2]?.en||m.t2}</span>
+          </div>
+        </div>
+      </div>
+      <div class="amc-footer">
+        <span class="amc-stadium">🏟 ${m.stadium||''}</span>
+        <div class="amc-actions">
+          <button class="goal-btn" onclick="openGoalModal(${m.id},false)">${hg?`⚽${hg}`:'⚽'}</button>
+          <button class="sv-btn" id="sb_${m.id}" onclick="window.saveOne(${m.id})">Save</button>
+          <button class="cl-btn" onclick="window.clearOne(${m.id})">✕</button>
+        </div>
+      </div>
+    </div>`;
   }).join('');
 }
 
@@ -375,9 +390,9 @@ window.batchSave=async function(){
     updateChangedCount();
     prog.textContent='';
     toast(`✓ ${done}টি ম্যাচ একসাথে সেভ হয়েছে${errs?` (${errs}টি স্কিপ)`:''}`, 'ok');
-    // Remove changed styling
-    document.querySelectorAll('.sc-in.changed').forEach(el=>el.classList.remove('changed'));
+    document.querySelectorAll('.asc.changed').forEach(el=>el.classList.remove('changed'));
     document.querySelectorAll('.changed-dot').forEach(el=>el.remove());
+    document.querySelectorAll('.amc.changed-card').forEach(el=>el.classList.remove('changed-card'));
   }catch(e){
     prog.textContent='';
     btn.disabled=false;
@@ -692,6 +707,7 @@ window.markChanged=function(id){
   pendingChanges.add(id);updateChangedCount();
   document.getElementById('s1_'+id)?.classList.add('changed');
   document.getElementById('s2_'+id)?.classList.add('changed');
+  document.getElementById('tr-'+id)?.classList.add('changed-card');
 };
 </script>
 </body>
