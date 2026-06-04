@@ -1,111 +1,136 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="bn" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel | FIFA 2026</title>
+<title>Admin | FIFA 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--dark:#080d18;--navy:#0c1829;--blue:#003d7a;--gold:#c9a84c;--gold-light:#e8c96a;--green:#27ae60;--red:#e74c3c;--gray:#7f8fa4;--white:#eef2ff;--border:rgba(201,168,76,0.2)}
+[data-theme="dark"]{--bg:#080d18;--bg2:#0c1829;--bg3:#111f35;--card:rgba(12,24,41,0.97);--blue:#003d7a;--blue2:#004d9a;--gold:#c9a84c;--gold-l:#e8c96a;--green:#27ae60;--red:#e74c3c;--orange:#f39c12;--text:#eef2ff;--text2:#b8c4d8;--gray:#7f8fa4;--border:rgba(201,168,76,0.18);--border2:rgba(255,255,255,0.07);--shadow:rgba(0,0,0,0.5);--inp-bg:rgba(0,0,0,0.35)}
+[data-theme="light"]{--bg:#f0f4f8;--bg2:#e2eaf5;--bg3:#d5e0ef;--card:rgba(255,255,255,0.97);--blue:#1a5faa;--blue2:#2271c7;--gold:#a07828;--gold-l:#c09030;--green:#1a8a45;--red:#c0392b;--orange:#d68910;--text:#0d1b2e;--text2:#2c3e50;--gray:#5a7089;--border:rgba(160,120,40,0.25);--border2:rgba(0,0,0,0.1);--shadow:rgba(0,0,0,0.15);--inp-bg:rgba(0,0,0,0.06)}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--dark);color:var(--white);font-family:'Barlow Condensed',sans-serif;min-height:100vh}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(0,61,122,0.3) 0%,transparent 70%);pointer-events:none;z-index:0}
+body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-serif;min-height:100vh}
 
-/* LOGIN SCREEN */
-.login-wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:200;background:var(--dark)}
-.login-box{background:var(--navy);border:1px solid var(--border);border-radius:14px;padding:2.5rem;width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.6)}
-.login-icon{font-size:3rem;margin-bottom:0.8rem;filter:drop-shadow(0 0 15px rgba(201,168,76,0.5))}
-.login-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;color:var(--gold-light);margin-bottom:0.3rem}
-.login-sub{font-size:0.75rem;color:var(--gray);letter-spacing:1px;margin-bottom:2rem}
-.pw-input{width:100%;padding:0.85rem 1rem;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--white);font-family:'Barlow Condensed',sans-serif;font-size:1rem;letter-spacing:3px;text-align:center;outline:none;transition:border 0.2s;margin-bottom:1rem}
-.pw-input:focus{border-color:var(--gold)}
-.login-btn{width:100%;padding:0.85rem;background:linear-gradient(135deg,var(--blue),#002860);border:1px solid var(--border);border-radius:8px;color:var(--gold-light);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;cursor:pointer;transition:all 0.2s}
-.login-btn:hover{background:linear-gradient(135deg,#004d9a,#003070)}
-.login-err{color:var(--red);font-size:0.78rem;margin-top:0.8rem;display:none}
+/* LOGIN */
+.login-wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:200;background:var(--bg)}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:2.5rem;width:min(340px,90vw);text-align:center;box-shadow:0 20px 60px var(--shadow)}
+.login-ic{font-size:3rem;margin-bottom:0.8rem}
+.login-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;color:var(--gold-l);margin-bottom:0.3rem}
+.login-sub{font-size:0.72rem;color:var(--gray);letter-spacing:1px;margin-bottom:1.5rem}
+.pw-in{width:100%;padding:0.85rem;background:var(--inp-bg);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:1rem;letter-spacing:4px;text-align:center;outline:none;transition:border 0.2s;margin-bottom:0.8rem}
+.pw-in:focus{border-color:var(--gold)}
+.login-btn{width:100%;padding:0.85rem;background:linear-gradient(135deg,var(--blue),#002860);border:1px solid var(--border);border-radius:8px;color:var(--gold-l);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;cursor:pointer;transition:all 0.2s}
+.login-btn:hover{background:linear-gradient(135deg,var(--blue2),#003070)}
+.login-err{color:var(--red);font-size:0.75rem;margin-top:0.6rem;display:none}
 .login-err.show{display:block}
 
-/* ADMIN PANEL */
-.admin-wrap{display:none;position:relative;z-index:1}
-.admin-wrap.show{display:block}
-.admin-header{background:linear-gradient(180deg,rgba(0,15,40,0.98),transparent);border-bottom:1px solid var(--border);padding:0 1.5rem}
-.admin-header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:1rem;padding:1rem 0}
-.admin-logo{font-size:1.8rem}
-.admin-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:2px;color:var(--gold-light)}
-.admin-sub{font-size:0.68rem;color:var(--gray);letter-spacing:1px;margin-top:1px}
-.admin-badges{margin-left:auto;display:flex;gap:0.6rem;align-items:center}
-.badge-green{background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);color:var(--green);padding:0.3rem 0.7rem;border-radius:5px;font-size:0.65rem;letter-spacing:1px}
-.logout-btn{background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);color:var(--red);padding:0.3rem 0.8rem;border-radius:5px;font-size:0.7rem;letter-spacing:1px;cursor:pointer;transition:all 0.2s}
-.logout-btn:hover{background:rgba(231,76,60,0.2)}
+/* ADMIN */
+.admin-wrap{display:none}.admin-wrap.show{display:block}
+.hdr{background:linear-gradient(180deg,rgba(0,10,30,0.98),rgba(0,10,30,0.7));border-bottom:1px solid var(--border);padding:0 1rem}
+.hdr-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:1rem;padding:0.8rem 0}
+.hdr-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;color:var(--gold-l)}
+.hdr-sub{font-size:0.65rem;color:var(--gray);letter-spacing:1px;margin-top:1px}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:0.5rem}
+.fb-badge{padding:0.25rem 0.6rem;border-radius:5px;font-size:0.62rem;letter-spacing:1px}
+.btn-sm{font-size:0.68rem;letter-spacing:1px;padding:0.3rem 0.7rem;border-radius:5px;cursor:pointer;transition:all 0.2s;border:1px solid var(--border2)}
+.btn-view{background:rgba(201,168,76,0.1);color:var(--gold);text-decoration:none}
+.btn-logout{background:rgba(231,76,60,0.1);color:var(--red)}
+.btn-logout:hover{background:rgba(231,76,60,0.2)}
+.btn-theme{background:none;color:var(--text);cursor:pointer}
 
-.main{max-width:1200px;margin:0 auto;padding:1.5rem}
+.main{max-width:1200px;margin:0 auto;padding:1rem}
 
 /* TOAST */
-.toast{position:fixed;bottom:2rem;right:2rem;padding:0.8rem 1.5rem;border-radius:8px;font-size:0.85rem;letter-spacing:1px;z-index:999;transform:translateY(100px);opacity:0;transition:all 0.3s;pointer-events:none}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;padding:0.7rem 1.2rem;border-radius:8px;font-size:0.82rem;z-index:999;transform:translateY(80px);opacity:0;transition:all 0.3s;pointer-events:none}
 .toast.show{transform:translateY(0);opacity:1}
-.toast.success{background:rgba(39,174,96,0.9);border:1px solid var(--green);color:#fff}
-.toast.error{background:rgba(231,76,60,0.9);border:1px solid var(--red);color:#fff}
+.toast.ok{background:rgba(39,174,96,0.9);border:1px solid var(--green);color:#fff}
+.toast.err{background:rgba(231,76,60,0.9);border:1px solid var(--red);color:#fff}
 
-/* STATS BAR */
-.stats-bar{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:0.7rem;margin-bottom:1.5rem}
-.sbar-card{background:rgba(12,24,41,0.9);border:1px solid var(--border);border-radius:7px;padding:0.8rem;text-align:center}
-.sbar-num{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold-light);line-height:1}
-.sbar-lbl{font-size:0.6rem;letter-spacing:1px;color:var(--gray);margin-top:2px}
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:0.6rem;margin-bottom:1rem}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:7px;padding:0.7rem;text-align:center}
+.sc-n{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:var(--gold-l);line-height:1}
+.sc-l{font-size:0.58rem;letter-spacing:1px;color:var(--gray);margin-top:2px}
 
-/* SECTION */
-.sec-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;color:var(--gold-light);margin-bottom:1rem;display:flex;align-items:center;gap:0.7rem}
+/* SEC */
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;color:var(--gold-l);margin-bottom:0.8rem;display:flex;align-items:center;gap:0.7rem}
 .sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
 
-/* GROUP FILTER */
-.gfilters{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1rem}
-.gf-btn{font-size:0.75rem;letter-spacing:1px;padding:0.3rem 0.8rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;color:var(--gray);cursor:pointer;transition:all 0.2s}
-.gf-btn:hover,.gf-btn.on{background:var(--blue);border-color:var(--gold);color:var(--white)}
+/* FILTERS */
+.filters{display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:0.8rem}
+.fb{font-size:0.7rem;letter-spacing:0.5px;padding:0.28rem 0.7rem;background:var(--card);border:1px solid var(--border2);border-radius:20px;color:var(--gray);cursor:pointer;transition:all 0.2s}
+.fb:hover,.fb.on{background:var(--blue);border-color:var(--gold);color:#fff}
+
+/* BULK */
+.bulk{display:flex;gap:0.6rem;margin-bottom:1rem;align-items:center;flex-wrap:wrap}
+.bbtn{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:1px;padding:0.5rem 1.2rem;border-radius:7px;cursor:pointer;transition:all 0.2s}
+.bbtn-save{background:linear-gradient(135deg,var(--green),#1e8449);border:1px solid rgba(39,174,96,0.5);color:#fff}
+.bbtn-clear{background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.4);color:var(--red)}
+.save-st{font-size:0.72rem;color:var(--gray)}
 
 /* MATCH TABLE */
-.match-table{width:100%;border-collapse:collapse}
-.match-table thead tr{background:rgba(0,61,122,0.3);border-bottom:2px solid var(--border)}
-.match-table th{padding:0.6rem 0.8rem;text-align:left;font-size:0.65rem;letter-spacing:1.5px;color:var(--gray);white-space:nowrap}
-.match-table th:nth-child(n+4){text-align:center}
-.match-table tbody tr{border-bottom:1px solid rgba(255,255,255,0.05);transition:background 0.15s}
-.match-table tbody tr:hover{background:rgba(255,255,255,0.03)}
-.match-table td{padding:0.55rem 0.8rem;font-size:0.82rem;vertical-align:middle}
-.match-table td:nth-child(n+4){text-align:center}
-.m-id{font-size:0.65rem;color:var(--gray);font-weight:600}
-.grp-tag{display:inline-block;font-size:0.6rem;padding:1px 5px;background:rgba(0,61,122,0.5);border:1px solid var(--border);border-radius:3px;color:var(--gold-light);letter-spacing:1px}
-.score-in{width:42px;height:34px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.12);border-radius:5px;color:var(--white);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;text-align:center;outline:none;transition:border 0.2s}
-.score-in:focus{border-color:var(--gold)}
-.score-in.filled{border-color:rgba(39,174,96,0.5);background:rgba(39,174,96,0.08)}
-.vsep{color:var(--gray);font-size:0.7rem;padding:0 4px}
-.save-btn{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:1px;padding:0.35rem 0.9rem;background:var(--blue);border:1px solid var(--border);border-radius:5px;color:var(--white);cursor:pointer;transition:all 0.2s;white-space:nowrap}
-.save-btn:hover{background:#004d9a}
-.save-btn.saving{background:rgba(243,156,18,0.3);border-color:#f39c12;color:#f39c12;pointer-events:none}
-.save-btn.saved{background:rgba(39,174,96,0.2);border-color:var(--green);color:var(--green);pointer-events:none}
-.clear-btn{font-size:0.75rem;padding:0.3rem 0.6rem;background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-radius:4px;color:var(--red);cursor:pointer;transition:all 0.2s}
-.clear-btn:hover{background:rgba(231,76,60,0.2)}
-.date-col{font-size:0.75rem;color:var(--gray)}
-.bulk-save{display:flex;gap:0.8rem;margin-bottom:1.5rem;align-items:center;flex-wrap:wrap}
-.bulk-btn{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:1.5px;padding:0.55rem 1.4rem;border-radius:7px;cursor:pointer;transition:all 0.2s}
-.bulk-save-btn{background:linear-gradient(135deg,var(--green),#1e8449);border:1px solid rgba(39,174,96,0.5);color:#fff}
-.bulk-save-btn:hover{background:linear-gradient(135deg,#2ecc71,#27ae60)}
-.bulk-clear-btn{background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.4);color:var(--red)}
-.bulk-clear-btn:hover{background:rgba(231,76,60,0.2)}
-.save-status{font-size:0.75rem;color:var(--gray);letter-spacing:1px}
+.tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;overflow-x:auto;margin-bottom:1.5rem}
+.mtbl{width:100%;border-collapse:collapse}
+.mtbl thead tr{background:rgba(0,61,122,0.25);border-bottom:2px solid var(--border)}
+.mtbl th{padding:0.55rem 0.6rem;text-align:left;font-size:0.62rem;letter-spacing:1.5px;color:var(--gray);white-space:nowrap}
+.mtbl th.c{text-align:center}
+.mtbl tbody tr{border-bottom:1px solid var(--border2);transition:background 0.15s}
+.mtbl tbody tr:hover{background:rgba(255,255,255,0.02)}
+.mtbl td{padding:0.5rem 0.6rem;font-size:0.8rem;vertical-align:middle}
+.mtbl td.c{text-align:center}
+.m-id{font-size:0.6rem;color:var(--gray);font-weight:600}
+.grp-tag{display:inline-block;font-size:0.58rem;padding:1px 5px;background:rgba(0,61,122,0.4);border:1px solid var(--border);border-radius:3px;color:var(--gold-l);letter-spacing:1px}
+.flag-sm{width:24px;height:18px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:4px}
+.sc-in{width:40px;height:32px;background:var(--inp-bg);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;text-align:center;outline:none;transition:border 0.2s}
+.sc-in:focus{border-color:var(--gold)}
+.sc-in.filled{border-color:rgba(39,174,96,0.5);background:rgba(39,174,96,0.07)}
+.vsep{color:var(--gray);font-size:0.65rem;padding:0 3px}
+.sv-btn{font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:1px;padding:0.3rem 0.8rem;background:var(--blue);border:1px solid var(--border);border-radius:5px;color:#fff;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.sv-btn:hover{background:var(--blue2)}
+.sv-btn.saving{background:rgba(243,156,18,0.2);border-color:var(--orange);color:var(--orange);pointer-events:none}
+.sv-btn.saved{background:rgba(39,174,96,0.15);border-color:var(--green);color:var(--green);pointer-events:none}
+.cl-btn{font-size:0.7rem;padding:0.28rem 0.5rem;background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.25);border-radius:4px;color:var(--red);cursor:pointer}
 
-/* KNOCKOUT ADMIN */
-.ko-section{margin-top:2rem}
-.ko-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
-.ko-card{background:rgba(12,24,41,0.9);border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.ko-card-head{background:rgba(0,61,122,0.3);padding:0.5rem 0.9rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
-.ko-round-name{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:1.5px;color:var(--gold)}
-.ko-match-id{font-size:0.6rem;color:var(--gray)}
-.ko-body{padding:0.8rem}
-.ko-team-row{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem}
-.ko-team-input{flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:5px;padding:0.4rem 0.6rem;color:var(--white);font-size:0.78rem;outline:none;transition:border 0.2s}
-.ko-team-input:focus{border-color:var(--gold)}
-.ko-score-input{width:38px;height:30px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);border-radius:4px;color:var(--white);font-family:'Bebas Neue',sans-serif;font-size:1rem;text-align:center;outline:none;transition:border 0.2s}
-.ko-score-input:focus{border-color:var(--gold)}
-.ko-date{font-size:0.62rem;color:var(--gray);margin-bottom:0.6rem}
-.ko-save-btn{width:100%;font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:1px;padding:0.4rem;background:var(--blue);border:1px solid var(--border);border-radius:5px;color:var(--white);cursor:pointer;transition:all 0.2s;margin-top:0.4rem}
-.ko-save-btn:hover{background:#004d9a}
+/* GOAL INPUT */
+.goal-btn{font-size:0.7rem;padding:0.28rem 0.6rem;background:rgba(201,168,76,0.1);border:1px solid var(--border);border-radius:4px;color:var(--gold);cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.goal-btn:hover{background:rgba(201,168,76,0.2)}
+
+/* GOAL MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal-bg.hide{display:none}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:12px;width:min(600px,100%);max-height:90vh;overflow-y:auto;padding:1.5rem}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:var(--gold-l);margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between}
+.modal-close{background:none;border:none;color:var(--gray);font-size:1.2rem;cursor:pointer}
+.modal-close:hover{color:var(--red)}
+.modal-teams{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.modal-team-title{font-size:0.75rem;letter-spacing:1px;color:var(--gold);margin-bottom:0.6rem;font-weight:700}
+.goal-entry{display:flex;gap:0.4rem;align-items:center;margin-bottom:0.4rem}
+.goal-name-in{flex:1;background:var(--inp-bg);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-size:0.78rem;padding:0.35rem 0.5rem;outline:none;transition:border 0.2s}
+.goal-name-in:focus{border-color:var(--gold)}
+.goal-min-in{width:48px;background:var(--inp-bg);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-size:0.78rem;padding:0.35rem 0.4rem;text-align:center;outline:none;transition:border 0.2s}
+.goal-min-in:focus{border-color:var(--gold)}
+.pen-cb{width:14px;height:14px;cursor:pointer;accent-color:var(--orange)}
+.pen-lbl{font-size:0.68rem;color:var(--orange)}
+.add-goal-btn{font-size:0.7rem;padding:0.3rem 0.6rem;background:rgba(39,174,96,0.1);border:1px solid rgba(39,174,96,0.3);border-radius:5px;color:var(--green);cursor:pointer;margin-top:0.3rem}
+.remove-goal-btn{background:none;border:none;color:var(--red);cursor:pointer;font-size:0.9rem;padding:0 0.2rem}
+.modal-save{width:100%;margin-top:1rem;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;padding:0.6rem;background:linear-gradient(135deg,var(--green),#1e8449);border:1px solid rgba(39,174,96,0.5);border-radius:8px;color:#fff;cursor:pointer;transition:all 0.2s}
+.modal-save:hover{opacity:0.9}
+
+/* KO */
+.ko-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:0.8rem}
+.ko-card{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.ko-hd{background:rgba(0,61,122,0.25);padding:0.45rem 0.8rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.ko-rname{font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:1.5px;color:var(--gold)}
+.ko-mid{font-size:0.58rem;color:var(--gray)}
+.ko-body{padding:0.7rem}
+.ko-date{font-size:0.6rem;color:var(--gray);margin-bottom:0.5rem}
+.ko-tr{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.4rem}
+.ko-ti{flex:1;background:var(--inp-bg);border:1px solid var(--border2);border-radius:5px;padding:0.35rem 0.5rem;color:var(--text);font-size:0.76rem;outline:none;transition:border 0.2s}
+.ko-ti:focus{border-color:var(--gold)}
+.ko-si{width:36px;height:28px;background:var(--inp-bg);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:'Bebas Neue',sans-serif;font-size:0.95rem;text-align:center;outline:none;transition:border 0.2s}
+.ko-si:focus{border-color:var(--gold)}
+.ko-sv{width:100%;font-family:'Bebas Neue',sans-serif;font-size:0.82rem;letter-spacing:1px;padding:0.38rem;background:var(--blue);border:1px solid var(--border);border-radius:5px;color:#fff;cursor:pointer;transition:all 0.2s;margin-top:0.3rem}
+.ko-sv:hover{background:var(--blue2)}
 </style>
 </head>
 <body>
@@ -113,169 +138,157 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <!-- LOGIN -->
 <div class="login-wrap" id="loginWrap">
   <div class="login-box">
-    <div class="login-icon">🔐</div>
+    <div class="login-ic">🔐</div>
     <div class="login-title">ADMIN LOGIN</div>
     <div class="login-sub">FIFA WORLD CUP 2026 · Al Amin Onik</div>
-    <input class="pw-input" type="password" id="pwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')tryLogin()">
-    <button class="login-btn" onclick="tryLogin()">LOGIN →</button>
-    <div class="login-err" id="loginErr">❌ ভুল Password! আবার চেষ্টা করুন</div>
+    <input class="pw-in" type="password" id="pwIn" placeholder="••••••••" onkeydown="if(event.key==='Enter')window.tryLogin()">
+    <button class="login-btn" onclick="window.tryLogin()">LOGIN →</button>
+    <div class="login-err" id="loginErr">❌ ভুল Password!</div>
   </div>
 </div>
 
-<!-- ADMIN PANEL -->
+<!-- ADMIN -->
 <div class="admin-wrap" id="adminWrap">
-  <div class="admin-header">
-    <div class="admin-header-inner">
-      <div class="admin-logo">⚙️</div>
+  <div class="hdr">
+    <div class="hdr-in">
       <div>
-        <div class="admin-title">ADMIN PANEL</div>
-        <div class="admin-sub">FIFA World Cup 2026 Score Manager</div>
+        <div class="hdr-title">⚙️ ADMIN PANEL</div>
+        <div class="hdr-sub">FIFA World Cup 2026 Score Manager</div>
       </div>
-      <div class="admin-badges">
-        <span class="badge-green" id="fbStatus">Firebase...</span>
-        <a href="index.html" style="background:rgba(201,168,76,0.1);border:1px solid var(--border);color:var(--gold);padding:0.3rem 0.8rem;border-radius:5px;font-size:0.7rem;letter-spacing:1px;text-decoration:none;">🏠 সাইট দেখো</a>
-        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+      <div class="hdr-right">
+        <span class="fb-badge" id="fbSt" style="background:rgba(0,61,122,0.3);border:1px solid var(--border);color:var(--gray)">Firebase...</span>
+        <button class="btn-sm btn-theme" onclick="toggleTheme()">🌙</button>
+        <a href="index.html" class="btn-sm btn-view">🏠 সাইট</a>
+        <button class="btn-sm btn-logout" onclick="window.doLogout()">🚪 Logout</button>
       </div>
     </div>
   </div>
 
   <div class="main">
-    <!-- Stats -->
-    <div class="stats-bar" id="statsBar"></div>
+    <div class="stats-row" id="statsRow"></div>
 
-    <!-- Bulk Actions -->
-    <div class="bulk-save">
-      <button class="bulk-btn bulk-save-btn" onclick="saveAll()">💾 সব Save করো</button>
-      <button class="bulk-btn bulk-clear-btn" onclick="confirmClearAll()">🗑️ সব Clear করো</button>
-      <span class="save-status" id="saveStatus"></span>
+    <!-- BULK -->
+    <div class="bulk">
+      <button class="bbtn bbtn-save" onclick="window.saveAll()">💾 সব Save</button>
+      <button class="bbtn bbtn-clear" onclick="window.confirmClear()">🗑️ সব Clear</button>
+      <span class="save-st" id="saveSt"></span>
     </div>
 
-    <!-- Group Stage -->
-    <div class="sec-title">গ্রুপ পর্যায় ম্যাচ স্কোর</div>
-    <div class="gfilters" id="gfilters"></div>
-    <div style="background:rgba(12,24,41,0.9);border:1px solid var(--border);border-radius:10px;overflow:hidden;overflow-x:auto;">
-      <table class="match-table">
+    <!-- GROUP STAGE -->
+    <div class="sec-title">গ্রুপ পর্যায় স্কোর</div>
+    <div class="filters" id="gFilters"></div>
+    <div class="tbl-wrap">
+      <table class="mtbl">
         <thead>
           <tr>
-            <th>#</th><th>তারিখ</th><th>GRP</th>
-            <th colspan="3">দল ১</th>
-            <th></th>
-            <th colspan="3">দল ২</th>
-            <th>Action</th>
+            <th>#</th><th>তারিখ/সময়</th><th class="c">GRP</th>
+            <th>দল ১</th><th class="c" colspan="3">স্কোর</th><th>দল ২</th>
+            <th class="c">গোল</th><th class="c">Action</th>
           </tr>
         </thead>
-        <tbody id="matchTbody"></tbody>
+        <tbody id="mTbody"></tbody>
       </table>
     </div>
 
-    <!-- Knockout -->
-    <div class="ko-section">
-      <div class="sec-title">নকআউট রাউন্ড</div>
-      <div class="ko-grid" id="koGrid"></div>
-    </div>
+    <!-- KNOCKOUT -->
+    <div class="sec-title">নকআউট রাউন্ড</div>
+    <div class="ko-grid" id="koGrid"></div>
   </div>
 </div>
 
-<!-- Toast -->
+<!-- GOAL MODAL -->
+<div class="modal-bg hide" id="goalModal">
+  <div class="modal">
+    <div class="modal-title">
+      <span>⚽ গোল বিস্তারিত — <span id="modalMatchTitle"></span></span>
+      <button class="modal-close" onclick="closeGoalModal()">✕</button>
+    </div>
+    <div class="modal-teams" id="modalTeams"></div>
+    <button class="modal-save" onclick="saveGoals()">💾 গোল তথ্য সেভ করো</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getDatabase,ref,set,get,onValue}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import{getDatabase,ref,set,onValue}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import{FIREBASE_CONFIG,ADMIN_PASSWORD}from'./firebase-config.js';
+import{TEAMS,MATCHES,KO_ROUNDS}from'./data.js';
 
 const app=initializeApp(FIREBASE_CONFIG);
 const db=getDatabase(app);
 
-// ── PASSWORD LOGIN ──────────────────────────
+const DAYS=['রবি','সোম','মঙ্গল','বুধ','বৃহঃ','শুক্র','শনি'];
+const MONTHS=['জানু','ফেব','মার্চ','এপ্রি','মে','জুন','জুলাই','আগ','সেপ্ট','অক্টো','নভে','ডিসে'];
+function fDate(d){const dt=new Date(d+'T00:00:00');return`${DAYS[dt.getDay()]}, ${dt.getDate()} ${MONTHS[dt.getMonth()]}`;}
+function fTime(t){const[h,m]=t.split(':').map(Number);const ap=h<12?'AM':'PM';const h12=h===0?12:h>12?h-12:h;return`${h12}:${String(m).padStart(2,'0')} ${ap}`;}
+function flag(name){const t=TEAMS[name];if(!t)return'';return`<img class="flag-sm" src="https://flagcdn.com/32x24/${t.code}.png" loading="lazy">`;}
+
+let dbSc={};let activeGrp='ALL';let modalMatchId=null;
+
+// ── AUTH ──
 window.tryLogin=function(){
-  const pw=document.getElementById('pwInput').value;
-  if(pw===ADMIN_PASSWORD){
+  if(document.getElementById('pwIn').value===ADMIN_PASSWORD){
     document.getElementById('loginWrap').style.display='none';
     document.getElementById('adminWrap').classList.add('show');
-    sessionStorage.setItem('fifa_admin','1');
+    sessionStorage.setItem('fa','1');
     initAdmin();
-  } else {
-    document.getElementById('loginErr').classList.add('show');
-    document.getElementById('pwInput').value='';
-    document.getElementById('pwInput').focus();
-    setTimeout(()=>document.getElementById('loginErr').classList.remove('show'),3000);
+  }else{
+    const e=document.getElementById('loginErr');
+    e.classList.add('show');
+    document.getElementById('pwIn').value='';
+    setTimeout(()=>e.classList.remove('show'),3000);
   }
 };
-
-window.logout=function(){
-  sessionStorage.removeItem('fifa_admin');
-  document.getElementById('adminWrap').classList.remove('show');
-  document.getElementById('loginWrap').style.display='flex';
-};
-
-// Auto-login if session exists
-if(sessionStorage.getItem('fifa_admin')==='1'){
-  document.getElementById('loginWrap').style.display='none';
-  document.getElementById('adminWrap').classList.add('show');
-  initAdmin();
-}
-
-// ── MATCH DATA ──────────────────────────────
-const MATCHES=[{id:1,date:'Jun 12',time:'01:00',t1:'১৫. মেক্সিকো',t2:'৬০. দক্ষিণ আফ্রিকা',grp:'A'},{id:2,date:'Jun 12',time:'08:00',t1:'২৫. কোরিয়া প্রজাতন্ত্র',t2:'৪১. চেক প্রজাতন্ত্র',grp:'A'},{id:3,date:'Jun 13',time:'01:00',t1:'৩০. কানাডা',t2:'৬৫. বসনিয়া ও হার্জেগোভিনা',grp:'B'},{id:4,date:'Jun 13',time:'07:00',t1:'১৬. যুক্তরাষ্ট্র',t2:'৪০. প্যারাগুয়ে',grp:'D'},{id:5,date:'Jun 14',time:'07:00',t1:'৮৩. হাইতি',t2:'৪৩. স্কটল্যান্ড',grp:'C'},{id:6,date:'Jun 14',time:'10:00',t1:'২৭. অস্ট্রেলিয়া',t2:'২২. তুরস্ক',grp:'D'},{id:7,date:'Jun 14',time:'04:00',t1:'৬. ব্রাজিল',t2:'৮. মরক্কো',grp:'C'},{id:8,date:'Jun 14',time:'01:00',t1:'৫৫. কাতার',t2:'১৯. সুইজারল্যান্ড',grp:'B'},{id:9,date:'Jun 15',time:'05:00',t1:'৩৪. আইভরি কোস্ট',t2:'২৩. ইকুয়েডর',grp:'E'},{id:10,date:'Jun 14',time:'23:00',t1:'১০. জার্মানি',t2:'৮২. কুরাসাও',grp:'E'},{id:11,date:'Jun 15',time:'02:00',t1:'৭. নেদারল্যান্ডস',t2:'১৮. জাপান',grp:'F'},{id:12,date:'Jun 15',time:'08:00',t1:'৩৮. সুইডেন',t2:'৪৪. তিউনিসিয়া',grp:'F'},{id:13,date:'Jun 16',time:'04:00',t1:'৬১. সৌদি আরব',t2:'১৭. উরুগুয়ে',grp:'H'},{id:14,date:'Jun 15',time:'22:00',t1:'২. স্পেন',t2:'৬৯. কেপ ভার্দে',grp:'H'},{id:15,date:'Jun 16',time:'07:00',t1:'২১. ইরান',t2:'৮৫. নিউজিল্যান্ড',grp:'G'},{id:16,date:'Jun 16',time:'01:00',t1:'৯. বেলজিয়াম',t2:'২৯. মিশর',grp:'G'},{id:17,date:'Jun 17',time:'01:00',t1:'১. ফ্রান্স',t2:'১৪. সেনেগাল',grp:'I'},{id:18,date:'Jun 17',time:'04:00',t1:'৫৭. ইরাক',t2:'৩১. নরওয়ে',grp:'I'},{id:19,date:'Jun 17',time:'07:00',t1:'৩. আর্জেন্টিনা',t2:'২৮. আলজেরিয়া',grp:'J'},{id:20,date:'Jun 17',time:'10:00',t1:'২৪. অস্ট্রিয়া',t2:'৬৩. জর্ডান',grp:'J'},{id:21,date:'Jun 18',time:'05:00',t1:'৭৪. ঘানা',t2:'৩৩. পানামা',grp:'L'},{id:22,date:'Jun 18',time:'02:00',t1:'৪. ইংল্যান্ড',t2:'১১. ক্রোয়েশিয়া',grp:'L'},{id:23,date:'Jun 17',time:'23:00',t1:'৫. পর্তুগাল',t2:'৪৬. ডিআর কঙ্গো',grp:'K'},{id:24,date:'Jun 18',time:'08:00',t1:'৫০. উজবেকিস্তান',t2:'১৩. কলম্বিয়া',grp:'K'},{id:25,date:'Jun 18',time:'22:00',t1:'৪১. চেক প্রজাতন্ত্র',t2:'৬০. দক্ষিণ আফ্রিকা',grp:'A'},{id:26,date:'Jun 19',time:'01:00',t1:'১৯. সুইজারল্যান্ড',t2:'৬৫. বসনিয়া ও হার্জেগোভিনা',grp:'B'},{id:27,date:'Jun 19',time:'04:00',t1:'৩০. কানাডা',t2:'৫৫. কাতার',grp:'B'},{id:28,date:'Jun 19',time:'07:00',t1:'১৫. মেক্সিকো',t2:'২৫. কোরিয়া প্রজাতন্ত্র',grp:'A'},{id:29,date:'Jun 20',time:'06:30',t1:'৬. ব্রাজিল',t2:'৮৩. হাইতি',grp:'C'},{id:30,date:'Jun 20',time:'04:00',t1:'৪৩. স্কটল্যান্ড',t2:'৮. মরক্কো',grp:'C'},{id:31,date:'Jun 20',time:'09:00',t1:'১৬. যুক্তরাষ্ট্র',t2:'২৭. অস্ট্রেলিয়া',grp:'D'},{id:32,date:'Jun 20',time:'01:00',t1:'২২. তুরস্ক',t2:'৪০. প্যারাগুয়ে',grp:'D'},{id:33,date:'Jun 21',time:'02:00',t1:'১০. জার্মানি',t2:'৩৪. আইভরি কোস্ট',grp:'E'},{id:34,date:'Jun 21',time:'06:00',t1:'২৩. ইকুয়েডর',t2:'৮২. কুরাসাও',grp:'E'},{id:35,date:'Jun 20',time:'23:00',t1:'৭. নেদারল্যান্ডস',t2:'৩৮. সুইডেন',grp:'F'},{id:36,date:'Jun 21',time:'10:00',t1:'৪৪. তিউনিসিয়া',t2:'১৮. জাপান',grp:'F'},{id:37,date:'Jun 22',time:'04:00',t1:'১৭. উরুগুয়ে',t2:'৬৯. কেপ ভার্দে',grp:'H'},{id:38,date:'Jun 21',time:'22:00',t1:'২. স্পেন',t2:'৬১. সৌদি আরব',grp:'H'},{id:39,date:'Jun 22',time:'01:00',t1:'৯. বেলজিয়াম',t2:'২১. ইরান',grp:'G'},{id:40,date:'Jun 22',time:'07:00',t1:'৮৫. নিউজিল্যান্ড',t2:'২৯. মিশর',grp:'G'},{id:41,date:'Jun 23',time:'06:00',t1:'৩১. নরওয়ে',t2:'১৪. সেনেগাল',grp:'I'},{id:42,date:'Jun 23',time:'02:00',t1:'১. ফ্রান্স',t2:'৫৭. ইরাক',grp:'I'},{id:43,date:'Jun 22',time:'23:00',t1:'৩. আর্জেন্টিনা',t2:'২৪. অস্ট্রিয়া',grp:'J'},{id:44,date:'Jun 23',time:'09:00',t1:'৬৩. জর্ডান',t2:'২৮. আলজেরিয়া',grp:'J'},{id:45,date:'Jun 24',time:'02:00',t1:'৪. ইংল্যান্ড',t2:'৭৪. ঘানা',grp:'L'},{id:46,date:'Jun 24',time:'05:00',t1:'৩৩. পানামা',t2:'১১. ক্রোয়েশিয়া',grp:'L'},{id:47,date:'Jun 23',time:'23:00',t1:'৫. পর্তুগাল',t2:'৫০. উজবেকিস্তান',grp:'K'},{id:48,date:'Jun 24',time:'08:00',t1:'১৩. কলম্বিয়া',t2:'৪৬. ডিআর কঙ্গো',grp:'K'},{id:49,date:'Jun 25',time:'04:00',t1:'৪৩. স্কটল্যান্ড',t2:'৬. ব্রাজিল',grp:'C'},{id:50,date:'Jun 25',time:'04:00',t1:'৮. মরক্কো',t2:'৮৩. হাইতি',grp:'C'},{id:51,date:'Jun 25',time:'01:00',t1:'১৯. সুইজারল্যান্ড',t2:'৩০. কানাডা',grp:'B'},{id:52,date:'Jun 25',time:'01:00',t1:'৬৫. বসনিয়া ও হার্জেগোভিনা',t2:'৫৫. কাতার',grp:'B'},{id:53,date:'Jun 25',time:'07:00',t1:'৪১. চেক প্রজাতন্ত্র',t2:'১৫. মেক্সিকো',grp:'A'},{id:54,date:'Jun 25',time:'07:00',t1:'৬০. দক্ষিণ আফ্রিকা',t2:'২৫. কোরিয়া প্রজাতন্ত্র',grp:'A'},{id:55,date:'Jun 26',time:'02:00',t1:'৮২. কুরাসাও',t2:'৩৪. আইভরি কোস্ট',grp:'E'},{id:56,date:'Jun 26',time:'02:00',t1:'২৩. ইকুয়েডর',t2:'১০. জার্মানি',grp:'E'},{id:57,date:'Jun 26',time:'05:00',t1:'১৮. জাপান',t2:'৩৮. সুইডেন',grp:'F'},{id:58,date:'Jun 26',time:'05:00',t1:'৪৪. তিউনিসিয়া',t2:'৭. নেদারল্যান্ডস',grp:'F'},{id:59,date:'Jun 26',time:'08:00',t1:'২২. তুরস্ক',t2:'১৬. যুক্তরাষ্ট্র',grp:'D'},{id:60,date:'Jun 26',time:'08:00',t1:'৪০. প্যারাগুয়ে',t2:'২৭. অস্ট্রেলিয়া',grp:'D'},{id:61,date:'Jun 27',time:'01:00',t1:'৩১. নরওয়ে',t2:'১. ফ্রান্স',grp:'I'},{id:62,date:'Jun 27',time:'01:00',t1:'১৪. সেনেগাল',t2:'৫৭. ইরাক',grp:'I'},{id:63,date:'Jun 27',time:'09:00',t1:'২৯. মিশর',t2:'২১. ইরান',grp:'G'},{id:64,date:'Jun 27',time:'09:00',t1:'৮৫. নিউজিল্যান্ড',t2:'৯. বেলজিয়াম',grp:'G'},{id:65,date:'Jun 27',time:'06:00',t1:'৬৯. কেপ ভার্দে',t2:'৬১. সৌদি আরব',grp:'H'},{id:66,date:'Jun 27',time:'06:00',t1:'১৭. উরুগুয়ে',t2:'২. স্পেন',grp:'H'},{id:67,date:'Jun 28',time:'03:00',t1:'৩৩. পানামা',t2:'৪. ইংল্যান্ড',grp:'L'},{id:68,date:'Jun 28',time:'03:00',t1:'১১. ক্রোয়েশিয়া',t2:'৭৪. ঘানা',grp:'L'},{id:69,date:'Jun 28',time:'08:00',t1:'২৮. আলজেরিয়া',t2:'২৪. অস্ট্রিয়া',grp:'J'},{id:70,date:'Jun 28',time:'08:00',t1:'৬৩. জর্ডান',t2:'৩. আর্জেন্টিনা',grp:'J'},{id:71,date:'Jun 28',time:'05:30',t1:'১৩. কলম্বিয়া',t2:'৫. পর্তুগাল',grp:'K'},{id:72,date:'Jun 28',time:'05:30',t1:'৪৬. ডিআর কঙ্গো',t2:'৫০. উজবেকিস্তান',grp:'K'}];
-const KO_MATCHES=[{id:'r32_1',round:'শেষ বত্রিশ',date:'Jun 29',time:'01:00'},{id:'r32_2',round:'শেষ বত্রিশ',date:'Jun 29',time:'23:00'},{id:'r32_3',round:'শেষ বত্রিশ',date:'Jun 30',time:'02:30'},{id:'r32_4',round:'শেষ বত্রিশ',date:'Jun 30',time:'07:00'},{id:'r32_5',round:'শেষ বত্রিশ',date:'Jun 30',time:'23:00'},{id:'r32_6',round:'শেষ বত্রিশ',date:'Jul 1',time:'03:00'},{id:'r32_7',round:'শেষ বত্রিশ',date:'Jul 1',time:'07:00'},{id:'r32_8',round:'শেষ বত্রিশ',date:'Jul 1',time:'22:00'},{id:'r32_9',round:'শেষ বত্রিশ',date:'Jul 2',time:'02:00'},{id:'r32_10',round:'শেষ বত্রিশ',date:'Jul 2',time:'06:00'},{id:'r32_11',round:'শেষ বত্রিশ',date:'Jul 3',time:'01:00'},{id:'r32_12',round:'শেষ বত্রিশ',date:'Jul 3',time:'05:00'},{id:'r32_13',round:'শেষ বত্রিশ',date:'Jul 3',time:'09:00'},{id:'r32_14',round:'শেষ বত্রিশ',date:'Jul 4',time:'00:00'},{id:'r32_15',round:'শেষ বত্রিশ',date:'Jul 4',time:'04:00'},{id:'r32_16',round:'শেষ বত্রিশ',date:'Jul 4',time:'07:30'},{id:'r16_1',round:'শেষ ষোলো',date:'Jul 5',time:'03:00'},{id:'r16_2',round:'শেষ ষোলো',date:'Jul 4',time:'23:00'},{id:'r16_3',round:'শেষ ষোলো',date:'Jul 6',time:'02:00'},{id:'r16_4',round:'শেষ ষোলো',date:'Jul 6',time:'06:00'},{id:'r16_5',round:'শেষ ষোলো',date:'Jul 7',time:'01:00'},{id:'r16_6',round:'শেষ ষোলো',date:'Jul 7',time:'06:00'},{id:'r16_7',round:'শেষ ষোলো',date:'Jul 7',time:'22:00'},{id:'r16_8',round:'শেষ ষোলো',date:'Jul 8',time:'02:00'},{id:'qf_1',round:'কোয়ার্টার ফাইনাল',date:'Jul 10',time:'02:00'},{id:'qf_2',round:'কোয়ার্টার ফাইনাল',date:'Jul 11',time:'01:00'},{id:'qf_3',round:'কোয়ার্টার ফাইনাল',date:'Jul 12',time:'03:00'},{id:'qf_4',round:'কোয়ার্টার ফাইনাল',date:'Jul 12',time:'07:00'},{id:'sf_1',round:'সেমি ফাইনাল',date:'Jul 15',time:'01:00'},{id:'sf_2',round:'সেমি ফাইনাল',date:'Jul 16',time:'01:00'},{id:'final',round:'🏆 ফাইনাল',date:'Jul 20',time:'01:00'}];
-
-let dbScores={};
-let activeGrpF='ALL';
+window.doLogout=function(){sessionStorage.removeItem('fa');location.reload();};
+if(sessionStorage.getItem('fa')==='1'){document.getElementById('loginWrap').style.display='none';document.getElementById('adminWrap').classList.add('show');initAdmin();}
 
 function initAdmin(){
-  const r=ref(db,'scores');
-  onValue(r,snap=>{
-    dbScores=snap.val()||{};
-    document.getElementById('fbStatus').textContent='✓ Firebase Connected';
-    document.getElementById('fbStatus').style.color='var(--green)';
-    renderStats();
-    renderTable(activeGrpF);
-    renderKO();
-  },()=>{
-    document.getElementById('fbStatus').textContent='✗ Firebase Error';
-    document.getElementById('fbStatus').style.color='var(--red)';
-  });
+  onValue(ref(db,'scores'),snap=>{
+    dbSc=snap.val()||{};
+    document.getElementById('fbSt').innerHTML='✓ Firebase';
+    document.getElementById('fbSt').style.cssText='background:rgba(39,174,96,0.15);border:1px solid var(--green);color:var(--green);padding:0.25rem 0.6rem;border-radius:5px;font-size:0.62rem;letter-spacing:1px';
+    renderStats();renderTable(activeGrp);renderKO();
+  },()=>{document.getElementById('fbSt').textContent='✗ Error';});
   renderGFilters();
 }
 
 function renderStats(){
-  const pl=MATCHES.filter(m=>dbScores[m.id]?.s1!==undefined).length;
-  const gl=MATCHES.reduce((s,m)=>s+(dbScores[m.id]?Number(dbScores[m.id].s1||0)+Number(dbScores[m.id].s2||0):0),0);
-  document.getElementById('statsBar').innerHTML=`
-    <div class="sbar-card"><div class="sbar-num">${pl}</div><div class="sbar-lbl">স্কোর দেওয়া</div></div>
-    <div class="sbar-card"><div class="sbar-num">${72-pl}</div><div class="sbar-lbl">বাকি</div></div>
-    <div class="sbar-card"><div class="sbar-num">${gl}</div><div class="sbar-lbl">মোট গোল</div></div>
-    <div class="sbar-card"><div class="sbar-num">72</div><div class="sbar-lbl">মোট ম্যাচ</div></div>`;
+  const pl=MATCHES.filter(m=>dbSc[m.id]?.s1!==undefined).length;
+  const gl=MATCHES.reduce((s,m)=>s+(dbSc[m.id]?Number(dbSc[m.id].s1||0)+Number(dbSc[m.id].s2||0):0),0);
+  document.getElementById('statsRow').innerHTML=`<div class="sc"><div class="sc-n">${pl}</div><div class="sc-l">স্কোর দেওয়া</div></div><div class="sc"><div class="sc-n">${72-pl}</div><div class="sc-l">বাকি</div></div><div class="sc"><div class="sc-n">${gl}</div><div class="sc-l">মোট গোল</div></div><div class="sc"><div class="sc-n">72</div><div class="sc-l">মোট ম্যাচ</div></div>`;
 }
 
 function renderGFilters(){
   const gs=['ALL','A','B','C','D','E','F','G','H','I','J','K','L'];
-  document.getElementById('gfilters').innerHTML=gs.map(g=>
-    `<button class="gf-btn ${activeGrpF===g?'on':''}" onclick="window.fGrp('${g}')">${g==='ALL'?'সকল':'Group '+g}</button>`
+  document.getElementById('gFilters').innerHTML=gs.map(g=>
+    `<button class="fb ${activeGrp===g?'on':''}" onclick="window._afg('${g}')">${g==='ALL'?'সকল':'Group '+g}</button>`
   ).join('');
 }
-window.fGrp=function(g){activeGrpF=g;renderGFilters();renderTable(g);};
+window._afg=function(g){activeGrp=g;renderGFilters();renderTable(g);};
 
 function renderTable(grp){
   const list=grp==='ALL'?MATCHES:MATCHES.filter(m=>m.grp===grp);
-  document.getElementById('matchTbody').innerHTML=list.map(m=>{
-    const sc=dbScores[m.id]||{};
+  document.getElementById('mTbody').innerHTML=list.map(m=>{
+    const sc=dbSc[m.id]||{};
     const s1=sc.s1!==undefined?sc.s1:'';
     const s2=sc.s2!==undefined?sc.s2:'';
-    return`<tr id="row-${m.id}">
+    const hasGoals=(sc.goals1?.length||0)+(sc.goals2?.length||0);
+    return`<tr id="tr-${m.id}">
       <td><span class="m-id">#${m.id}</span></td>
-      <td class="date-col">${m.date} ${m.time}</td>
-      <td><span class="grp-tag">${m.grp}</span></td>
-      <td style="font-weight:600;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.t1}</td>
-      <td><input class="score-in ${s1!==''?'filled':''}" type="number" min="0" max="30" id="s1_${m.id}" value="${s1}" placeholder="-" oninput="this.classList.toggle('filled',this.value!=='')"></td>
-      <td><span class="vsep">VS</span></td>
-      <td><input class="score-in ${s2!==''?'filled':''}" type="number" min="0" max="30" id="s2_${m.id}" value="${s2}" placeholder="-" oninput="this.classList.toggle('filled',this.value!=='')"></td>
-      <td style="font-weight:600;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.t2}</td>
-      <td>
-        <div style="display:flex;gap:0.4rem;align-items:center">
-          <button class="save-btn" id="sb_${m.id}" onclick="window.saveMatch(${m.id})">Save</button>
-          <button class="clear-btn" onclick="window.clearMatch(${m.id})">✕</button>
+      <td style="white-space:nowrap"><div style="font-size:0.75rem;font-weight:600">${fDate(m.date)}</div><div style="font-size:0.68rem;color:var(--gold)">${fTime(m.time)}</div></td>
+      <td class="c"><span class="grp-tag">${m.grp}</span></td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600">${flag(m.t1)}${m.t1}</td>
+      <td class="c"><input class="sc-in ${s1!==''?'filled':''}" type="number" min="0" max="30" id="s1_${m.id}" value="${s1}" placeholder="-" oninput="this.classList.toggle('filled',this.value!=='')"></td>
+      <td class="c"><span class="vsep">VS</span></td>
+      <td class="c"><input class="sc-in ${s2!==''?'filled':''}" type="number" min="0" max="30" id="s2_${m.id}" value="${s2}" placeholder="-" oninput="this.classList.toggle('filled',this.value!=='')"></td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600">${flag(m.t2)}${m.t2}</td>
+      <td class="c"><button class="goal-btn" onclick="openGoalModal(${m.id})" title="গোল বিস্তারিত">${hasGoals?`⚽ ${hasGoals}`:'+ গোল'}</button></td>
+      <td class="c">
+        <div style="display:flex;gap:0.3rem;align-items:center;justify-content:center">
+          <button class="sv-btn" id="sb_${m.id}" onclick="window.saveMx(${m.id})">Save</button>
+          <button class="cl-btn" onclick="window.clearMx(${m.id})">✕</button>
         </div>
       </td>
     </tr>`;
@@ -283,96 +296,146 @@ function renderTable(grp){
 }
 
 function renderKO(){
-  document.getElementById('koGrid').innerHTML=KO_MATCHES.map(m=>{
-    const sc=dbScores[m.id]||{};
+  document.getElementById('koGrid').innerHTML=KO_ROUNDS.flatMap(r=>r.matches).map(m=>{
+    const sc=dbSc[m.id]||{};
     return`<div class="ko-card">
-      <div class="ko-card-head">
-        <span class="ko-round-name">${m.round}</span>
-        <span class="ko-match-id">${m.id}</span>
-      </div>
+      <div class="ko-hd"><span class="ko-rname">${KO_ROUNDS.find(r=>r.matches.find(x=>x.id===m.id))?.name||''}</span><span class="ko-mid">${m.id}</span></div>
       <div class="ko-body">
-        <div class="ko-date">📅 ${m.date} · ⏰ ${m.time}</div>
-        <div class="ko-team-row">
-          <input class="ko-team-input" id="kt1_${m.id}" placeholder="দল ১ নাম" value="${sc.t1||''}">
-          <input class="ko-score-input" type="number" min="0" id="ks1_${m.id}" placeholder="-" value="${sc.s1!==undefined?sc.s1:''}">
-        </div>
-        <div class="ko-team-row">
-          <input class="ko-team-input" id="kt2_${m.id}" placeholder="দল ২ নাম" value="${sc.t2||''}">
-          <input class="ko-score-input" type="number" min="0" id="ks2_${m.id}" placeholder="-" value="${sc.s2!==undefined?sc.s2:''}">
-        </div>
-        <button class="ko-save-btn" onclick="window.saveKO('${m.id}')">💾 Save</button>
+        <div class="ko-date">📅 ${fDate(m.date)} · ⏰ ${fTime(m.time)}</div>
+        <div class="ko-tr"><input class="ko-ti" id="kt1_${m.id}" placeholder="দল ১" value="${sc.t1||''}"><input class="ko-si" type="number" min="0" id="ks1_${m.id}" value="${sc.s1!==undefined?sc.s1:''}"></div>
+        <div class="ko-tr"><input class="ko-ti" id="kt2_${m.id}" placeholder="দল ২" value="${sc.t2||''}"><input class="ko-si" type="number" min="0" id="ks2_${m.id}" value="${sc.s2!==undefined?sc.s2:''}"></div>
+        <button class="ko-sv" onclick="window.saveKO('${m.id}')">💾 Save</button>
       </div>
     </div>`;
   }).join('');
 }
 
-// ── SAVE FUNCTIONS ──────────────────────────
-window.saveMatch=async function(id){
-  const s1v=document.getElementById('s1_'+id).value;
-  const s2v=document.getElementById('s2_'+id).value;
-  const btn=document.getElementById('sb_'+id);
-  if(s1v===''||s2v===''){showToast('স্কোর দুটোই দিন!','error');return;}
-  btn.textContent='Saving...';btn.className='save-btn saving';
-  try{
-    await set(ref(db,'scores/'+id),{s1:Number(s1v),s2:Number(s2v)});
-    btn.textContent='✓ Saved';btn.className='save-btn saved';
-    showToast(`Match #${id} → ${s1v} - ${s2v} সেভ হয়েছে ✓`,'success');
-    setTimeout(()=>{btn.textContent='Save';btn.className='save-btn';},2000);
-  }catch(e){btn.textContent='Save';btn.className='save-btn';showToast('সেভ ব্যর্থ হয়েছে!','error');}
+// ── GOAL MODAL ──
+window.openGoalModal=function(id){
+  modalMatchId=id;
+  const m=MATCHES.find(x=>x.id===id);if(!m)return;
+  const sc=dbSc[id]||{};
+  document.getElementById('modalMatchTitle').textContent=`#${id} · ${m.t1} vs ${m.t2}`;
+  const g1=sc.goals1||[]; const g2=sc.goals2||[];
+
+  function teamGoalsHTML(goals,side,teamName){
+    const entries=goals.map((g,i)=>goalEntryHTML(side,i,g.name,g.min,g.pen)).join('');
+    return`<div>
+      <div class="modal-team-title">${flag(teamName)}${teamName}</div>
+      <div id="goals_${side}">${entries}</div>
+      <button class="add-goal-btn" onclick="addGoalEntry('${side}')">+ গোল যোগ করো</button>
+    </div>`;
+  }
+  function goalEntryHTML(side,i,name='',min='',pen=false){
+    return`<div class="goal-entry" id="ge_${side}_${i}">
+      <input class="goal-name-in" placeholder="গোলদাতার নাম" value="${name}" id="gn_${side}_${i}">
+      <input class="goal-min-in" type="number" min="1" max="120" placeholder="মিনিট" value="${min}" id="gm_${side}_${i}">
+      <input type="checkbox" class="pen-cb" id="gp_${side}_${i}" ${pen?'checked':''}><label class="pen-lbl" for="gp_${side}_${i}">P</label>
+      <button class="remove-goal-btn" onclick="removeGoalEntry('${side}',${i})">✕</button>
+    </div>`;
+  }
+  document.getElementById('modalTeams').innerHTML=teamGoalsHTML(g1,'t1',m.t1)+teamGoalsHTML(g2,'t2',m.t2);
+  document.getElementById('goalModal').classList.remove('hide');
 };
 
-window.clearMatch=async function(id){
-  try{
-    await set(ref(db,'scores/'+id),null);
-    document.getElementById('s1_'+id).value='';
-    document.getElementById('s2_'+id).value='';
-    document.getElementById('s1_'+id).classList.remove('filled');
-    document.getElementById('s2_'+id).classList.remove('filled');
-    showToast(`Match #${id} clear হয়েছে`,'success');
-  }catch(e){showToast('Clear ব্যর্থ!','error');}
+let goalCounters={t1:0,t2:0};
+window.addGoalEntry=function(side){
+  const m=MATCHES.find(x=>x.id===modalMatchId);if(!m)return;
+  const container=document.getElementById('goals_'+side);
+  const count=container.children.length;
+  const div=document.createElement('div');
+  div.innerHTML=`<div class="goal-entry" id="ge_${side}_${count}">
+    <input class="goal-name-in" placeholder="গোলদাতার নাম" id="gn_${side}_${count}">
+    <input class="goal-min-in" type="number" min="1" max="120" placeholder="মিনিট" id="gm_${side}_${count}">
+    <input type="checkbox" class="pen-cb" id="gp_${side}_${count}"><label class="pen-lbl" for="gp_${side}_${count}">P</label>
+    <button class="remove-goal-btn" onclick="removeGoalEntry('${side}',${count})">✕</button>
+  </div>`;
+  container.appendChild(div.firstElementChild);
 };
+window.removeGoalEntry=function(side,i){const el=document.getElementById(`ge_${side}_${i}`);if(el)el.remove();};
+window.closeGoalModal=function(){document.getElementById('goalModal').classList.add('hide');modalMatchId=null;};
+
+window.saveGoals=async function(){
+  if(!modalMatchId)return;
+  function collectGoals(side){
+    const container=document.getElementById('goals_'+side);if(!container)return[];
+    return Array.from(container.children).map(row=>{
+      const id=row.id.split('_');const i=id[id.length-1];const side2=id[1];
+      const name=document.getElementById(`gn_${side2}_${i}`)?.value?.trim()||'';
+      const min=document.getElementById(`gm_${side2}_${i}`)?.value||'';
+      const pen=document.getElementById(`gp_${side2}_${i}`)?.checked||false;
+      return name?{name,min:Number(min)||0,pen}:null;
+    }).filter(Boolean);
+  }
+  const goals1=collectGoals('t1');
+  const goals2=collectGoals('t2');
+  try{
+    const existing=dbSc[modalMatchId]||{};
+    await set(ref(db,'scores/'+modalMatchId),{...existing,goals1,goals2});
+    toast('গোল তথ্য সেভ হয়েছে ✓','ok');
+    closeGoalModal();
+  }catch(e){toast('সেভ ব্যর্থ!','err');}
+};
+
+// ── SAVE/CLEAR ──
+window.saveMx=async function(id){
+  const s1=document.getElementById('s1_'+id)?.value;
+  const s2=document.getElementById('s2_'+id)?.value;
+  const btn=document.getElementById('sb_'+id);
+  if(s1===''||s2===''){toast('স্কোর দুটোই দিন!','err');return;}
+  btn.textContent='Saving...';btn.className='sv-btn saving';
+  try{
+    const ex=dbSc[id]||{};
+    await set(ref(db,'scores/'+id),{...ex,s1:Number(s1),s2:Number(s2)});
+    btn.textContent='✓ Saved';btn.className='sv-btn saved';
+    toast(`Match #${id} → ${s1}-${s2} সেভ ✓`,'ok');
+    setTimeout(()=>{btn.textContent='Save';btn.className='sv-btn';},2000);
+  }catch(e){btn.textContent='Save';btn.className='sv-btn';toast('সেভ ব্যর্থ!','err');}
+};
+window.clearMx=async function(id){
+  try{await set(ref(db,'scores/'+id),null);toast(`Match #${id} clear হয়েছে`,'ok');}
+  catch(e){toast('Clear ব্যর্থ!','err');}
+};
+window.saveAll=async function(){
+  document.getElementById('saveSt').textContent='সেভ হচ্ছে...';
+  let n=0,e=0;
+  for(const m of MATCHES){
+    const s1=document.getElementById('s1_'+m.id)?.value;
+    const s2=document.getElementById('s2_'+m.id)?.value;
+    if(s1!==''&&s2!==''&&s1!==undefined){
+      try{const ex=dbSc[m.id]||{};await set(ref(db,'scores/'+m.id),{...ex,s1:Number(s1),s2:Number(s2)});n++;}
+      catch{e++;}
+    }
+  }
+  document.getElementById('saveSt').textContent='';
+  toast(`${n}টি ম্যাচ সেভ${e?` (${e} ব্যর্থ)`:''}  ✓`,'ok');
+};
+window.confirmClear=function(){if(confirm('⚠️ সব ডেটা মুছে ফেলবেন?'))set(ref(db,'scores'),null).then(()=>toast('সব clear হয়েছে','ok'));};
 
 window.saveKO=async function(id){
-  const t1=document.getElementById('kt1_'+id).value;
-  const t2=document.getElementById('kt2_'+id).value;
-  const s1=document.getElementById('ks1_'+id).value;
-  const s2=document.getElementById('ks2_'+id).value;
+  const t1=document.getElementById('kt1_'+id)?.value;
+  const t2=document.getElementById('kt2_'+id)?.value;
+  const s1=document.getElementById('ks1_'+id)?.value;
+  const s2=document.getElementById('ks2_'+id)?.value;
   const data={};
   if(t1)data.t1=t1;if(t2)data.t2=t2;
   if(s1!=='')data.s1=Number(s1);if(s2!=='')data.s2=Number(s2);
-  if(!Object.keys(data).length){showToast('কিছু একটা দিন!','error');return;}
-  try{
-    await set(ref(db,'scores/'+id),data);
-    showToast(`${id} সেভ হয়েছে ✓`,'success');
-  }catch(e){showToast('সেভ ব্যর্থ!','error');}
+  if(!Object.keys(data).length){toast('কিছু দিন!','err');return;}
+  try{await set(ref(db,'scores/'+id),data);toast(`${id} সেভ ✓`,'ok');}
+  catch(e){toast('সেভ ব্যর্থ!','err');}
 };
 
-window.saveAll=async function(){
-  document.getElementById('saveStatus').textContent='সেভ হচ্ছে...';
-  let count=0,errors=0;
-  for(const m of MATCHES){
-    const s1v=document.getElementById('s1_'+m.id)?.value;
-    const s2v=document.getElementById('s2_'+m.id)?.value;
-    if(s1v!==''&&s2v!==''&&s1v!==undefined){
-      try{await set(ref(db,'scores/'+m.id),{s1:Number(s1v),s2:Number(s2v)});count++;}
-      catch(e){errors++;}
-    }
-  }
-  document.getElementById('saveStatus').textContent='';
-  showToast(`${count}টি ম্যাচ সেভ হয়েছে${errors?` (${errors}টি ব্যর্থ)`:''}  ✓`,'success');
+// ── THEME ──
+window.toggleTheme=function(){
+  const html=document.documentElement;
+  const isDark=html.getAttribute('data-theme')==='dark';
+  html.setAttribute('data-theme',isDark?'light':'dark');
+  localStorage.setItem('theme',isDark?'light':'dark');
 };
+(function(){const t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();
 
-window.confirmClearAll=function(){
-  if(confirm('⚠️ সব স্কোর মুছে ফেলবেন? এটা undo করা যাবে না!')){clearAll();}
-};
-async function clearAll(){
-  try{
-    await set(ref(db,'scores'),null);
-    showToast('সব স্কোর clear হয়েছে','success');
-  }catch(e){showToast('Clear ব্যর্থ!','error');}
-}
-
-function showToast(msg,type){
+// ── TOAST ──
+function toast(msg,type){
   const t=document.getElementById('toast');
   t.textContent=msg;t.className='toast '+type+' show';
   setTimeout(()=>t.classList.remove('show'),3000);

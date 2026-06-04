@@ -8,5 +8,4 @@ export const FIREBASE_CONFIG = {
   appId: "1:766207347545:web:166cc979371d4c753a5a48",
   measurementId: "G-Q6Y4ZKZVR9"
 };
-
 export const ADMIN_PASSWORD = "Onik@2026";

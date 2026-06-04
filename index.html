@@ -1,230 +1,650 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="bn" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FIFA World Cup 2026 | Al Amin Onik</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--dark:#080d18;--navy:#0c1829;--blue:#003d7a;--gold:#c9a84c;--gold-light:#e8c96a;--green:#27ae60;--red:#e74c3c;--gray:#7f8fa4;--white:#eef2ff;--border:rgba(201,168,76,0.2);--card:rgba(12,24,41,0.95)}
+/* ── THEME VARIABLES ── */
+[data-theme="dark"] {
+  --bg: #080d18; --bg2: #0c1829; --bg3: #111f35;
+  --card: rgba(12,24,41,0.97); --card2: rgba(17,31,53,0.9);
+  --blue: #003d7a; --blue2: #004d9a;
+  --gold: #c9a84c; --gold-l: #e8c96a;
+  --green: #27ae60; --red: #e74c3c; --orange: #f39c12;
+  --text: #eef2ff; --text2: #b8c4d8; --gray: #7f8fa4;
+  --border: rgba(201,168,76,0.18); --border2: rgba(255,255,255,0.07);
+  --shadow: rgba(0,0,0,0.5);
+  --header-bg: rgba(0,10,30,0.97);
+  --tab-bg: rgba(8,13,24,0.97);
+  --score-bg: rgba(0,0,0,0.4);
+}
+[data-theme="light"] {
+  --bg: #f0f4f8; --bg2: #e2eaf5; --bg3: #d5e0ef;
+  --card: rgba(255,255,255,0.97); --card2: rgba(240,244,248,0.9);
+  --blue: #1a5faa; --blue2: #2271c7;
+  --gold: #a07828; --gold-l: #c09030;
+  --green: #1a8a45; --red: #c0392b; --orange: #d68910;
+  --text: #0d1b2e; --text2: #2c3e50; --gray: #5a7089;
+  --border: rgba(160,120,40,0.25); --border2: rgba(0,0,0,0.1);
+  --shadow: rgba(0,0,0,0.15);
+  --header-bg: rgba(13,27,46,0.97);
+  --tab-bg: rgba(240,244,248,0.97);
+  --score-bg: rgba(0,0,0,0.08);
+}
+
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--dark);color:var(--white);font-family:'Barlow Condensed','Hind Siliguri',sans-serif;min-height:100vh}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 40% at 10% 0%,rgba(0,61,122,0.25) 0%,transparent 70%),radial-gradient(ellipse 60% 40% at 90% 100%,rgba(201,168,76,0.08) 0%,transparent 70%);pointer-events:none;z-index:0}
-.header{position:relative;z-index:10;background:linear-gradient(180deg,rgba(0,15,40,0.98) 0%,rgba(0,15,40,0.7) 100%);border-bottom:1px solid var(--border);padding:0 1.5rem}
-.header-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;gap:1.2rem;padding:1rem 0}
-.header-logo{font-size:2.2rem;filter:drop-shadow(0 0 12px rgba(201,168,76,0.5))}
-.header-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.4rem,3vw,2.2rem);letter-spacing:2px;color:var(--gold-light);line-height:1}
-.header-sub{font-size:0.72rem;color:var(--gray);letter-spacing:1px;margin-top:2px}
-.header-right{margin-left:auto;display:flex;align-items:center;gap:0.8rem}
-.live-badge{display:flex;align-items:center;gap:0.4rem;background:rgba(0,61,122,0.5);border:1px solid var(--border);border-radius:5px;padding:0.35rem 0.8rem;font-size:0.68rem;letter-spacing:1px;color:var(--gold)}
-.dot{width:6px;height:6px;background:#2ecc71;border-radius:50%;animation:blink 1.4s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-.admin-link{font-size:0.7rem;letter-spacing:1px;padding:0.35rem 0.8rem;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:5px;color:var(--gray);text-decoration:none;transition:all 0.2s}
-.admin-link:hover{border-color:var(--gold);color:var(--gold)}
-.tabs{position:sticky;top:0;z-index:100;background:rgba(8,13,24,0.97);backdrop-filter:blur(12px);border-bottom:2px solid var(--border);display:flex;padding:0 1.5rem;overflow-x:auto}
-.tab{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:2px;color:var(--gray);background:none;border:none;border-bottom:3px solid transparent;padding:0.9rem 1.5rem;cursor:pointer;white-space:nowrap;transition:all 0.2s;margin-bottom:-2px}
-.tab:hover{color:var(--white)}.tab.active{color:var(--gold-light);border-bottom-color:var(--gold)}
-.main{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:1.5rem}
-.tab-panel{display:none}.tab-panel.active{display:block}
-.sec-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;color:var(--gold-light);margin-bottom:1.2rem;display:flex;align-items:center;gap:0.8rem}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed','Hind Siliguri',sans-serif;min-height:100vh;transition:background 0.3s,color 0.3s}
+
+/* BG EFFECT */
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse 80% 40% at 10% 0%,rgba(0,61,122,0.2) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 100%,rgba(201,168,76,0.06) 0%,transparent 60%);
+  pointer-events:none;z-index:0}
+[data-theme="light"] body::before{background:radial-gradient(ellipse 80% 40% at 10% 0%,rgba(0,61,122,0.06) 0%,transparent 60%)}
+
+/* ── HEADER ── */
+.hdr{position:relative;z-index:50;background:var(--header-bg);border-bottom:2px solid var(--border);padding:0 1rem}
+.hdr-in{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1rem;padding:0.8rem 0}
+.hdr-logo{font-size:2rem;filter:drop-shadow(0 0 10px rgba(201,168,76,0.5));flex-shrink:0}
+.hdr-text{flex:1;min-width:0}
+.hdr-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.3rem,3vw,2rem);letter-spacing:2px;color:var(--gold-l);line-height:1}
+.hdr-sub{font-size:0.68rem;color:var(--gray);letter-spacing:1px;margin-top:1px}
+.hdr-right{display:flex;align-items:center;gap:0.5rem;flex-shrink:0}
+.live-pill{display:flex;align-items:center;gap:4px;background:rgba(0,61,122,0.4);border:1px solid var(--border);border-radius:20px;padding:0.25rem 0.6rem;font-size:0.62rem;letter-spacing:1px;color:var(--gold)}
+.dot{width:6px;height:6px;background:#2ecc71;border-radius:50%;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.theme-btn{background:none;border:1px solid var(--border2);border-radius:8px;padding:0.3rem 0.5rem;cursor:pointer;font-size:1rem;color:var(--text);transition:all 0.2s}
+.theme-btn:hover{border-color:var(--gold);background:rgba(201,168,76,0.1)}
+.admin-btn{font-size:0.65rem;letter-spacing:1px;padding:0.3rem 0.7rem;background:rgba(255,255,255,0.05);border:1px solid var(--border2);border-radius:6px;color:var(--gray);text-decoration:none;transition:all 0.2s;white-space:nowrap}
+.admin-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--tab-bg);backdrop-filter:blur(12px);border-bottom:2px solid var(--border);display:flex;overflow-x:auto;padding:0 1rem;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:var(--gray);background:none;border:none;border-bottom:3px solid transparent;padding:0.85rem 1.2rem;cursor:pointer;white-space:nowrap;transition:all 0.2s;margin-bottom:-2px;flex-shrink:0}
+.nav-btn:hover{color:var(--text)}
+.nav-btn.on{color:var(--gold-l);border-bottom-color:var(--gold)}
+
+/* ── MAIN ── */
+.main{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:1.2rem 1rem}
+.panel{display:none}.panel.on{display:block}
+
+/* ── INFO BAR ── */
+.info-bar{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:0.6rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:0.7rem;font-size:0.75rem;color:var(--gray);flex-wrap:wrap}
+.refresh-btn{margin-left:auto;font-size:0.72rem;letter-spacing:1px;padding:0.3rem 0.8rem;background:var(--blue);border:1px solid var(--border);border-radius:5px;color:#fff;cursor:pointer;transition:all 0.2s}
+.refresh-btn:hover{background:var(--blue2)}
+
+/* ── SECTION TITLE ── */
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;color:var(--gold-l);margin-bottom:1rem;display:flex;align-items:center;gap:0.7rem}
 .sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
-.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:0.8rem;margin-bottom:1.5rem}
-.stat-card{background:linear-gradient(135deg,var(--navy),rgba(0,61,122,0.2));border:1px solid var(--border);border-radius:8px;padding:0.9rem;text-align:center}
-.stat-num{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold-light);line-height:1}
-.stat-lbl{font-size:0.65rem;letter-spacing:1px;color:var(--gray);margin-top:3px}
-.filters{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1.2rem}
-.filter-btn{font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;letter-spacing:1px;padding:0.35rem 0.9rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;color:var(--gray);cursor:pointer;transition:all 0.2s}
-.filter-btn:hover,.filter-btn.on{background:var(--blue);border-color:var(--gold);color:var(--white)}
-.matches{display:flex;flex-direction:column;gap:0.5rem}
-.match-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0.75rem 1.2rem;display:grid;grid-template-columns:110px 1fr auto 1fr 70px;align-items:center;gap:0.8rem;transition:all 0.2s}
-.match-card:hover{border-color:rgba(201,168,76,0.5);background:rgba(0,61,122,0.15)}
-.m-meta{display:flex;flex-direction:column;gap:2px}
-.m-num{font-size:0.6rem;color:var(--gray);letter-spacing:1px}
-.m-date{font-size:0.75rem;color:var(--white);font-weight:600}
-.m-time{font-size:0.68rem;color:var(--gold)}
-.m-grp{display:inline-block;font-size:0.58rem;padding:1px 5px;background:rgba(0,61,122,0.5);border:1px solid var(--border);border-radius:3px;color:var(--gold-light);letter-spacing:1px;width:fit-content;margin-top:1px}
-.m-team{display:flex;flex-direction:column}.m-team.right{text-align:right;align-items:flex-end}
-.m-tname{font-size:0.85rem;font-weight:700}
-.m-score{display:flex;align-items:center;justify-content:center;gap:0.4rem}
-.score-box{width:32px;height:32px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.2rem}
-.score-box.played{background:rgba(0,61,122,0.3);border-color:var(--border)}
-.score-sep{font-size:0.65rem;color:var(--gray)}
-.m-status{text-align:center;font-size:0.62rem;letter-spacing:1px}
-.st-done{color:var(--gold)}.st-wait{color:var(--gray)}
-.groups-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem}
-.grp-card{background:var(--navy);border:1px solid var(--border);border-radius:10px;overflow:hidden}
-.grp-head{background:linear-gradient(135deg,var(--blue),#002860);padding:0.6rem 1rem;display:flex;align-items:center;gap:0.6rem;border-bottom:1px solid var(--border)}
-.grp-letter{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold-light);line-height:1;text-shadow:0 0 20px rgba(201,168,76,0.4)}
+
+/* ── STATS STRIP ── */
+.stats-strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:0.7rem;margin-bottom:1.2rem}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0.75rem 0.5rem;text-align:center}
+.sc-n{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;color:var(--gold-l);line-height:1}
+.sc-l{font-size:0.6rem;letter-spacing:1px;color:var(--gray);margin-top:2px}
+
+/* ── FILTERS ── */
+.filters{display:flex;gap:0.35rem;flex-wrap:wrap;margin-bottom:1rem}
+.fb{font-size:0.72rem;letter-spacing:0.5px;padding:0.3rem 0.75rem;background:var(--card);border:1px solid var(--border2);border-radius:20px;color:var(--gray);cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.fb:hover,.fb.on{background:var(--blue);border-color:var(--gold);color:#fff}
+
+/* ── MATCH CARD ── */
+.match-list{display:flex;flex-direction:column;gap:0.5rem}
+.mc{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:all 0.2s}
+.mc:hover{border-color:rgba(201,168,76,0.4);box-shadow:0 4px 20px var(--shadow)}
+
+.mc-top{display:flex;align-items:stretch;min-height:80px}
+.mc-meta{padding:0.7rem 0.9rem;display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:130px;border-right:1px solid var(--border2);flex-shrink:0}
+.mc-num{font-size:0.6rem;color:var(--gray);letter-spacing:1px}
+.mc-date{font-size:0.82rem;font-weight:700;color:var(--text)}
+.mc-time{font-size:0.78rem;color:var(--gold);font-weight:600}
+.mc-grp{display:inline-block;font-size:0.6rem;padding:2px 6px;background:rgba(0,61,122,0.3);border:1px solid var(--border);border-radius:3px;color:var(--gold-l);letter-spacing:1px;margin-top:2px;width:fit-content}
+.mc-knockout-tag{background:rgba(201,168,76,0.15);border-color:var(--gold);color:var(--gold)}
+
+.mc-body{flex:1;display:flex;align-items:center;padding:0.7rem 1rem;gap:0.5rem;min-width:0}
+.mc-team{flex:1;display:flex;align-items:center;gap:0.6rem;min-width:0}
+.mc-team.right{flex-direction:row-reverse;text-align:right}
+.mc-flag{width:40px;height:30px;object-fit:cover;border-radius:3px;box-shadow:0 1px 4px var(--shadow);flex-shrink:0}
+.mc-flag-ph{width:40px;height:30px;background:var(--bg3);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--gray)}
+.mc-tname{font-size:0.88rem;font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mc-ten{font-size:0.65rem;color:var(--gray);white-space:nowrap}
+
+.mc-score{display:flex;align-items:center;justify-content:center;gap:0.35rem;flex-shrink:0;padding:0 0.5rem}
+.sb{width:36px;height:36px;background:var(--score-bg);border:1px solid var(--border2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;flex-shrink:0;transition:all 0.2s}
+.sb.done{background:rgba(0,61,122,0.25);border-color:var(--border)}
+.score-vs{font-size:0.65rem;color:var(--gray);flex-shrink:0}
+.mc-status{font-size:0.6rem;letter-spacing:1px;padding:0 0.5rem;flex-shrink:0;text-align:center}
+.st-d{color:var(--gold)}.st-w{color:var(--gray)}
+
+/* GOAL DETAILS */
+.mc-goals{background:var(--bg3);border-top:1px solid var(--border2);padding:0.5rem 1rem;display:flex;gap:2rem}
+.mc-goals-side{flex:1}
+.mc-goals-side.right{text-align:right}
+.goal-item{font-size:0.72rem;color:var(--text2);padding:1px 0}
+.goal-item .gmin{color:var(--gold);font-weight:700}
+.goal-item .gpen{color:var(--orange);font-size:0.65rem}
+
+/* ── GROUP TABLES ── */
+.grp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1rem}
+.grp-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.grp-hd{background:linear-gradient(135deg,var(--blue),rgba(0,40,100,0.8));padding:0.6rem 1rem;display:flex;align-items:center;gap:0.6rem;border-bottom:1px solid var(--border)}
+.grp-let{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:var(--gold-l);line-height:1;text-shadow:0 0 15px rgba(201,168,76,0.4)}
 .grp-lbl{font-size:0.65rem;color:var(--gray);letter-spacing:1px}
-.grp-tbl{width:100%;border-collapse:collapse;font-size:0.8rem}
-.grp-tbl th{padding:0.45rem 0.5rem;text-align:center;font-size:0.6rem;letter-spacing:1px;color:var(--gray);background:rgba(0,0,0,0.25);border-bottom:1px solid rgba(255,255,255,0.05)}
-.grp-tbl th:first-child{text-align:left;padding-left:0.8rem}
-.grp-tbl td{padding:0.5rem 0.5rem;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)}
-.grp-tbl td:first-child{text-align:left;padding-left:0.8rem}
-.grp-tbl tbody tr:last-child td{border-bottom:none}
-.grp-tbl tbody tr:hover{background:rgba(255,255,255,0.03)}
-.rank-badge{display:inline-block;width:17px;height:17px;background:rgba(255,255,255,0.07);border-radius:3px;text-align:center;line-height:17px;font-size:0.65rem;color:var(--gray);margin-right:5px}
+.gt{width:100%;border-collapse:collapse;font-size:0.78rem}
+.gt th{padding:0.4rem 0.4rem;text-align:center;font-size:0.58rem;letter-spacing:1px;color:var(--gray);background:rgba(0,0,0,0.15);border-bottom:1px solid var(--border2)}
+.gt th:first-child{text-align:left;padding-left:0.7rem}
+.gt td{padding:0.45rem 0.4rem;text-align:center;border-bottom:1px solid var(--border2)}
+.gt td:first-child{text-align:left;padding-left:0.7rem}
+.gt tbody tr:last-child td{border-bottom:none}
+.gt tbody tr:hover{background:rgba(255,255,255,0.03)}
+.gt-team{display:flex;align-items:center;gap:0.4rem}
+.gt-flag{width:22px;height:16px;object-fit:cover;border-radius:2px;flex-shrink:0}
+.gt-rank{display:inline-block;width:16px;height:16px;background:rgba(255,255,255,0.07);border-radius:3px;text-align:center;line-height:16px;font-size:0.6rem;color:var(--gray);margin-right:3px;flex-shrink:0}
+.pts-c{font-weight:700;color:var(--gold-l);font-size:0.9rem}
+.gdp{color:var(--green)}.gdn{color:var(--red)}.gdz{color:var(--gray)}
 .row-q{background:rgba(39,174,96,0.07)!important}.row-q td:first-child{border-left:3px solid var(--green)}
-.row-3{background:rgba(243,156,18,0.05)!important}.row-3 td:first-child{border-left:3px solid #f39c12}
-.pts{font-weight:700;color:var(--gold-light);font-size:0.9rem}
-.gd-p{color:var(--green)}.gd-n{color:var(--red)}.gd-z{color:var(--gray)}
-.bracket-wrap{overflow-x:auto;padding-bottom:1rem}
-.bracket{display:flex;gap:0.8rem;min-width:1100px;align-items:flex-start}
-.b-round{flex:1;min-width:165px}
-.b-round-title{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:2px;color:var(--gold);text-align:center;padding:0.6rem;background:rgba(0,61,122,0.3);border:1px solid var(--border);border-radius:6px 6px 0 0;margin-bottom:0.4rem}
-.b-matches{display:flex;flex-direction:column;gap:0.4rem;padding:0.4rem}
-.b-match{background:var(--navy);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:all 0.2s}
+.row-3{background:rgba(243,156,18,0.05)!important}.row-3 td:first-child{border-left:3px solid var(--orange)}
+
+/* ── BRACKET ── */
+.bracket-wrap{overflow-x:auto;padding-bottom:1rem;-webkit-overflow-scrolling:touch}
+.bracket{display:flex;gap:0;align-items:flex-start;min-width:900px}
+.b-col{display:flex;flex-direction:column;flex:1;min-width:150px}
+.b-col-title{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:1.5px;color:var(--gold);text-align:center;padding:0.5rem 0.3rem;background:rgba(0,61,122,0.25);border:1px solid var(--border);border-radius:6px 6px 0 0;margin:0 2px 0.3rem}
+.b-matches{display:flex;flex-direction:column;gap:0;padding:0 2px;position:relative}
+.b-match{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:0.35rem;transition:all 0.2s;cursor:default}
 .b-match:hover{border-color:var(--gold)}
-.b-team{display:flex;align-items:center;justify-content:space-between;padding:0.4rem 0.6rem;font-size:0.75rem;border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.15s}
+.b-team{display:flex;align-items:center;gap:0.4rem;padding:0.38rem 0.5rem;border-bottom:1px solid var(--border2);transition:background 0.15s;font-size:0.72rem}
 .b-team:last-of-type{border-bottom:none}
-.b-team:hover{background:rgba(255,255,255,0.03)}
-.b-tname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.b-score{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;color:var(--gold-light);min-width:20px;text-align:right}
-.b-date{text-align:center;font-size:0.58rem;color:var(--gray);padding:3px;background:rgba(0,0,0,0.2)}
-.b-win{background:rgba(39,174,96,0.1)!important;font-weight:700}
-.tp-card{background:var(--navy);border:1px solid var(--border);border-radius:10px;overflow:hidden;padding:1.2rem}
-.tp-table{width:100%;border-collapse:collapse;font-size:0.82rem}
-.tp-table th{padding:0.5rem 0.7rem;text-align:center;font-size:0.62rem;letter-spacing:1px;color:var(--gray);background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(255,255,255,0.05)}
-.tp-table th:first-child,.tp-table th:nth-child(2){text-align:left}
-.tp-table td{padding:0.5rem 0.7rem;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)}
-.tp-table td:first-child,.tp-table td:nth-child(2){text-align:left}
-.tp-table tbody tr:hover{background:rgba(255,255,255,0.03)}
-.loading{position:fixed;inset:0;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;z-index:9999;transition:opacity 0.5s}
-.loading.gone{opacity:0;pointer-events:none}
-.loading-icon{font-size:3.5rem;animation:float 1.2s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-.loading-txt{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;color:var(--gold);font-size:1rem}
-.loading-bar{width:180px;height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
-.loading-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));animation:ld 1.5s infinite}
-@keyframes ld{0%{width:0}100%{width:100%}}
-.info-bar{background:rgba(0,61,122,0.15);border:1px solid var(--border);border-radius:7px;padding:0.7rem 1.2rem;margin-bottom:1.2rem;display:flex;align-items:center;gap:0.8rem;font-size:0.78rem;color:var(--gray);flex-wrap:wrap}
-.info-bar strong{color:var(--gold-light)}
-.refresh-btn{margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;letter-spacing:1px;padding:0.35rem 0.9rem;background:var(--blue);border:1px solid var(--border);border-radius:5px;color:var(--white);cursor:pointer;transition:all 0.2s}
-.refresh-btn:hover{background:#004d9a}
-@media(max-width:700px){.match-card{grid-template-columns:1fr;gap:0.4rem}.m-score{justify-content:flex-start}.groups-grid{grid-template-columns:1fr}}
+.b-flag{width:20px;height:15px;object-fit:cover;border-radius:2px;flex-shrink:0}
+.b-tname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+.b-sc{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--gold-l);min-width:18px;text-align:right}
+.b-date{font-size:0.58rem;color:var(--gray);text-align:center;padding:2px;background:rgba(0,0,0,0.15)}
+.b-win{background:rgba(39,174,96,0.12)!important;font-weight:700}
+.connector{display:flex;align-items:center;justify-content:center;padding:0 0;flex:1}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:700px){.stats-grid{grid-template-columns:1fr}}
+.stats-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.stats-card-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--gold);padding:0.7rem 1rem;background:rgba(0,61,122,0.2);border-bottom:1px solid var(--border)}
+.scorer-row{display:flex;align-items:center;gap:0.7rem;padding:0.55rem 1rem;border-bottom:1px solid var(--border2);transition:background 0.15s}
+.scorer-row:hover{background:rgba(255,255,255,0.03)}
+.scorer-row:last-child{border-bottom:none}
+.scorer-rank{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--gray);width:24px;flex-shrink:0;text-align:center}
+.scorer-rank.top1{color:#FFD700}.scorer-rank.top2{color:#C0C0C0}.scorer-rank.top3{color:#CD7F32}
+.scorer-flag{width:28px;height:21px;object-fit:cover;border-radius:3px;flex-shrink:0}
+.scorer-info{flex:1;min-width:0}
+.scorer-name{font-size:0.82rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.scorer-team{font-size:0.65rem;color:var(--gray)}
+.scorer-goals{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold-l)}
+.team-row{display:flex;align-items:center;gap:0.7rem;padding:0.5rem 1rem;border-bottom:1px solid var(--border2)}
+.team-row:last-child{border-bottom:none}
+.team-row-flag{width:32px;height:24px;object-fit:cover;border-radius:3px}
+.team-row-name{flex:1;font-size:0.82rem;font-weight:600}
+.team-row-goals{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold-l)}
+.team-row-bar-wrap{width:80px;height:5px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.team-row-bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-l));border-radius:3px;transition:width 0.6s}
+
+/* ── THIRD PLACE ── */
+.tp-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;padding:1rem}
+.tp-tbl{width:100%;border-collapse:collapse;font-size:0.8rem}
+.tp-tbl th{padding:0.45rem 0.5rem;text-align:center;font-size:0.6rem;letter-spacing:1px;color:var(--gray);background:rgba(0,0,0,0.15);border-bottom:1px solid var(--border2)}
+.tp-tbl th:nth-child(2){text-align:left}
+.tp-tbl td{padding:0.45rem 0.5rem;text-align:center;border-bottom:1px solid var(--border2)}
+.tp-tbl td:nth-child(2){text-align:left}
+.tp-tbl tbody tr:hover{background:rgba(255,255,255,0.03)}
+
+/* ── LOADING ── */
+.loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;z-index:9999;transition:opacity 0.4s}
+.loader.gone{opacity:0;pointer-events:none}
+.loader-ic{font-size:3rem;animation:fl 1s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.loader-txt{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;color:var(--gold);font-size:1rem}
+.loader-bar{width:160px;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden}
+.loader-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-l));animation:lb 1.5s infinite}
+@keyframes lb{0%{width:0}100%{width:100%}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .mc-meta{min-width:110px;padding:0.5rem 0.6rem}
+  .mc-body{padding:0.5rem 0.6rem;gap:0.3rem}
+  .mc-flag{width:32px;height:24px}
+  .mc-tname{font-size:0.78rem}
+  .mc-ten{display:none}
+  .sb{width:30px;height:30px;font-size:1.1rem}
+  .stats-grid{grid-template-columns:1fr}
+  .hdr-sub{display:none}
+}
+@media(max-width:400px){
+  .mc-meta{min-width:95px}
+  .mc-flag{display:none}
+}
 </style>
 </head>
 <body>
-<div class="loading" id="loader">
-  <div class="loading-icon">🏆</div>
-  <div class="loading-txt">লোড হচ্ছে...</div>
-  <div class="loading-bar"><div class="loading-fill"></div></div>
+
+<div class="loader" id="loader">
+  <div class="loader-ic">🏆</div>
+  <div class="loader-txt">লোড হচ্ছে...</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
 </div>
-<header class="header">
-  <div class="header-inner">
-    <div class="header-logo">🏆</div>
-    <div>
-      <div class="header-title">FIFA WORLD CUP 2026</div>
-      <div class="header-sub">২০২৬ ফিফা বিশ্বকাপ · Al Amin Onik</div>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="hdr-logo">🏆</div>
+    <div class="hdr-text">
+      <div class="hdr-title">FIFA WORLD CUP 2026</div>
+      <div class="hdr-sub">২০২৬ ফিফা বিশ্বকাপ · Al Amin Onik</div>
     </div>
-    <div class="header-right">
-      <div class="live-badge"><div class="dot"></div>LIVE</div>
-      <a href="admin.html" class="admin-link">🔐 Admin</a>
+    <div class="hdr-right">
+      <div class="live-pill"><div class="dot"></div>LIVE</div>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Dark/Light Mode">🌙</button>
+      <a href="admin.html" class="admin-btn">🔐 Admin</a>
     </div>
   </div>
 </header>
-<nav class="tabs">
-  <button class="tab active" onclick="switchTab('schedule',this)">📅 ম্যাচ সূচি</button>
-  <button class="tab" onclick="switchTab('groups',this)">📊 Group Table</button>
-  <button class="tab" onclick="switchTab('knockout',this)">🏅 Knockout</button>
-  <button class="tab" onclick="switchTab('thirdplace',this)">🥉 তৃতীয় স্থান</button>
+
+<nav class="nav">
+  <button class="nav-btn on" onclick="goTab('schedule',this)">📅 ম্যাচ সূচি</button>
+  <button class="nav-btn" onclick="goTab('groups',this)">📊 Group Table</button>
+  <button class="nav-btn" onclick="goTab('knockout',this)">🏅 Knockout</button>
+  <button class="nav-btn" onclick="goTab('stats',this)">📈 Stats</button>
+  <button class="nav-btn" onclick="goTab('thirdplace',this)">🥉 তৃতীয় স্থান</button>
 </nav>
+
 <main class="main">
   <div class="info-bar">
-    <span>🔥 Firebase Realtime Database</span>
-    <strong id="dbStatus">সংযোগ হচ্ছে...</strong>
-    <span id="lastUp" style="font-size:0.7rem;"></span>
-    <button class="refresh-btn" onclick="window.loadScores && window.loadScores()">🔄 রিফ্রেশ</button>
+    <span>🔥</span>
+    <strong id="dbSt">সংযোগ হচ্ছে...</strong>
+    <span id="upAt" style="font-size:0.68rem"></span>
+    <button class="refresh-btn" onclick="window._reload&&window._reload()">🔄 রিফ্রেশ</button>
   </div>
-  <div id="p-schedule" class="tab-panel active">
-    <div class="stats-row" id="statsRow"></div>
+
+  <!-- SCHEDULE -->
+  <div id="p-schedule" class="panel on">
+    <div class="stats-strip" id="statStrip"></div>
     <div class="sec-title">ম্যাচ সূচি</div>
-    <div class="filters" id="filters"></div>
-    <div class="matches" id="matchList"></div>
+    <div class="filters" id="schedFilters"></div>
+    <div class="match-list" id="matchList"></div>
   </div>
-  <div id="p-groups" class="tab-panel">
+
+  <!-- GROUPS -->
+  <div id="p-groups" class="panel">
     <div class="sec-title">Group Stage Table</div>
-    <div class="groups-grid" id="groupsGrid"></div>
+    <div class="grp-grid" id="grpGrid"></div>
   </div>
-  <div id="p-knockout" class="tab-panel">
-    <div class="sec-title">Knockout Round</div>
+
+  <!-- KNOCKOUT -->
+  <div id="p-knockout" class="panel">
+    <div class="sec-title">Knockout Bracket</div>
     <div class="bracket-wrap"><div class="bracket" id="bracket"></div></div>
   </div>
-  <div id="p-thirdplace" class="tab-panel">
+
+  <!-- STATS -->
+  <div id="p-stats" class="panel">
+    <div class="sec-title">Stats</div>
+    <div class="filters" id="statsFilters"></div>
+    <div class="stats-grid" id="statsGrid"></div>
+  </div>
+
+  <!-- THIRD PLACE -->
+  <div id="p-thirdplace" class="panel">
     <div class="sec-title">তৃতীয় স্থান র‍্যাংকিং</div>
     <div id="thirdPlace"></div>
   </div>
 </main>
+
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getDatabase,ref,onValue}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import{FIREBASE_CONFIG}from'./firebase-config.js';
+import{TEAMS,FLAG,GROUPS,MATCHES,KO_ROUNDS}from'./data.js';
+
 const app=initializeApp(FIREBASE_CONFIG);
 const db=getDatabase(app);
-const GROUPS={A:['১৫. মেক্সিকো','২৫. কোরিয়া প্রজাতন্ত্র','৪১. চেক প্রজাতন্ত্র','৬০. দক্ষিণ আফ্রিকা'],B:['১৯. সুইজারল্যান্ড','৩০. কানাডা','৫৫. কাতার','৬৫. বসনিয়া ও হার্জেগোভিনা'],C:['৬. ব্রাজিল','৮. মরক্কো','৪৩. স্কটল্যান্ড','৮৩. হাইতি'],D:['১৬. যুক্তরাষ্ট্র','২২. তুরস্ক','২৭. অস্ট্রেলিয়া','৪০. প্যারাগুয়ে'],E:['১০. জার্মানি','২৩. ইকুয়েডর','৩৪. আইভরি কোস্ট','৮২. কুরাসাও'],F:['৭. নেদারল্যান্ডস','১৮. জাপান','৩৮. সুইডেন','৪৪. তিউনিসিয়া'],G:['৯. বেলজিয়াম','২১. ইরান','২৯. মিশর','৮৫. নিউজিল্যান্ড'],H:['২. স্পেন','১৭. উরুগুয়ে','৬১. সৌদি আরব','৬৯. কেপ ভার্দে'],I:['১. ফ্রান্স','১৪. সেনেগাল','৩১. নরওয়ে','৫৭. ইরাক'],J:['৩. আর্জেন্টিনা','২৪. অস্ট্রিয়া','২৮. আলজেরিয়া','৬৩. জর্ডান'],K:['৫. পর্তুগাল','১৩. কলম্বিয়া','৪৬. ডিআর কঙ্গো','৫০. উজবেকিস্তান'],L:['৪. ইংল্যান্ড','১১. ক্রোয়েশিয়া','৩৩. পানামা','৭৪. ঘানা']};
-const MATCHES=[{id:1,date:'Jun 12',time:'01:00',t1:'১৫. মেক্সিকো',t2:'৬০. দক্ষিণ আফ্রিকা',grp:'A'},{id:2,date:'Jun 12',time:'08:00',t1:'২৫. কোরিয়া প্রজাতন্ত্র',t2:'৪১. চেক প্রজাতন্ত্র',grp:'A'},{id:3,date:'Jun 13',time:'01:00',t1:'৩০. কানাডা',t2:'৬৫. বসনিয়া ও হার্জেগোভিনা',grp:'B'},{id:4,date:'Jun 13',time:'07:00',t1:'১৬. যুক্তরাষ্ট্র',t2:'৪০. প্যারাগুয়ে',grp:'D'},{id:5,date:'Jun 14',time:'07:00',t1:'৮৩. হাইতি',t2:'৪৩. স্কটল্যান্ড',grp:'C'},{id:6,date:'Jun 14',time:'10:00',t1:'২৭. অস্ট্রেলিয়া',t2:'২২. তুরস্ক',grp:'D'},{id:7,date:'Jun 14',time:'04:00',t1:'৬. ব্রাজিল',t2:'৮. মরক্কো',grp:'C'},{id:8,date:'Jun 14',time:'01:00',t1:'৫৫. কাতার',t2:'১৯. সুইজারল্যান্ড',grp:'B'},{id:9,date:'Jun 15',time:'05:00',t1:'৩৪. আইভরি কোস্ট',t2:'২৩. ইকুয়েডর',grp:'E'},{id:10,date:'Jun 14',time:'23:00',t1:'১০. জার্মানি',t2:'৮২. কুরাসাও',grp:'E'},{id:11,date:'Jun 15',time:'02:00',t1:'৭. নেদারল্যান্ডস',t2:'১৮. জাপান',grp:'F'},{id:12,date:'Jun 15',time:'08:00',t1:'৩৮. সুইডেন',t2:'৪৪. তিউনিসিয়া',grp:'F'},{id:13,date:'Jun 16',time:'04:00',t1:'৬১. সৌদি আরব',t2:'১৭. উরুগুয়ে',grp:'H'},{id:14,date:'Jun 15',time:'22:00',t1:'২. স্পেন',t2:'৬৯. কেপ ভার্দে',grp:'H'},{id:15,date:'Jun 16',time:'07:00',t1:'২১. ইরান',t2:'৮৫. নিউজিল্যান্ড',grp:'G'},{id:16,date:'Jun 16',time:'01:00',t1:'৯. বেলজিয়াম',t2:'২৯. মিশর',grp:'G'},{id:17,date:'Jun 17',time:'01:00',t1:'১. ফ্রান্স',t2:'১৪. সেনেগাল',grp:'I'},{id:18,date:'Jun 17',time:'04:00',t1:'৫৭. ইরাক',t2:'৩১. নরওয়ে',grp:'I'},{id:19,date:'Jun 17',time:'07:00',t1:'৩. আর্জেন্টিনা',t2:'২৮. আলজেরিয়া',grp:'J'},{id:20,date:'Jun 17',time:'10:00',t1:'২৪. অস্ট্রিয়া',t2:'৬৩. জর্ডান',grp:'J'},{id:21,date:'Jun 18',time:'05:00',t1:'৭৪. ঘানা',t2:'৩৩. পানামা',grp:'L'},{id:22,date:'Jun 18',time:'02:00',t1:'৪. ইংল্যান্ড',t2:'১১. ক্রোয়েশিয়া',grp:'L'},{id:23,date:'Jun 17',time:'23:00',t1:'৫. পর্তুগাল',t2:'৪৬. ডিআর কঙ্গো',grp:'K'},{id:24,date:'Jun 18',time:'08:00',t1:'৫০. উজবেকিস্তান',t2:'১৩. কলম্বিয়া',grp:'K'},{id:25,date:'Jun 18',time:'22:00',t1:'৪১. চেক প্রজাতন্ত্র',t2:'৬০. দক্ষিণ আফ্রিকা',grp:'A'},{id:26,date:'Jun 19',time:'01:00',t1:'১৯. সুইজারল্যান্ড',t2:'৬৫. বসনিয়া ও হার্জেগোভিনা',grp:'B'},{id:27,date:'Jun 19',time:'04:00',t1:'৩০. কানাডা',t2:'৫৫. কাতার',grp:'B'},{id:28,date:'Jun 19',time:'07:00',t1:'১৫. মেক্সিকো',t2:'২৫. কোরিয়া প্রজাতন্ত্র',grp:'A'},{id:29,date:'Jun 20',time:'06:30',t1:'৬. ব্রাজিল',t2:'৮৩. হাইতি',grp:'C'},{id:30,date:'Jun 20',time:'04:00',t1:'৪৩. স্কটল্যান্ড',t2:'৮. মরক্কো',grp:'C'},{id:31,date:'Jun 20',time:'09:00',t1:'১৬. যুক্তরাষ্ট্র',t2:'২৭. অস্ট্রেলিয়া',grp:'D'},{id:32,date:'Jun 20',time:'01:00',t1:'২২. তুরস্ক',t2:'৪০. প্যারাগুয়ে',grp:'D'},{id:33,date:'Jun 21',time:'02:00',t1:'১০. জার্মানি',t2:'৩৪. আইভরি কোস্ট',grp:'E'},{id:34,date:'Jun 21',time:'06:00',t1:'২৩. ইকুয়েডর',t2:'৮২. কুরাসাও',grp:'E'},{id:35,date:'Jun 20',time:'23:00',t1:'৭. নেদারল্যান্ডস',t2:'৩৮. সুইডেন',grp:'F'},{id:36,date:'Jun 21',time:'10:00',t1:'৪৪. তিউনিসিয়া',t2:'১৮. জাপান',grp:'F'},{id:37,date:'Jun 22',time:'04:00',t1:'১৭. উরুগুয়ে',t2:'৬৯. কেপ ভার্দে',grp:'H'},{id:38,date:'Jun 21',time:'22:00',t1:'২. স্পেন',t2:'৬১. সৌদি আরব',grp:'H'},{id:39,date:'Jun 22',time:'01:00',t1:'৯. বেলজিয়াম',t2:'২১. ইরান',grp:'G'},{id:40,date:'Jun 22',time:'07:00',t1:'৮৫. নিউজিল্যান্ড',t2:'২৯. মিশর',grp:'G'},{id:41,date:'Jun 23',time:'06:00',t1:'৩১. নরওয়ে',t2:'১৪. সেনেগাল',grp:'I'},{id:42,date:'Jun 23',time:'02:00',t1:'১. ফ্রান্স',t2:'৫৭. ইরাক',grp:'I'},{id:43,date:'Jun 22',time:'23:00',t1:'৩. আর্জেন্টিনা',t2:'২৪. অস্ট্রিয়া',grp:'J'},{id:44,date:'Jun 23',time:'09:00',t1:'৬৩. জর্ডান',t2:'২৮. আলজেরিয়া',grp:'J'},{id:45,date:'Jun 24',time:'02:00',t1:'৪. ইংল্যান্ড',t2:'৭৪. ঘানা',grp:'L'},{id:46,date:'Jun 24',time:'05:00',t1:'৩৩. পানামা',t2:'১১. ক্রোয়েশিয়া',grp:'L'},{id:47,date:'Jun 23',time:'23:00',t1:'৫. পর্তুগাল',t2:'৫০. উজবেকিস্তান',grp:'K'},{id:48,date:'Jun 24',time:'08:00',t1:'১৩. কলম্বিয়া',t2:'৪৬. ডিআর কঙ্গো',grp:'K'},{id:49,date:'Jun 25',time:'04:00',t1:'৪৩. স্কটল্যান্ড',t2:'৬. ব্রাজিল',grp:'C'},{id:50,date:'Jun 25',time:'04:00',t1:'৮. মরক্কো',t2:'৮৩. হাইতি',grp:'C'},{id:51,date:'Jun 25',time:'01:00',t1:'১৯. সুইজারল্যান্ড',t2:'৩০. কানাডা',grp:'B'},{id:52,date:'Jun 25',time:'01:00',t1:'৬৫. বসনিয়া ও হার্জেগোভিনা',t2:'৫৫. কাতার',grp:'B'},{id:53,date:'Jun 25',time:'07:00',t1:'৪১. চেক প্রজাতন্ত্র',t2:'১৫. মেক্সিকো',grp:'A'},{id:54,date:'Jun 25',time:'07:00',t1:'৬০. দক্ষিণ আফ্রিকা',t2:'২৫. কোরিয়া প্রজাতন্ত্র',grp:'A'},{id:55,date:'Jun 26',time:'02:00',t1:'৮২. কুরাসাও',t2:'৩৪. আইভরি কোস্ট',grp:'E'},{id:56,date:'Jun 26',time:'02:00',t1:'২৩. ইকুয়েডর',t2:'১০. জার্মানি',grp:'E'},{id:57,date:'Jun 26',time:'05:00',t1:'১৮. জাপান',t2:'৩৮. সুইডেন',grp:'F'},{id:58,date:'Jun 26',time:'05:00',t1:'৪৪. তিউনিসিয়া',t2:'৭. নেদারল্যান্ডস',grp:'F'},{id:59,date:'Jun 26',time:'08:00',t1:'২২. তুরস্ক',t2:'১৬. যুক্তরাষ্ট্র',grp:'D'},{id:60,date:'Jun 26',time:'08:00',t1:'৪০. প্যারাগুয়ে',t2:'২৭. অস্ট্রেলিয়া',grp:'D'},{id:61,date:'Jun 27',time:'01:00',t1:'৩১. নরওয়ে',t2:'১. ফ্রান্স',grp:'I'},{id:62,date:'Jun 27',time:'01:00',t1:'১৪. সেনেগাল',t2:'৫৭. ইরাক',grp:'I'},{id:63,date:'Jun 27',time:'09:00',t1:'২৯. মিশর',t2:'২১. ইরান',grp:'G'},{id:64,date:'Jun 27',time:'09:00',t1:'৮৫. নিউজিল্যান্ড',t2:'৯. বেলজিয়াম',grp:'G'},{id:65,date:'Jun 27',time:'06:00',t1:'৬৯. কেপ ভার্দে',t2:'৬১. সৌদি আরব',grp:'H'},{id:66,date:'Jun 27',time:'06:00',t1:'১৭. উরুগুয়ে',t2:'২. স্পেন',grp:'H'},{id:67,date:'Jun 28',time:'03:00',t1:'৩৩. পানামা',t2:'৪. ইংল্যান্ড',grp:'L'},{id:68,date:'Jun 28',time:'03:00',t1:'১১. ক্রোয়েশিয়া',t2:'৭৪. ঘানা',grp:'L'},{id:69,date:'Jun 28',time:'08:00',t1:'২৮. আলজেরিয়া',t2:'২৪. অস্ট্রিয়া',grp:'J'},{id:70,date:'Jun 28',time:'08:00',t1:'৬৩. জর্ডান',t2:'৩. আর্জেন্টিনা',grp:'J'},{id:71,date:'Jun 28',time:'05:30',t1:'১৩. কলম্বিয়া',t2:'৫. পর্তুগাল',grp:'K'},{id:72,date:'Jun 28',time:'05:30',t1:'৪৬. ডিআর কঙ্গো',t2:'৫০. উজবেকিস্তান',grp:'K'}];
-const KO=[{name:'শেষ বত্রিশ',ms:[{id:'r32_1',date:'Jun 29',time:'01:00',s1:'1A',s2:'Best 3rd'},{id:'r32_2',date:'Jun 29',time:'23:00',s1:'1C',s2:'2F'},{id:'r32_3',date:'Jun 30',time:'02:30',s1:'1E',s2:'Best 3rd'},{id:'r32_4',date:'Jun 30',time:'07:00',s1:'1F',s2:'2C'},{id:'r32_5',date:'Jun 30',time:'23:00',s1:'2E',s2:'2I'},{id:'r32_6',date:'Jul 1',time:'03:00',s1:'1I',s2:'Best 3rd'},{id:'r32_7',date:'Jul 1',time:'07:00',s1:'1A',s2:'Best 3rd'},{id:'r32_8',date:'Jul 1',time:'22:00',s1:'1L',s2:'Best 3rd'},{id:'r32_9',date:'Jul 2',time:'02:00',s1:'1G',s2:'Best 3rd'},{id:'r32_10',date:'Jul 2',time:'06:00',s1:'1D',s2:'Best 3rd'},{id:'r32_11',date:'Jul 3',time:'01:00',s1:'1H',s2:'2J'},{id:'r32_12',date:'Jul 3',time:'05:00',s1:'2K',s2:'2L'},{id:'r32_13',date:'Jul 3',time:'09:00',s1:'1B',s2:'Best 3rd'},{id:'r32_14',date:'Jul 4',time:'00:00',s1:'2D',s2:'2G'},{id:'r32_15',date:'Jul 4',time:'04:00',s1:'1J',s2:'2H'},{id:'r32_16',date:'Jul 4',time:'07:30',s1:'1K',s2:'Best 3rd'}]},{name:'শেষ ষোলো',ms:[{id:'r16_1',date:'Jul 5',time:'03:00',s1:'W(R32-1)',s2:'W(R32-2)'},{id:'r16_2',date:'Jul 4',time:'23:00',s1:'W(R32-3)',s2:'W(R32-4)'},{id:'r16_3',date:'Jul 6',time:'02:00',s1:'W(R32-5)',s2:'W(R32-6)'},{id:'r16_4',date:'Jul 6',time:'06:00',s1:'W(R32-7)',s2:'W(R32-8)'},{id:'r16_5',date:'Jul 7',time:'01:00',s1:'W(R32-9)',s2:'W(R32-10)'},{id:'r16_6',date:'Jul 7',time:'06:00',s1:'W(R32-11)',s2:'W(R32-12)'},{id:'r16_7',date:'Jul 7',time:'22:00',s1:'W(R32-13)',s2:'W(R32-14)'},{id:'r16_8',date:'Jul 8',time:'02:00',s1:'W(R32-15)',s2:'W(R32-16)'}]},{name:'কোয়ার্টার ফাইনাল',ms:[{id:'qf_1',date:'Jul 10',time:'02:00',s1:'W(R16-1)',s2:'W(R16-2)'},{id:'qf_2',date:'Jul 11',time:'01:00',s1:'W(R16-3)',s2:'W(R16-4)'},{id:'qf_3',date:'Jul 12',time:'03:00',s1:'W(R16-5)',s2:'W(R16-6)'},{id:'qf_4',date:'Jul 12',time:'07:00',s1:'W(R16-7)',s2:'W(R16-8)'}]},{name:'সেমি ফাইনাল',ms:[{id:'sf_1',date:'Jul 15',time:'01:00',s1:'W(QF-1)',s2:'W(QF-2)'},{id:'sf_2',date:'Jul 16',time:'01:00',s1:'W(QF-3)',s2:'W(QF-4)'}]},{name:'🏆 ফাইনাল',ms:[{id:'final',date:'Jul 20',time:'01:00',s1:'W(SF-1)',s2:'W(SF-2)'}]}];
-let scores={};let activeF='ALL';
-window.loadScores=function(){
-  const r=ref(db,'scores');
-  onValue(r,snap=>{
+
+// ── STATE ──
+let scores={};
+let schedGrp='ALL';
+let statsFilter='ALL';
+const DAYS_BN=['রবি','সোম','মঙ্গল','বুধ','বৃহঃ','শুক্র','শনি'];
+const MONTHS_BN=['জানু','ফেব','মার্চ','এপ্রি','মে','জুন','জুলাই','আগ','সেপ্ট','অক্টো','নভে','ডিসে'];
+
+// ── HELPERS ──
+function fmtDate(d){
+  const dt=new Date(d+'T00:00:00');
+  return `${DAYS_BN[dt.getDay()]}, ${dt.getDate()} ${MONTHS_BN[dt.getMonth()]}`;
+}
+function fmtTime(t){
+  const [h,m]=t.split(':').map(Number);
+  const ampm=h<12?'AM':'PM';
+  const h12=h===0?12:h>12?h-12:h;
+  return `${h12}:${String(m).padStart(2,'0')} ${ampm}`;
+}
+function flagImg(name,w=40,h=30){
+  const t=TEAMS[name];
+  if(!t)return`<div class="mc-flag-ph" style="width:${w}px;height:${h}px">?</div>`;
+  return`<img class="mc-flag" src="https://flagcdn.com/${w}x${h}/${t.code}.png" alt="${t.en}" style="width:${w}px;height:${h}px" loading="lazy" onerror="this.style.display='none'">`;
+}
+function teamEn(name){return TEAMS[name]?.en||name}
+
+// ── FIREBASE ──
+window._reload=function(){
+  document.getElementById('dbSt').textContent='রিফ্রেশ হচ্ছে...';
+  onValue(ref(db,'scores'),snap=>{
     scores=snap.val()||{};
-    document.getElementById('dbStatus').innerHTML='<span style="color:var(--green)">✓ Firebase Connected</span>';
-    document.getElementById('lastUp').textContent='Updated: '+new Date().toLocaleTimeString('bn-BD');
+    document.getElementById('dbSt').innerHTML='<span style="color:var(--green)">✓ Firebase Connected</span>';
+    document.getElementById('upAt').textContent='Updated: '+new Date().toLocaleTimeString('bn-BD');
     renderAll();hideLoader();
   },()=>{
-    document.getElementById('dbStatus').innerHTML='<span style="color:var(--red)">✗ Connection Failed</span>';
+    document.getElementById('dbSt').innerHTML='<span style="color:var(--red)">✗ Connection Failed</span>';
     renderAll();hideLoader();
-  });
+  },{onlyOnce:true});
 };
-loadScores();
+onValue(ref(db,'scores'),snap=>{
+  scores=snap.val()||{};
+  document.getElementById('dbSt').innerHTML='<span style="color:var(--green)">✓ Firebase Connected</span>';
+  document.getElementById('upAt').textContent='Updated: '+new Date().toLocaleTimeString('bn-BD');
+  renderAll();hideLoader();
+},()=>{
+  document.getElementById('dbSt').innerHTML='<span style="color:var(--red)">✗ Connection Failed</span>';
+  renderAll();hideLoader();
+});
+
+// ── CALC GROUPS ──
 function calcGroups(){
   const t={};
-  for(const[g,teams]of Object.entries(GROUPS)){t[g]={};for(const tm of teams)t[g][tm]={pl:0,w:0,d:0,l:0,gf:0,ga:0,pts:0};}
+  for(const[g,teams]of Object.entries(GROUPS)){
+    t[g]={};
+    for(const tm of teams)t[g][tm]={pl:0,w:0,d:0,l:0,gf:0,ga:0,pts:0};
+  }
   for(const m of MATCHES){
     const sc=scores[m.id];
-    if(!sc||sc.s1===null||sc.s1===undefined)continue;
+    if(!sc||sc.s1===undefined||sc.s1===null)continue;
     const tbl=t[m.grp];if(!tbl||!tbl[m.t1]||!tbl[m.t2])continue;
     const s1=Number(sc.s1),s2=Number(sc.s2);
-    tbl[m.t1].pl++;tbl[m.t2].pl++;tbl[m.t1].gf+=s1;tbl[m.t1].ga+=s2;tbl[m.t2].gf+=s2;tbl[m.t2].ga+=s1;
+    tbl[m.t1].pl++;tbl[m.t2].pl++;
+    tbl[m.t1].gf+=s1;tbl[m.t1].ga+=s2;
+    tbl[m.t2].gf+=s2;tbl[m.t2].ga+=s1;
     if(s1>s2){tbl[m.t1].w++;tbl[m.t1].pts+=3;tbl[m.t2].l++;}
     else if(s1<s2){tbl[m.t2].w++;tbl[m.t2].pts+=3;tbl[m.t1].l++;}
     else{tbl[m.t1].d++;tbl[m.t1].pts++;tbl[m.t2].d++;tbl[m.t2].pts++;}
   }
   const s={};
-  for(const[g,tbl]of Object.entries(t)){s[g]=Object.entries(tbl).map(([n,v])=>({name:n,...v,gd:v.gf-v.ga})).sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);}
+  for(const[g,tbl]of Object.entries(t)){
+    s[g]=Object.entries(tbl).map(([n,v])=>({name:n,...v,gd:v.gf-v.ga}))
+      .sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
+  }
   return s;
 }
-function renderAll(){const g=calcGroups();renderStats();renderFilters();renderMatches(activeF);renderGroups(g);renderKO();renderTP(g);}
-function renderStats(){
+
+// ── RENDER ALL ──
+function renderAll(){
+  const grps=calcGroups();
+  renderStats(grps);
+  renderSchedFilters();
+  renderMatches(schedGrp);
+  renderGroups(grps);
+  renderBracket();
+  renderStatsPage(grps);
+  renderThirdPlace(grps);
+}
+
+// ── STATS STRIP ──
+function renderStats(grps){
   const pl=MATCHES.filter(m=>scores[m.id]?.s1!==undefined).length;
   const gl=MATCHES.reduce((s,m)=>s+(scores[m.id]?Number(scores[m.id].s1||0)+Number(scores[m.id].s2||0):0),0);
-  document.getElementById('statsRow').innerHTML=`<div class="stat-card"><div class="stat-num">${pl}</div><div class="stat-lbl">খেলা হয়েছে</div></div><div class="stat-card"><div class="stat-num">${72-pl}</div><div class="stat-lbl">বাকি ম্যাচ</div></div><div class="stat-card"><div class="stat-num">${gl}</div><div class="stat-lbl">মোট গোল</div></div><div class="stat-card"><div class="stat-num">${pl?(gl/pl).toFixed(1):'0.0'}</div><div class="stat-lbl">গড় গোল/ম্যাচ</div></div><div class="stat-card"><div class="stat-num">12</div><div class="stat-lbl">গ্রুপ</div></div><div class="stat-card"><div class="stat-num">48</div><div class="stat-lbl">দেশ</div></div>`;
+  document.getElementById('statStrip').innerHTML=
+    `<div class="sc"><div class="sc-n">${pl}</div><div class="sc-l">খেলা হয়েছে</div></div>
+     <div class="sc"><div class="sc-n">${72-pl}</div><div class="sc-l">বাকি ম্যাচ</div></div>
+     <div class="sc"><div class="sc-n">${gl}</div><div class="sc-l">মোট গোল</div></div>
+     <div class="sc"><div class="sc-n">${pl?(gl/pl).toFixed(1):'0.0'}</div><div class="sc-l">গড় গোল</div></div>
+     <div class="sc"><div class="sc-n">12</div><div class="sc-l">গ্রুপ</div></div>
+     <div class="sc"><div class="sc-n">48</div><div class="sc-l">দেশ</div></div>`;
 }
-function renderFilters(){
+
+// ── SCHEDULE ──
+function renderSchedFilters(){
   const gs=['ALL','A','B','C','D','E','F','G','H','I','J','K','L'];
-  document.getElementById('filters').innerHTML=gs.map(g=>`<button class="filter-btn ${activeF===g?'on':''}" onclick="window.fG('${g}')">${g==='ALL'?'সকল':'Group '+g}</button>`).join('');
+  document.getElementById('schedFilters').innerHTML=gs.map(g=>
+    `<button class="fb ${schedGrp===g?'on':''}" onclick="window._sfg('${g}')">${g==='ALL'?'সকল ম্যাচ':'Group '+g}</button>`
+  ).join('');
 }
-window.fG=function(g){activeF=g;renderFilters();renderMatches(g);};
+window._sfg=function(g){schedGrp=g;renderSchedFilters();renderMatches(g);};
+
 function renderMatches(grp){
   const list=grp==='ALL'?MATCHES:MATCHES.filter(m=>m.grp===grp);
   document.getElementById('matchList').innerHTML=list.map(m=>{
-    const sc=scores[m.id];const done=sc&&sc.s1!==undefined&&sc.s1!==null;
-    return`<div class="match-card"><div class="m-meta"><span class="m-num">MATCH #${m.id}</span><span class="m-date">${m.date}, 2026</span><span class="m-time">⏰ ${m.time} GMT+6</span><span class="m-grp">GROUP ${m.grp}</span></div><div class="m-team"><span class="m-tname">${m.t1}</span></div><div class="m-score"><div class="score-box ${done?'played':''}">${done?sc.s1:'–'}</div><span class="score-sep">VS</span><div class="score-box ${done?'played':''}">${done?sc.s2:'–'}</div></div><div class="m-team right"><span class="m-tname">${m.t2}</span></div><div class="m-status"><span class="${done?'st-done':'st-wait'}">${done?'✓ শেষ':'⏳ বাকি'}</span></div></div>`;
+    const sc=scores[m.id]||{};
+    const done=sc.s1!==undefined&&sc.s1!==null;
+    const goals1=sc.goals1||[];
+    const goals2=sc.goals2||[];
+    const hasGoals=goals1.length>0||goals2.length>0;
+    return`<div class="mc">
+      <div class="mc-top">
+        <div class="mc-meta">
+          <span class="mc-num">MATCH #${m.id}</span>
+          <span class="mc-date">${fmtDate(m.date)}</span>
+          <span class="mc-time">⏰ ${fmtTime(m.time)}</span>
+          <span class="mc-grp">GROUP ${m.grp}</span>
+        </div>
+        <div class="mc-body">
+          <div class="mc-team">
+            ${flagImg(m.t1)}
+            <div>
+              <div class="mc-tname">${m.t1}</div>
+              <div class="mc-ten">${teamEn(m.t1)}</div>
+            </div>
+          </div>
+          <div class="mc-score">
+            <div class="sb ${done?'done':''}">${done?sc.s1:'–'}</div>
+            <span class="score-vs">VS</span>
+            <div class="sb ${done?'done':''}">${done?sc.s2:'–'}</div>
+          </div>
+          <div class="mc-team right">
+            <div>
+              <div class="mc-tname">${m.t2}</div>
+              <div class="mc-ten">${teamEn(m.t2)}</div>
+            </div>
+            ${flagImg(m.t2)}
+          </div>
+        </div>
+        <div class="mc-status"><span class="${done?'st-d':'st-w'}">${done?'✓ শেষ':'⏳ বাকি'}</span></div>
+      </div>
+      ${hasGoals?`<div class="mc-goals">
+        <div class="mc-goals-side">
+          ${goals1.map(g=>`<div class="goal-item">⚽ ${g.name} <span class="gmin">${g.min}'</span>${g.pen?` <span class="gpen">(P)</span>`:''}</div>`).join('')}
+        </div>
+        <div class="mc-goals-side right">
+          ${goals2.map(g=>`<div class="goal-item">${g.pen?`<span class="gpen">(P) </span>`:''}<span class="gmin">${g.min}'</span> ${g.name} ⚽</div>`).join('')}
+        </div>
+      </div>`:''}
+    </div>`;
   }).join('');
 }
-function renderGroups(g){
-  document.getElementById('groupsGrid').innerHTML=Object.entries(g).map(([gr,teams])=>`<div class="grp-card"><div class="grp-head"><div class="grp-letter">${gr}</div><div><div style="font-size:0.7rem;color:var(--gold)">GROUP ${gr}</div><div class="grp-lbl">গ্রুপ ${gr}</div></div></div><table class="grp-tbl"><thead><tr><th>দল</th><th>খে</th><th>জ</th><th>ড্র</th><th>হা</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead><tbody>${teams.map((t,i)=>`<tr class="${i<2?'row-q':i===2?'row-3':''}"><td><span class="rank-badge">${i+1}</span>${t.name}</td><td>${t.pl}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td><td>${t.gf}</td><td>${t.ga}</td><td class="${t.gd>0?'gd-p':t.gd<0?'gd-n':'gd-z'}">${t.gd>0?'+'+t.gd:t.gd}</td><td class="pts">${t.pts}</td></tr>`).join('')}</tbody></table></div>`).join('');
+
+// ── GROUPS ──
+function renderGroups(grps){
+  document.getElementById('grpGrid').innerHTML=Object.entries(grps).map(([g,teams])=>`
+    <div class="grp-card">
+      <div class="grp-hd">
+        <div class="grp-let">${g}</div>
+        <div><div style="font-size:0.7rem;color:var(--gold-l)">GROUP ${g}</div><div class="grp-lbl">গ্রুপ ${g}</div></div>
+      </div>
+      <table class="gt">
+        <thead><tr><th>দল</th><th>খে</th><th>জ</th><th>ড্র</th><th>হা</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead>
+        <tbody>${teams.map((t,i)=>`
+          <tr class="${i<2?'row-q':i===2?'row-3':''}">
+            <td><div class="gt-team"><span class="gt-rank">${i+1}</span>${flagImg(t.name,22,16)}<span>${t.name}</span></div></td>
+            <td>${t.pl}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
+            <td>${t.gf}</td><td>${t.ga}</td>
+            <td class="${t.gd>0?'gdp':t.gd<0?'gdn':'gdz'}">${t.gd>0?'+'+t.gd:t.gd}</td>
+            <td class="pts-c">${t.pts}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`).join('');
 }
-function renderKO(){
-  document.getElementById('bracket').innerHTML=KO.map(r=>`<div class="b-round"><div class="b-round-title">${r.name}</div><div class="b-matches">${r.ms.map(m=>{const sc=scores[m.id];const done=sc&&sc.s1!==undefined;const t1=sc?.t1||m.s1;const t2=sc?.t2||m.s2;return`<div class="b-match"><div class="b-team ${done&&Number(sc.s1)>Number(sc.s2)?'b-win':''}"><span class="b-tname">${t1}</span><span class="b-score">${done?sc.s1:''}</span></div><div class="b-team ${done&&Number(sc.s2)>Number(sc.s1)?'b-win':''}"><span class="b-tname">${t2}</span><span class="b-score">${done?sc.s2:''}</span></div><div class="b-date">${m.date} · ${m.time}</div></div>`;}).join('')}</div></div>`).join('');
+
+// ── BRACKET ──
+function renderBracket(){
+  document.getElementById('bracket').innerHTML=KO_ROUNDS.map(round=>`
+    <div class="b-col">
+      <div class="b-col-title">${round.name}</div>
+      <div class="b-matches">
+        ${round.matches.map(m=>{
+          const sc=scores[m.id]||{};
+          const done=sc.s1!==undefined;
+          const t1=sc.t1||m.s1; const t2=sc.t2||m.s2;
+          const flag1=TEAMS[t1]?flagImg(t1,20,15):'';
+          const flag2=TEAMS[t2]?flagImg(t2,20,15):'';
+          const s1win=done&&Number(sc.s1)>Number(sc.s2);
+          const s2win=done&&Number(sc.s2)>Number(sc.s1);
+          return`<div class="b-match">
+            <div class="b-team ${s1win?'b-win':''}">${flag1}<span class="b-tname">${t1}</span><span class="b-sc">${done?sc.s1:''}</span></div>
+            <div class="b-team ${s2win?'b-win':''}">${flag2}<span class="b-tname">${t2}</span><span class="b-sc">${done?sc.s2:''}</span></div>
+            <div class="b-date">${fmtDate(m.date)} · ${fmtTime(m.time)}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
 }
-function renderTP(g){
-  const thirds=Object.entries(g).map(([gr,teams])=>({...teams[2],group:gr})).sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
-  document.getElementById('thirdPlace').innerHTML=`<div class="tp-card"><p style="font-size:0.78rem;color:var(--gray);margin-bottom:1rem;">১২টি গ্রুপের ৩য় স্থানের দলের মধ্যে সেরা ৮টি শেষ বত্রিশে যাবে।</p><table class="tp-table"><thead><tr><th>#</th><th>দল</th><th>গ্রুপ</th><th>খে</th><th>Pts</th><th>GF</th><th>GA</th><th>GD</th><th>মর্যাদা</th></tr></thead><tbody>${thirds.map((t,i)=>`<tr class="${i<8?'row-q':''}"><td>${i+1}</td><td>${t.name}</td><td><span class="m-grp">GRP ${t.group}</span></td><td>${t.pl}</td><td class="pts">${t.pts}</td><td>${t.gf}</td><td>${t.ga}</td><td class="${t.gd>0?'gd-p':t.gd<0?'gd-n':'gd-z'}">${t.gd>0?'+'+t.gd:t.gd}</td><td style="font-size:0.72rem;color:${i<8?'var(--green)':'var(--gray)'}">${i<8?'✓ উত্তীর্ণ':'✗ বাদ'}</td></tr>`).join('')}</tbody></table></div>`;
+
+// ── STATS PAGE ──
+function renderStatsPage(grps){
+  // Top scorers
+  const scorerMap={};
+  for(const m of MATCHES){
+    const sc=scores[m.id]||{};
+    const g1=sc.goals1||[]; const g2=sc.goals2||[];
+    for(const g of g1){
+      const k=`${g.name}||${m.t1}`;
+      if(!scorerMap[k])scorerMap[k]={name:g.name,team:m.t1,goals:0};
+      scorerMap[k].goals++;
+    }
+    for(const g of g2){
+      const k=`${g.name}||${m.t2}`;
+      if(!scorerMap[k])scorerMap[k]={name:g.name,team:m.t2,goals:0};
+      scorerMap[k].goals++;
+    }
+  }
+  const scorers=Object.values(scorerMap).sort((a,b)=>b.goals-a.goals).slice(0,15);
+
+  // Team goals — filter by group or team
+  const teamGoals={};
+  for(const m of MATCHES){
+    const sc=scores[m.id]||{};
+    if(sc.s1===undefined)continue;
+    if(!teamGoals[m.t1])teamGoals[m.t1]=0;
+    if(!teamGoals[m.t2])teamGoals[m.t2]=0;
+    teamGoals[m.t1]+=Number(sc.s1||0);
+    teamGoals[m.t2]+=Number(sc.s2||0);
+  }
+  const teamList=Object.entries(teamGoals).sort((a,b)=>b[1]-a[1]);
+  const maxG=teamList[0]?teamList[0][1]:1;
+
+  // Filters
+  const gs=['ALL','A','B','C','D','E','F','G','H','I','J','K','L'];
+  document.getElementById('statsFilters').innerHTML=gs.map(g=>
+    `<button class="fb ${statsFilter===g?'on':''}" onclick="window._stf('${g}')">${g==='ALL'?'সকল':'Group '+g}</button>`
+  ).join('');
+
+  // Filter team list
+  const filteredTeams=statsFilter==='ALL'
+    ?teamList
+    :teamList.filter(([name])=>GROUPS[statsFilter]?.includes(name));
+
+  document.getElementById('statsGrid').innerHTML=`
+    <div class="stats-card">
+      <div class="stats-card-title">⚽ সর্বোচ্চ গোলদাতা</div>
+      ${scorers.length===0
+        ?'<div style="padding:1.5rem;text-align:center;color:var(--gray);font-size:0.8rem">এখনো গোলের তথ্য নেই</div>'
+        :scorers.map((s,i)=>`
+        <div class="scorer-row">
+          <div class="scorer-rank ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div>
+          ${flagImg(s.team,28,21)}
+          <div class="scorer-info">
+            <div class="scorer-name">${s.name}</div>
+            <div class="scorer-team">${teamEn(s.team)}</div>
+          </div>
+          <div class="scorer-goals">${s.goals}</div>
+        </div>`).join('')
+      }
+    </div>
+    <div class="stats-card">
+      <div class="stats-card-title">🏳️ দলীয় গোল ${statsFilter!=='ALL'?'· Group '+statsFilter:''}</div>
+      ${filteredTeams.length===0
+        ?'<div style="padding:1.5rem;text-align:center;color:var(--gray);font-size:0.8rem">এখনো গোলের তথ্য নেই</div>'
+        :filteredTeams.map(([name,g])=>`
+        <div class="team-row">
+          ${flagImg(name,32,24)}
+          <div class="team-row-name">${teamEn(name)}</div>
+          <div class="team-row-bar-wrap"><div class="team-row-bar" style="width:${Math.round(g/maxG*100)}%"></div></div>
+          <div class="team-row-goals">${g}</div>
+        </div>`).join('')
+      }
+    </div>`;
 }
-window.switchTab=function(id,btn){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.getElementById('p-'+id).classList.add('active');btn.classList.add('active');};
-function hideLoader(){setTimeout(()=>{const l=document.getElementById('loader');l.classList.add('gone');setTimeout(()=>l.remove(),500);},700);}
+window._stf=function(g){statsFilter=g;const grps=calcGroups();renderStatsPage(grps);};
+
+// ── THIRD PLACE ──
+function renderThirdPlace(grps){
+  const thirds=Object.entries(grps).map(([g,teams])=>({...teams[2],group:g}))
+    .sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
+  document.getElementById('thirdPlace').innerHTML=`
+    <div class="tp-card">
+      <p style="font-size:0.76rem;color:var(--gray);margin-bottom:1rem;">১২টি গ্রুপের ৩য় স্থানের দলের মধ্যে সেরা ৮টি শেষ বত্রিশে যাবে।</p>
+      <table class="tp-tbl">
+        <thead><tr><th>#</th><th>দল</th><th>গ্রুপ</th><th>খে</th><th>Pts</th><th>GF</th><th>GA</th><th>GD</th><th>মর্যাদা</th></tr></thead>
+        <tbody>${thirds.map((t,i)=>`
+          <tr class="${i<8?'row-q':''}">
+            <td>${i+1}</td>
+            <td><div class="gt-team">${flagImg(t.name,22,16)}<span>${t.name}</span></div></td>
+            <td><span class="mc-grp">GRP ${t.group}</span></td>
+            <td>${t.pl}</td>
+            <td class="pts-c">${t.pts}</td>
+            <td>${t.gf}</td><td>${t.ga}</td>
+            <td class="${t.gd>0?'gdp':t.gd<0?'gdn':'gdz'}">${t.gd>0?'+'+t.gd:t.gd}</td>
+            <td style="font-size:0.7rem;color:${i<8?'var(--green)':'var(--gray)'}">${i<8?'✓ উত্তীর্ণ':'✗ বাদ'}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+// ── TAB ──
+window.goTab=function(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('p-'+id).classList.add('on');
+  btn.classList.add('on');
+};
+
+// ── THEME ──
+window.toggleTheme=function(){
+  const html=document.documentElement;
+  const isDark=html.getAttribute('data-theme')==='dark';
+  html.setAttribute('data-theme',isDark?'light':'dark');
+  document.getElementById('themeBtn').textContent=isDark?'🌙':'☀️';
+  localStorage.setItem('theme',isDark?'light':'dark');
+};
+(function(){
+  const t=localStorage.getItem('theme')||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('themeBtn').textContent=t==='dark'?'🌙':'☀️';
+})();
+
+function hideLoader(){
+  setTimeout(()=>{
+    const l=document.getElementById('loader');
+    l.classList.add('gone');
+    setTimeout(()=>l.remove(),400);
+  },600);
+}
 </script>
 </body>
 </html>
