@@ -439,10 +439,10 @@ body::before{content:'';position:fixed;inset:0;
 <nav class="nav">
   <button class="nav-btn on"  onclick="goTab('schedule',this)">📅 ম্যাচ সূচি</button>
   <button class="nav-btn"     onclick="goTab('groups',this)">📊 Group Table</button>
+  <button class="nav-btn"     onclick="goTab('thirdplace',this)">🥉 Best 3rd Places From Groups</button>
   <button class="nav-btn"     onclick="goTab('knockout',this)">🏅 Knockout</button>
   <button class="nav-btn"     onclick="goTab('stats',this)">📈 Stats</button>
   <button class="nav-btn"     onclick="goTab('squads',this)">🧑‍⚽ Squads</button>
-  <button class="nav-btn"     onclick="goTab('thirdplace',this)">🥉 3rd Places</button>
 </nav>
 
 <main class="main">
@@ -465,16 +465,20 @@ body::before{content:'';position:fixed;inset:0;
     <div class="grp-grid" id="grpGrid"></div>
   </div>
 
+  <!-- BEST 3RD PLACES FROM GROUPS -->
+  <div id="p-thirdplace" class="panel">
+    <div class="sec-title">🥉 Best 3rd Places From Groups</div>
+    <div id="thirdPlace"></div>
+  </div>
+
   <!-- KNOCKOUT -->
   <div id="p-knockout" class="panel">
     <div class="sec-title">🏅 Knockout Bracket</div>
-    <!-- Desktop symmetric bracket -->
     <div class="bracket-desktop">
       <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:.5rem">
         <div class="sym-bracket" id="symDesktop"></div>
       </div>
     </div>
-    <!-- Mobile tabs -->
     <div class="bracket-mobile">
       <div class="bk-round-tabs" id="bkTabs"></div>
       <div id="bkMobile"></div>
@@ -506,12 +510,6 @@ body::before{content:'';position:fixed;inset:0;
     </div>
     <div id="sqHeader"></div>
     <div class="sq-grid" id="sqGrid"></div>
-  </div>
-
-  <!-- THIRD PLACE -->
-  <div id="p-thirdplace" class="panel">
-    <div class="sec-title">🥉 3rd Places From Groups</div>
-    <div id="thirdPlace"></div>
   </div>
 </main>
 
@@ -581,8 +579,8 @@ const FONT_URLS_PUB={roboto:'https://fonts.googleapis.com/css2?family=Roboto+Con
 
 // Main site nav labels
 const NAV_LABELS={
-  bn:{schedule:'📅 ম্যাচ সূচি',groups:'📊 Group Table',knockout:'🏅 Knockout',stats:'📈 Stats',squads:'🧑‍⚽ Squads',thirdplace:'🥉 3rd Places'},
-  en:{schedule:'📅 Schedule',groups:'📊 Groups',knockout:'🏅 Knockout',stats:'📈 Stats',squads:'🧑‍⚽ Squads',thirdplace:'🥉 3rd Places'}
+  bn:{schedule:'📅 ম্যাচ সূচি',groups:'📊 Group Table',thirdplace:'🥉 Best 3rd Places From Groups',knockout:'🏅 Knockout',stats:'📈 Stats',squads:'🧑‍⚽ Squads'},
+  en:{schedule:'📅 Schedule',groups:'📊 Groups',thirdplace:'🥉 Best 3rd Places From Groups',knockout:'🏅 Knockout',stats:'📈 Stats',squads:'🧑‍⚽ Squads'}
 };
 
 function applySettingsPub(s){
@@ -615,7 +613,7 @@ function applySettingsPub(s){
     window._siteLang=s.lang;
     const L=NAV_LABELS[s.lang]||NAV_LABELS.bn;
     const navBtns=document.querySelectorAll('.nav-btn');
-    const keys=['schedule','groups','knockout','stats','squads','thirdplace'];
+    const keys=['schedule','groups','thirdplace','knockout','stats','squads'];
     navBtns.forEach((b,i)=>{if(keys[i]&&L[keys[i]])b.textContent=L[keys[i]];});
   }
 }
