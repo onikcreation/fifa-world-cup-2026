@@ -358,7 +358,7 @@ function renderAll(){
   renderSchedFilters();
   renderMatches(schedGrp);
   renderGroups(grps);
-  renderBracket();
+  renderBracket(grps);
   renderStats(grps);
   renderThirdPlace(grps);
 }
@@ -440,22 +440,57 @@ function renderGroups(grps){
 }
 
 // ══ BRACKET ══
-function buildMatch(m){
+// Auto-populate: resolve slot labels to actual team names from group standings
+let _grpCache={};
+function resolveSlot(slot, grps){
+  if(!slot) return 'TBD';
+  // Already a real team name (not a slot label)
+  if(TEAMS[slot]) return slot;
+
+  // Pattern: "1A" = 1st place Group A, "2B" = 2nd Group B
+  const m1=slot.match(/^([12])([A-L])$/);
+  if(m1){
+    const rank=parseInt(m1[1])-1;
+    const grp=m1[2];
+    return grps[grp]?.[rank]?.name||slot;
+  }
+
+  // Best 3rd — show top 8 third-place teams sorted
+  if(slot.includes('Best 3rd')||slot.includes('3rd')){
+    const thirds=Object.entries(grps)
+      .map(([g,teams])=>teams[2]?{...teams[2],group:g}:null)
+      .filter(Boolean)
+      .sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
+    // Just show "Best 3rd" label with count if teams exist
+    const qualified=thirds.filter(t=>t.pl>0);
+    return qualified.length>0?`Best 3rd (${qualified.length}/12)`:'Best 3rd';
+  }
+  return slot;
+}
+
+function buildMatch(m, grps={}){
   const sc=scores[m.id]||{};
   const done=sc.s1!==undefined&&sc.s1!==null;
-  const t1=sc.t1||m.s1||'TBD', t2=sc.t2||m.s2||'TBD';
+
+  // Resolve team names: Firebase saved > auto from groups > slot label
+  const rawT1=sc.t1||(m.s1?resolveSlot(m.s1,grps):null)||m.s1||'TBD';
+  const rawT2=sc.t2||(m.s2?resolveSlot(m.s2,grps):null)||m.s2||'TBD';
+  const t1=rawT1, t2=rawT2;
+
   const s1win=done&&Number(sc.s1)>Number(sc.s2);
   const s2win=done&&Number(sc.s2)>Number(sc.s1);
   const f1=TEAMS[t1]?fImg(t1,18,13):'';
   const f2=TEAMS[t2]?fImg(t2,18,13):'';
+  const isAuto1=!sc.t1&&TEAMS[t1]; // auto-resolved
+  const isAuto2=!sc.t2&&TEAMS[t2];
   return`<div class="bk-match">
-    <div class="bk-team ${s1win?'bk-win':''}">${f1}<span class="bk-tname">${t1}</span><span class="bk-sc">${done?sc.s1:''}</span></div>
-    <div class="bk-team ${s2win?'bk-win':''}">${f2}<span class="bk-tname">${t2}</span><span class="bk-sc">${done?sc.s2:''}</span></div>
+    <div class="bk-team ${s1win?'bk-win':''}" ${isAuto1?'style="opacity:.8"':''}>${f1}<span class="bk-tname">${t1}</span><span class="bk-sc">${done?sc.s1:''}</span></div>
+    <div class="bk-team ${s2win?'bk-win':''}" ${isAuto2?'style="opacity:.8"':''}>${f2}<span class="bk-tname">${t2}</span><span class="bk-sc">${done?sc.s2:''}</span></div>
     <div class="bk-date">${fD(m.date)} · ${fT(m.time)}</div>
   </div>`;
 }
 
-function renderBracket(){
+function renderBracket(grps={}){
   // Desktop: all columns side by side
   const desktopHTML=KO_ROUNDS.map(round=>{
     const isFinal=round.short==='F';
@@ -463,8 +498,8 @@ function renderBracket(){
       <div class="bk-col-hd">${round.name}</div>
       <div class="bk-slots">
         ${isFinal
-          ?`<div class="bk-final-wrap"><div style="font-size:2rem;text-align:center;margin:.5rem 0">🏆</div>${round.matches.map(m=>buildMatch(m)).join('')}</div>`
-          :round.matches.map(m=>buildMatch(m)).join('')
+          ?`<div class="bk-final-wrap"><div style="font-size:2rem;text-align:center;margin:.5rem 0">🏆</div>${round.matches.map(m=>buildMatch(m,grps)).join('')}</div>`
+          :round.matches.map(m=>buildMatch(m,grps)).join('')
         }
       </div>
     </div>`;
@@ -479,7 +514,7 @@ function renderBracket(){
 
   const mobileHTML=KO_ROUNDS.map((round,i)=>
     `<div class="bk-round-panel ${i===activeBkTab?'on':''}">
-      ${round.matches.map(m=>buildMatch(m)).join('')}
+      ${round.matches.map(m=>buildMatch(m,grps)).join('')}
     </div>`
   ).join('');
   document.getElementById('bkMobile').innerHTML=mobileHTML;
