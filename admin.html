@@ -194,7 +194,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
         <div class="hdr-sub">⚙️ Admin Panel · Al Amin Onik</div>
       </div>
       <div class="hdr-right">
-        <span class="fb-badge" id="fbSt" style="background:rgba(0,61,122,.3);border:1px solid var(--border);color:var(--gray)">Firebase...</span>
+        <span id="fbSt" style="font-size:.6rem;color:var(--gray)">Firebase...</span>
+        <button class="icon-btn" onclick="location.reload()" title="রিফ্রেশ" style="font-size:.75rem;padding:.3rem .55rem">🔄</button>
         <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="Dark/Light">🌙</button>
         <a href="index.html" class="nav-link">🏠 সাইট</a>
         <button class="nav-link danger" onclick="window.doLogout()">🚪 Logout</button>
@@ -208,13 +209,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </nav>
 
   <div class="main">
-    <!-- Info bar -->
-    <div class="info-bar">
-      <span>🔥 Firebase</span>
-      <strong id="fbStatus">সংযোগ হচ্ছে...</strong>
-      <span id="fbTime" style="font-size:.68rem"></span>
-    </div>
-
     <div class="stats-row" id="statsRow"></div>
 
     <!-- GROUP STAGE PANEL -->
@@ -297,10 +291,7 @@ if(sessionStorage.getItem('fa')==='1'){
 function initAdmin(){
   onValue(ref(db,'scores'),snap=>{
     dbSc=snap.val()||{};
-    document.getElementById('fbSt').innerHTML='✓ Firebase';
-    document.getElementById('fbSt').style.cssText='background:rgba(39,174,96,.15);border:1px solid var(--green);color:var(--green);padding:.22rem .6rem;border-radius:5px;font-size:.6rem;letter-spacing:1px';
-    document.getElementById('fbStatus').innerHTML='<span style="color:var(--green)">✓ Firebase Connected</span>';
-    document.getElementById('fbTime').textContent='Updated: '+new Date().toLocaleTimeString('bn-BD');
+    document.getElementById('fbSt').innerHTML='<span style="color:var(--green)">✓ Live</span>';
     renderStats();
     renderTable(activeGrp);
     renderKO();

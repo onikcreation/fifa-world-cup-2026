@@ -288,6 +288,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     </div>
     <div class="hdr-right">
       <div class="live-pill"><div class="dot"></div>LIVE</div>
+      <span id="dbSt" style="font-size:.6rem;color:var(--gray)">Firebase...</span>
+      <button class="icon-btn" onclick="window._reload&&window._reload()" title="রিফ্রেশ" style="font-size:.75rem;padding:.3rem .55rem">🔄</button>
       <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="Dark/Light">🌙</button>
       <a href="admin.html" class="admin-btn">🔐 Admin</a>
     </div>
@@ -303,13 +305,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 </nav>
 
 <main class="main">
-  <div class="info-bar">
-    <span>🔥 Firebase</span>
-    <strong id="dbSt">সংযোগ হচ্ছে...</strong>
-    <span id="upAt" style="font-size:.68rem"></span>
-    <button class="refresh-btn" onclick="window._reload&&window._reload()">🔄 রিফ্রেশ</button>
-  </div>
-
   <!-- SCHEDULE -->
   <div id="p-schedule" class="panel on">
     <div class="stats-strip" id="statStrip"></div>
@@ -389,11 +384,10 @@ let activeBkTab=0;
 // Firebase
 onValue(ref(db,'scores'),snap=>{
   scores=snap.val()||{};
-  document.getElementById('dbSt').innerHTML='<span style="color:var(--green)">✓ Firebase Connected</span>';
-  document.getElementById('upAt').textContent='Updated: '+new Date().toLocaleTimeString('bn-BD');
+  document.getElementById('dbSt').innerHTML='<span style="color:var(--green)">✓ Live</span>';
   renderAll();hideLoader();
 },()=>{
-  document.getElementById('dbSt').innerHTML='<span style="color:var(--red)">✗ Connection Failed</span>';
+  document.getElementById('dbSt').innerHTML='<span style="color:var(--red)">✗ Offline</span>';
   renderAll();hideLoader();
 });
 window._reload=function(){location.reload();};
@@ -753,7 +747,7 @@ function renderBracket(grps={}){
         <span class="sym-score">${s2}</span>
       </div>
       ${hasPen?`<div class="sym-extra">PSO: ${sc.pen1}–${sc.pen2}</div>`:hasET?`<div class="sym-extra">ET: ${sc.et1}–${sc.et2}</div>`:''}
-      ${!compact?`<div class="sym-date">#${m.num||''} · ${fD(m.date)} · ${fT(m.time)}</div>`:''}
+      <div class="sym-date">${m.num?`#${m.num} · `:''}${compact?'':`${fD(m.date)} · `}${fT(m.time)}</div>
     </div>`;
   }
   // Column builder — evenly distribute spacers
