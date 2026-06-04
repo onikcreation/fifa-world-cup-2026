@@ -310,10 +310,16 @@ const DAYS=['রবি','সোম','মঙ্গল','বুধ','বৃহঃ'
 const MON=['জানু','ফেব','মার্চ','এপ্রি','মে','জুন','জুলাই','আগ','সেপ্ট','অক্টো','নভে','ডিসে'];
 function fD(d){const dt=new Date(d+'T00:00:00');return`${DAYS[dt.getDay()]}, ${dt.getDate()} ${MON[dt.getMonth()]}`;}
 function fT(t){const[h,m]=t.split(':').map(Number);const ap=h<12?'AM':'PM';const h12=h===0?12:h>12?h-12:h;return`${h12}:${String(m).padStart(2,'0')} ${ap}`;}
-function fImg(name,w=38,h=28){
+// flagcdn.com valid sizes: 20x15,24x18,28x21,32x24,40x30,48x36,64x48,80x60
+function nearestFlag(w){
+  const sizes=[20,24,28,32,40,48,64,80];
+  return sizes.reduce((a,b)=>Math.abs(b-w)<Math.abs(a-w)?b:a);
+}
+function fImg(name,w=40,h=30){
   const t=TEAMS[name];
   if(!t)return`<div style="width:${w}px;height:${h}px;background:var(--bg3);border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-size:.55rem;color:var(--gray)">?</div>`;
-  return`<img src="https://flagcdn.com/${w}x${h}/${t.code}.png" style="width:${w}px;height:${h}px;object-fit:cover;border-radius:3px;box-shadow:0 1px 4px var(--shadow)" loading="lazy" onerror="this.style.display='none'" alt="${t.en}">`;
+  const fw=nearestFlag(w);const fh=Math.round(fw*0.75);
+  return`<img src="https://flagcdn.com/${fw}x${fh}/${t.code}.png" style="width:${w}px;height:${h}px;object-fit:cover;border-radius:3px;box-shadow:0 1px 4px var(--shadow)" loading="lazy" onerror="this.style.display='none'" alt="${t.en}">`;
 }
 function enName(name){return TEAMS[name]?.en||name}
 
