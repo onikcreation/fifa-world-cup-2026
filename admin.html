@@ -435,12 +435,19 @@ function resolveSlotAdmin(slot,grps){
   return'';
 }
 function buildB3MapAdmin(grps){
-  const best3rd=Object.entries(grps).map(([g,teams])=>teams[2]?{...teams[2],group:g}:null)
-    .filter(t=>t&&t.pl>0).sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf).slice(0,8);
-  const map={};let idx=0;
+  const allThirds=Object.entries(grps)
+    .map(([g,teams])=>teams[2]?{...teams[2],group:g}:null)
+    .filter(t=>t&&t.pl>0)
+    .sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
+  const map={};
   for(const m of KO_ROUNDS[0].matches){
-    if(m.s1&&m.s1.includes('Best 3rd')){if(best3rd[idx])map[`${m.id}_s1`]=best3rd[idx++].name;}
-    if(m.s2&&m.s2.includes('Best 3rd')){if(best3rd[idx])map[`${m.id}_s2`]=best3rd[idx++].name;}
+    ['s1','s2'].forEach(side=>{
+      const slot=m[side];
+      if(!slot||!slot.startsWith('3rd '))return;
+      const groups=slot.replace('3rd ','').split('');
+      const candidate=allThirds.find(t=>groups.includes(t.group));
+      if(candidate)map[`${m.id}_${side}`]=candidate.name;
+    });
   }
   return map;
 }
@@ -455,11 +462,11 @@ function renderKO(){
     // Auto-resolve team names
     let autoT1='',autoT2='';
     if(!sc.t1){
-      if(m.s1&&m.s1.includes('Best 3rd'))autoT1=b3map[`${m.id}_s1`]||'';
+      if(m.s1&&m.s1.startsWith('3rd '))autoT1=b3map[`${m.id}_s1`]||'';
       else autoT1=resolveSlotAdmin(m.s1,grps)||'';
     }
     if(!sc.t2){
-      if(m.s2&&m.s2.includes('Best 3rd'))autoT2=b3map[`${m.id}_s2`]||'';
+      if(m.s2&&m.s2.startsWith('3rd '))autoT2=b3map[`${m.id}_s2`]||'';
       else autoT2=resolveSlotAdmin(m.s2,grps)||'';
     }
     const t1val=sc.t1||autoT1;

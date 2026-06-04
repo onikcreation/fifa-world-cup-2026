@@ -450,22 +450,24 @@ function getBest3rd(grps){
   return Object.entries(grps)
     .map(([g,teams])=>teams[2]?{...teams[2],group:g}:null)
     .filter(t=>t&&t.pl>0)
-    .sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf)
-    .slice(0,8);
+    .sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
 }
 
-// Collect all R32 slots that have "Best 3rd" in s1 or s2
+// Build map: for each R32 slot with "3rd XXXXX", find the best qualifying 3rd team from those groups
 function buildBest3rdMap(grps){
-  const best3rd=getBest3rd(grps);
-  const map={}; // key: `${matchId}_s1` or `${matchId}_s2`, value: team name
-  let idx=0;
+  const allThirds=getBest3rd(grps); // sorted best to worst, all 12
+  const map={}; // matchId_s1 or matchId_s2 => team name
+
   for(const m of KO_ROUNDS[0].matches){
-    if(m.s1&&m.s1.includes('Best 3rd')){
-      if(best3rd[idx])map[`${m.id}_s1`]=best3rd[idx++].name;
-    }
-    if(m.s2&&m.s2.includes('Best 3rd')){
-      if(best3rd[idx])map[`${m.id}_s2`]=best3rd[idx++].name;
-    }
+    ['s1','s2'].forEach(side=>{
+      const slot=m[side];
+      if(!slot||!slot.startsWith('3rd '))return;
+      // slot format: "3rd ABCDF" — groups listed
+      const groups=slot.replace('3rd ','').split('');
+      // Find best 3rd team from these specific groups
+      const candidate=allThirds.find(t=>groups.includes(t.group));
+      if(candidate) map[`${m.id}_${side}`]=candidate.name;
+    });
   }
   return map;
 }
@@ -473,6 +475,7 @@ function buildBest3rdMap(grps){
 function resolveSlot(slot,grps){
   if(!slot)return'TBD';
   if(TEAMS[slot])return slot;
+  // "1A" or "2B"
   const m1=slot.match(/^([12])([A-L])$/);
   if(m1){
     const rank=parseInt(m1[1])-1;
@@ -489,11 +492,11 @@ function buildMatch(m,grps={},b3map={}){
   let t1=sc.t1||'';
   let t2=sc.t2||'';
   if(!t1){
-    if(m.s1&&m.s1.includes('Best 3rd'))t1=b3map[`${m.id}_s1`]||'Best 3rd';
+    if(m.s1&&m.s1.startsWith('3rd '))t1=b3map[`${m.id}_s1`]||m.s1;
     else t1=resolveSlot(m.s1,grps)||m.s1||'TBD';
   }
   if(!t2){
-    if(m.s2&&m.s2.includes('Best 3rd'))t2=b3map[`${m.id}_s2`]||'Best 3rd';
+    if(m.s2&&m.s2.startsWith('3rd '))t2=b3map[`${m.id}_s2`]||m.s2;
     else t2=resolveSlot(m.s2,grps)||m.s2||'TBD';
   }
   const s1win=done&&Number(sc.s1)>Number(sc.s2);
