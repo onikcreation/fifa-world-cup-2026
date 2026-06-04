@@ -195,10 +195,29 @@ body::before{content:'';position:fixed;inset:0;
 .preset-btn{font-size:.7rem;padding:.35rem .75rem;background:rgba(161,240,0,.07);border:1px solid var(--border2);border-radius:20px;color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap}
 .preset-btn:hover{border-color:var(--neon);color:var(--neon);background:rgba(161,240,0,.12)}
 
-/* GOAL MODAL */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem}
+/* GOAL & CARD MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem}
 .modal-bg.hide{display:none}
-.modal{background:var(--card);border:1px solid var(--border);border-radius:12px;width:min(600px,100%);max-height:90vh;overflow-y:auto;padding:1.5rem}
+.modal{background:#071517;border:1px solid var(--border);border-radius:12px;width:min(640px,100%);max-height:90vh;overflow-y:auto;padding:1.2rem}
+.modal-tabs{display:flex;gap:.4rem;margin:.7rem 0;border-bottom:1px solid var(--border2);padding-bottom:.5rem}
+.modal-tab{font-family:'Bebas Neue',sans-serif;font-size:.82rem;letter-spacing:1px;padding:.35rem .9rem;background:none;border:1px solid var(--border2);border-radius:5px;color:var(--gray);cursor:pointer;transition:all .2s}
+.modal-tab.on{background:rgba(161,240,0,.12);border-color:var(--neon);color:var(--neon)}
+.modal-tab-panel{padding:.3rem 0}
+/* Card entry */
+.card-section{margin-bottom:.8rem}
+.card-section-title{font-family:'Bebas Neue',sans-serif;font-size:.82rem;letter-spacing:1px;color:var(--text2);margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.card-entry{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;padding:.4rem .5rem;background:rgba(255,255,255,.03);border-radius:6px;border:1px solid var(--border2)}
+.card-type-btns{display:flex;gap:.3rem;flex-shrink:0}
+.card-type-btn{font-size:.75rem;padding:.2rem .5rem;border-radius:4px;cursor:pointer;border:1px solid transparent;transition:all .2s;font-weight:700}
+.card-type-btn.yellow{background:rgba(255,200,0,.1);border-color:rgba(255,200,0,.3);color:#ffc800}
+.card-type-btn.red{background:rgba(255,50,50,.1);border-color:rgba(255,50,50,.3);color:#ff3232}
+.card-type-btn.on.yellow{background:rgba(255,200,0,.25);border-color:#ffc800}
+.card-type-btn.on.red{background:rgba(255,50,50,.25);border-color:#ff3232}
+.cn-in{flex:1;background:var(--inp);border:1px solid var(--border2);border-radius:5px;padding:.3rem .5rem;color:var(--text);font-size:.8rem;outline:none}
+.cn-in:focus{border-color:var(--neon)}
+.cm-in{width:52px;background:var(--inp);border:1px solid var(--border2);border-radius:5px;padding:.3rem .4rem;color:var(--text);font-size:.8rem;text-align:center;outline:none}
+.add-card-btn{font-size:.7rem;letter-spacing:1px;padding:.28rem .65rem;background:rgba(161,240,0,.08);border:1px solid var(--border2);border-radius:5px;color:var(--neon);cursor:pointer;transition:all .2s;white-space:nowrap}
+.add-card-btn:hover{background:rgba(161,240,0,.18);border-color:var(--neon)}
 .modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--neon);margin-bottom:.8rem;display:flex;justify-content:space-between;align-items:center}
 .modal-close{background:none;border:none;color:var(--gray);font-size:1.2rem;cursor:pointer}
 .modal-close:hover{color:var(--red)}
@@ -425,15 +444,27 @@ body::before{content:'';position:fixed;inset:0;
   </div>
 </div>
 
-<!-- GOAL MODAL -->
+<!-- GOAL & CARD MODAL -->
 <div class="modal-bg hide" id="goalModal">
   <div class="modal">
     <div class="modal-title">
-      <span>⚽ গোল বিস্তারিত — <span id="modalTitle"></span></span>
+      <span id="modalTitle">⚽ ম্যাচ বিস্তারিত</span>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-    <div class="modal-teams" id="modalBody"></div>
-    <button class="modal-save" onclick="saveGoals()">💾 গোল তথ্য সেভ করো</button>
+    <!-- Tabs -->
+    <div class="modal-tabs">
+      <button class="modal-tab on" onclick="switchModalTab('goals',this)">⚽ গোল</button>
+      <button class="modal-tab" onclick="switchModalTab('cards',this)">🟨 কার্ড</button>
+    </div>
+    <!-- Goals tab -->
+    <div id="modal-goals-panel" class="modal-tab-panel">
+      <div class="modal-teams" id="modalBody"></div>
+    </div>
+    <!-- Cards tab -->
+    <div id="modal-cards-panel" class="modal-tab-panel" style="display:none">
+      <div class="modal-teams" id="modalCardsBody"></div>
+    </div>
+    <button class="modal-save" onclick="saveGoalsAndCards()">💾 সেভ করো</button>
   </div>
 </div>
 
@@ -858,7 +889,14 @@ window.saveKO=async function(id){
   }catch(e){toast('সেভ ব্যর্থ!','err');}
 };
 
-// ── GOAL MODAL ──
+// ── GOAL & CARD MODAL ──
+window.switchModalTab=function(tab,btn){
+  document.querySelectorAll('.modal-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('modal-goals-panel').style.display=tab==='goals'?'':'none';
+  document.getElementById('modal-cards-panel').style.display=tab==='cards'?'':'none';
+};
+
 window.openGoalModal=function(id,isKO){
   modalMatchId=id;modalIsKO=isKO;
   const sc=dbSc[id]||{};
@@ -871,26 +909,65 @@ window.openGoalModal=function(id,isKO){
     if(!m)return;
     t1=m.t1;t2=m.t2;
   }
-  document.getElementById('modalTitle').textContent=`#${id}`;
-  const g1=sc.goals1||[],g2=sc.goals2||[];
+  const en1=TEAMS[t1]?.en||t1;
+  const en2=TEAMS[t2]?.en||t2;
+  document.getElementById('modalTitle').textContent=`⚽ ${en1} vs ${en2} — #${id}`;
 
-  function teamSection(side,teamName,goals){
-    return`<div>
-      <div class="modal-team-title">${teamName}</div>
-      <div id="glist_${side}">${goals.map((g,i)=>entryHTML(side,i,g.name,g.min,g.pen)).join('')}</div>
-      <button class="add-goal-btn" onclick="addGoal('${side}')">+ গোল যোগ</button>
-    </div>`;
-  }
-  function entryHTML(side,i,name='',min='',pen=false){
+  // Reset tab to goals
+  document.querySelectorAll('.modal-tab').forEach((b,i)=>b.classList.toggle('on',i===0));
+  document.getElementById('modal-goals-panel').style.display='';
+  document.getElementById('modal-cards-panel').style.display='none';
+
+  // Goals
+  const g1=sc.goals1||[],g2=sc.goals2||[];
+  function goalEntry(side,i,name='',min='',pen=false){
     return`<div class="goal-entry" id="ge_${side}_${i}">
       <input class="gn-in" placeholder="গোলদাতার নাম" value="${esc(name)}" id="gn_${side}_${i}">
-      <input class="gm-in" type="number" min="1" max="120" placeholder="মি." value="${min}" id="gm_${side}_${i}">
+      <input class="gm-in" type="number" min="1" max="130" placeholder="মি." value="${min}" id="gm_${side}_${i}">
       <input type="checkbox" class="pen-cb" id="gp_${side}_${i}" ${pen?'checked':''}><label class="pen-lbl" for="gp_${side}_${i}">P</label>
       <button class="rm-btn" onclick="rmGoal('${side}',${i})">✕</button>
     </div>`;
   }
-  document.getElementById('modalBody').innerHTML=teamSection('t1',t1,g1)+teamSection('t2',t2,g2);
+  function goalSection(side,teamName,goals){
+    return`<div>
+      <div class="modal-team-title">${teamName}</div>
+      <div id="glist_${side}">${goals.map((g,i)=>goalEntry(side,i,g.name,g.min,g.pen)).join('')}</div>
+      <button class="add-goal-btn" onclick="addGoal('${side}')">+ গোল যোগ</button>
+    </div>`;
+  }
+  document.getElementById('modalBody').innerHTML=goalSection('t1',en1,g1)+goalSection('t2',en2,g2);
+
+  // Cards
+  const c1=sc.cards1||[],c2=sc.cards2||[];
+  function cardEntry(side,i,name='',min='',type='yellow'){
+    return`<div class="card-entry" id="ce_${side}_${i}">
+      <div class="card-type-btns">
+        <button class="card-type-btn yellow ${type==='yellow'?'on':''}" onclick="setCardType('${side}',${i},'yellow',this)">🟨</button>
+        <button class="card-type-btn red ${type==='red'?'on':''}" onclick="setCardType('${side}',${i},'red',this)">🟥</button>
+        <button class="card-type-btn red ${type==='yr'?'on':''}" onclick="setCardType('${side}',${i},'yr',this)" title="২য় হলুদ = লাল" style="font-size:.6rem">🟨🟥</button>
+      </div>
+      <input class="cn-in" placeholder="খেলোয়াড়ের নাম" value="${esc(name)}" id="cn_${side}_${i}">
+      <input class="cm-in" type="number" min="1" max="130" placeholder="মি." value="${min}" id="cm_${side}_${i}">
+      <input type="hidden" id="ct_${side}_${i}" value="${type}">
+      <button class="rm-btn" onclick="rmCard('${side}',${i})">✕</button>
+    </div>`;
+  }
+  function cardSection(side,teamName,cards){
+    return`<div class="card-section">
+      <div class="card-section-title">${TEAMS[t1&&side==='t1'?t1:t2]?.code?`<img src="https://flagcdn.com/20x15/${TEAMS[side==='t1'?t1:t2]?.code}.png" style="width:18px;height:13px;object-fit:cover;border-radius:2px" loading="lazy">`:''} ${teamName}</div>
+      <div id="clist_${side}">${cards.map((c,i)=>cardEntry(side,i,c.name,c.min,c.type)).join('')}</div>
+      <button class="add-card-btn" onclick="addCard('${side}')">+ কার্ড যোগ</button>
+    </div>`;
+  }
+  document.getElementById('modalCardsBody').innerHTML=cardSection('t1',en1,c1)+cardSection('t2',en2,c2);
   document.getElementById('goalModal').classList.remove('hide');
+};
+
+window.setCardType=function(side,i,type,btn){
+  document.getElementById(`ct_${side}_${i}`).value=type;
+  const row=document.getElementById(`ce_${side}_${i}`);
+  row.querySelectorAll('.card-type-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
 };
 
 window.addGoal=function(side){
@@ -899,18 +976,37 @@ window.addGoal=function(side){
   const d=document.createElement('div');
   d.innerHTML=`<div class="goal-entry" id="ge_${side}_${i}">
     <input class="gn-in" placeholder="গোলদাতার নাম" id="gn_${side}_${i}">
-    <input class="gm-in" type="number" min="1" max="120" placeholder="মি." id="gm_${side}_${i}">
+    <input class="gm-in" type="number" min="1" max="130" placeholder="মি." id="gm_${side}_${i}">
     <input type="checkbox" class="pen-cb" id="gp_${side}_${i}"><label class="pen-lbl" for="gp_${side}_${i}">P</label>
     <button class="rm-btn" onclick="rmGoal('${side}',${i})">✕</button>
   </div>`;
   c.appendChild(d.firstElementChild);
 };
 window.rmGoal=function(side,i){const el=document.getElementById(`ge_${side}_${i}`);if(el)el.remove();};
+
+window.addCard=function(side){
+  const c=document.getElementById('clist_'+side);
+  const i=c.children.length;
+  const d=document.createElement('div');
+  d.innerHTML=`<div class="card-entry" id="ce_${side}_${i}">
+    <div class="card-type-btns">
+      <button class="card-type-btn yellow on" onclick="setCardType('${side}',${i},'yellow',this)">🟨</button>
+      <button class="card-type-btn red" onclick="setCardType('${side}',${i},'red',this)">🟥</button>
+      <button class="card-type-btn red" onclick="setCardType('${side}',${i},'yr',this)" style="font-size:.6rem">🟨🟥</button>
+    </div>
+    <input class="cn-in" placeholder="খেলোয়াড়ের নাম" id="cn_${side}_${i}">
+    <input class="cm-in" type="number" min="1" max="130" placeholder="মি." id="cm_${side}_${i}">
+    <input type="hidden" id="ct_${side}_${i}" value="yellow">
+    <button class="rm-btn" onclick="rmCard('${side}',${i})">✕</button>
+  </div>`;
+  c.appendChild(d.firstElementChild);
+};
+window.rmCard=function(side,i){const el=document.getElementById(`ce_${side}_${i}`);if(el)el.remove();};
 window.closeModal=function(){document.getElementById('goalModal').classList.add('hide');modalMatchId=null;};
 
-window.saveGoals=async function(){
+window.saveGoalsAndCards=async function(){
   if(!modalMatchId)return;
-  function collect(side){
+  function collectGoals(side){
     const c=document.getElementById('glist_'+side);if(!c)return[];
     return Array.from(c.children).map(row=>{
       const parts=row.id.split('_');const i=parts[parts.length-1];const s=parts[1];
@@ -920,13 +1016,29 @@ window.saveGoals=async function(){
       return name?{name,min,pen}:null;
     }).filter(Boolean);
   }
+  function collectCards(side){
+    const c=document.getElementById('clist_'+side);if(!c)return[];
+    return Array.from(c.children).map(row=>{
+      const parts=row.id.split('_');const i=parts[parts.length-1];const s=parts[1];
+      const name=document.getElementById(`cn_${s}_${i}`)?.value?.trim()||'';
+      const min=Number(document.getElementById(`cm_${s}_${i}`)?.value||0);
+      const type=document.getElementById(`ct_${s}_${i}`)?.value||'yellow';
+      return name?{name,min,type}:null;
+    }).filter(Boolean);
+  }
   try{
     const ex=dbSc[modalMatchId]||{};
-    await set(ref(db,'scores/'+modalMatchId),{...ex,goals1:collect('t1'),goals2:collect('t2')});
-    toast('গোল তথ্য সেভ হয়েছে ✓','ok');
+    await set(ref(db,'scores/'+modalMatchId),{
+      ...ex,
+      goals1:collectGoals('t1'),goals2:collectGoals('t2'),
+      cards1:collectCards('t1'),cards2:collectCards('t2'),
+    });
+    toast('গোল ও কার্ড তথ্য সেভ হয়েছে ✓','ok');
     closeModal();
-  }catch(e){toast('গোল সেভ ব্যর্থ!','err');}
+  }catch(e){toast('সেভ ব্যর্থ: '+e.message,'err');}
 };
+// Legacy alias
+window.saveGoals=window.saveGoalsAndCards;
 
 // ── SETTINGS ──
 const FONT_MAP = {

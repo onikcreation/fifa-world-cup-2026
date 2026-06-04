@@ -329,8 +329,14 @@ body::before{content:'';position:fixed;inset:0;
 .stats-empty{padding:1.5rem;text-align:center;color:var(--gray);font-size:.8rem}
 
 /* Stats team filter */
-/* team filter buttons — in .filters already styled */
-#statsTeamFilters .fb{display:inline-flex;align-items:center;gap:3px}
+/* Match history */
+.mh-header{font-family:'Bebas Neue',sans-serif;font-size:.78rem;letter-spacing:1.5px;color:var(--neon);padding:.5rem .9rem;background:rgba(161,240,0,.05);border-bottom:1px solid var(--border2)}
+.mh-row{display:flex;align-items:center;gap:.5rem;padding:.42rem .9rem;border-bottom:1px solid var(--border2);font-size:.75rem}
+.mh-row:last-child{border-bottom:none}
+.mh-row:hover{background:rgba(255,255,255,.03)}
+.mh-date{font-size:.65rem;color:var(--gray);flex-shrink:0;min-width:65px}
+.mh-opp{flex:1;display:flex;align-items:center;gap:.35rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mh-score{font-family:'Bebas Neue',sans-serif;font-size:.9rem;flex-shrink:0;min-width:50px;text-align:right}
 
 /* Third place */
 .tp-card{background:var(--card);border:1px solid var(--border2);border-radius:10px;overflow:hidden;padding:1rem}
@@ -1150,106 +1156,196 @@ window._bktab=function(i){
 
 // ══ STATS ══
 function renderStats(grps){
-  // ── Group filter buttons ──
+  // ── Group filter ──
   const gs=['ALL','A','B','C','D','E','F','G','H','I','J','K','L'];
   document.getElementById('statsGrpFilters').innerHTML=gs.map(g=>
     `<button class="fb ${statsGrp===g?'on':''}" onclick="window._stg('${g}')">${g==='ALL'?'সকল':'Group '+g}</button>`
   ).join('');
 
-  // ── Team buttons sorted by FIFA rank ──
-  // Get teams for current group filter, sorted by rank number
-  const teamPool=statsGrp==='ALL'
-    ? Object.keys(TEAMS)
-    : GROUPS[statsGrp]||[];
-  // Sort by rank (numeric part of Bengali name)
-  const sortedTeams=[...teamPool].sort((a,b)=>{
-    const ra=parseInt(getRank(a))||999;
-    const rb=parseInt(getRank(b))||999;
-    return ra-rb;
-  });
-
-  const teamBtns=`<button class="fb ${statsTeam==='ALL'?'on':''}" onclick="window._stt('ALL')">সকল দল</button>`
+  // ── Team filter ──
+  const teamPool=statsGrp==='ALL'?Object.keys(TEAMS):GROUPS[statsGrp]||[];
+  const sortedTeams=[...teamPool].sort((a,b)=>(parseInt(getRank(a))||999)-(parseInt(getRank(b))||999));
+  document.getElementById('statsTeamFilters').innerHTML=
+    `<button class="fb ${statsTeam==='ALL'?'on':''}" onclick="window._stt('ALL')">সকল দল</button>`
     +sortedTeams.map(n=>{
-      const rank=getRank(n);
-      const en=TEAMS[n]?.en||n;
       const code=TEAMS[n]?.code||'';
-      const flagHtml=code?`<img src="https://flagcdn.com/20x15/${code}.png" style="width:18px;height:13px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:3px" loading="lazy">`:'';
+      const en=TEAMS[n]?.en||n;
+      const rank=getRank(n);
       return`<button class="fb ${statsTeam===n?'on':''}" onclick="window._stt('${n.replace(/'/g,"\\'")}')">
-        ${flagHtml}<span style="font-size:.6rem;opacity:.6;margin-right:2px">${rank}</span>${en}
+        ${code?`<img src="https://flagcdn.com/20x15/${code}.png" style="width:18px;height:13px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:3px" loading="lazy">`:''}
+        <span style="font-size:.6rem;opacity:.6;margin-right:2px">${rank}</span>${en}
       </button>`;
     }).join('');
-  document.getElementById('statsTeamFilters').innerHTML=teamBtns;
+
+  // ── Collect all match data ──
+  const allMatches=[...MATCHES,...KO_ROUNDS.flatMap(r=>r.matches)];
+
+  // ── Card data ──
+  const cardMap={}; // name||team → {yellow,red}
+  for(const m of allMatches){
+    const sc=scores[m.id]||{};
+    const t1=m.t1||(sc.t1||''), t2=m.t2||(sc.t2||'');
+    for(const c of(sc.cards1||[])){
+      const k=`${c.name}||${t1}`;
+      if(!cardMap[k])cardMap[k]={name:c.name,team:t1,yellow:0,red:0};
+      if(c.type==='yellow'||c.type==='yr')cardMap[k].yellow++;
+      if(c.type==='red'||c.type==='yr')cardMap[k].red++;
+    }
+    for(const c of(sc.cards2||[])){
+      const k=`${c.name}||${t2}`;
+      if(!cardMap[k])cardMap[k]={name:c.name,team:t2,yellow:0,red:0};
+      if(c.type==='yellow'||c.type==='yr')cardMap[k].yellow++;
+      if(c.type==='red'||c.type==='yr')cardMap[k].red++;
+    }
+  }
 
   // ── Top scorers ──
   const scorerMap={};
   for(const m of MATCHES){
     const sc=scores[m.id]||{};
-    for(const g of(sc.goals1||[])){const k=`${g.name}||${m.t1}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:m.t1,goals:0,grp:m.grp};scorerMap[k].goals++;}
-    for(const g of(sc.goals2||[])){const k=`${g.name}||${m.t2}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:m.t2,goals:0,grp:m.grp};scorerMap[k].goals++;}
+    for(const g of(sc.goals1||[])){const k=`${g.name}||${m.t1}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:m.t1,goals:0};scorerMap[k].goals++;}
+    for(const g of(sc.goals2||[])){const k=`${g.name}||${m.t2}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:m.t2,goals:0};scorerMap[k].goals++;}
   }
   for(const round of KO_ROUNDS){for(const m of round.matches){
     const sc=scores[m.id]||{};
     const t1=sc.t1||'',t2=sc.t2||'';
-    for(const g of(sc.goals1||[])){if(t1){const k=`${g.name}||${t1}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:t1,goals:0,grp:'KO'};scorerMap[k].goals++;}}
-    for(const g of(sc.goals2||[])){if(t2){const k=`${g.name}||${t2}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:t2,goals:0,grp:'KO'};scorerMap[k].goals++;}}
+    for(const g of(sc.goals1||[])){if(t1){const k=`${g.name}||${t1}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:t1,goals:0};scorerMap[k].goals++;}}
+    for(const g of(sc.goals2||[])){if(t2){const k=`${g.name}||${t2}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:t2,goals:0};scorerMap[k].goals++;}}
   }}
-
   let scorers=Object.values(scorerMap).sort((a,b)=>b.goals-a.goals);
-  // Filter scorers by group or team
-  if(statsTeam!=='ALL'){
-    scorers=scorers.filter(s=>s.team===statsTeam);
-  } else if(statsGrp!=='ALL'){
-    scorers=scorers.filter(s=>GROUPS[statsGrp]?.includes(s.team));
-  }
 
   // ── Team goals ──
   const teamGoals={};
   for(const m of MATCHES){
     const sc=scores[m.id]||{};if(sc.s1===undefined)continue;
-    if(!teamGoals[m.t1])teamGoals[m.t1]={goals:0,grp:m.grp};
-    if(!teamGoals[m.t2])teamGoals[m.t2]={goals:0,grp:m.grp};
+    if(!teamGoals[m.t1])teamGoals[m.t1]={goals:0};
+    if(!teamGoals[m.t2])teamGoals[m.t2]={goals:0};
     teamGoals[m.t1].goals+=Number(sc.s1||0);
     teamGoals[m.t2].goals+=Number(sc.s2||0);
   }
+
+  // ── Filter by team/group ──
+  if(statsTeam!=='ALL'){
+    scorers=scorers.filter(s=>s.team===statsTeam);
+  } else if(statsGrp!=='ALL'){
+    scorers=scorers.filter(s=>GROUPS[statsGrp]?.includes(s.team));
+  }
   let teamList=Object.entries(teamGoals).sort((a,b)=>b[1].goals-a[1].goals);
   if(statsTeam!=='ALL') teamList=teamList.filter(([n])=>n===statsTeam);
-  else if(statsGrp!=='ALL') teamList=teamList.filter(([n,v])=>GROUPS[statsGrp]?.includes(n));
+  else if(statsGrp!=='ALL') teamList=teamList.filter(([n])=>GROUPS[statsGrp]?.includes(n));
   const maxG=teamList[0]?teamList[0][1].goals:1;
 
-  // ── Render ──
-  const titleSuffix=statsTeam!=='ALL'
-    ?`· ${enNameRanked(statsTeam)}`
-    :statsGrp!=='ALL'?`· Group ${statsGrp}`:'';
+  let cardList=Object.values(cardMap).sort((a,b)=>b.red-a.red||b.yellow-a.yellow);
+  if(statsTeam!=='ALL') cardList=cardList.filter(c=>c.team===statsTeam);
+  else if(statsGrp!=='ALL') cardList=cardList.filter(c=>GROUPS[statsGrp]?.includes(c.team));
+
+  const titleSuffix=statsTeam!=='ALL'?`· ${enNameRanked(statsTeam)}`:statsGrp!=='ALL'?`· Group ${statsGrp}`:'';
+
+  // ── Match history (only when a specific team is selected) ──
+  let matchHistoryHTML='';
+  if(statsTeam!=='ALL'){
+    const played=[],upcoming=[];
+    for(const m of MATCHES){
+      if(m.t1!==statsTeam&&m.t2!==statsTeam)continue;
+      const sc=scores[m.id]||{};
+      const done=sc.s1!==undefined&&sc.s1!==null;
+      const isHome=m.t1===statsTeam;
+      const opp=isHome?m.t2:m.t1;
+      const oppCode=TEAMS[opp]?.code||'';
+      const myScore=done?(isHome?sc.s1:sc.s2):'';
+      const opScore=done?(isHome?sc.s2:sc.s1):'';
+      let result='';
+      if(done){
+        const ms=Number(myScore),os=Number(opScore);
+        result=ms>os?'W':ms<os?'L':'D';
+      }
+      const row={m,opp,oppCode,myScore,opScore,result,done};
+      if(done)played.push(row);else upcoming.push(row);
+    }
+    // KO matches
+    for(const round of KO_ROUNDS){for(const m of round.matches){
+      const sc=scores[m.id]||{};
+      const t1=sc.t1||'',t2=sc.t2||'';
+      if(t1!==statsTeam&&t2!==statsTeam)continue;
+      const done=sc.s1!==undefined&&sc.s1!==null;
+      const isHome=t1===statsTeam;
+      const opp=isHome?t2:t1;
+      const oppCode=TEAMS[opp]?.code||'';
+      const myScore=done?(isHome?sc.s1:sc.s2):'';
+      const opScore=done?(isHome?sc.s2:sc.s1):'';
+      let result='';
+      if(done){const ms=Number(myScore),os=Number(opScore);result=ms>os?'W':ms<os?'L':'D';}
+      const row={m,opp,oppCode,myScore,opScore,result,done,round:round.name};
+      if(done)played.push(row);else upcoming.push(row);
+    }}
+
+    const resultColor={W:'#A1F000',D:'#ffaa00',L:'#ff4d4d'};
+    const matchRow=(row,isDone)=>`
+      <div class="mh-row">
+        <div class="mh-date">${fD(row.m.date)}</div>
+        <div class="mh-opp">
+          ${row.oppCode?`<img src="https://flagcdn.com/20x15/${row.oppCode}.png" style="width:18px;height:13px;object-fit:cover;border-radius:2px" loading="lazy">`:''}
+          ${enNameRanked(row.opp)}
+          ${row.round?`<span style="font-size:.6rem;opacity:.5;margin-left:3px">(${row.round})</span>`:''}
+        </div>
+        ${isDone
+          ?`<div class="mh-score" style="color:${resultColor[row.result]||'#fff'}">${row.result} ${row.myScore}–${row.opScore}</div>`
+          :`<div class="mh-score" style="color:var(--gray)">বাকি</div>`
+        }
+      </div>`;
+
+    matchHistoryHTML=`
+      <div class="stats-card" style="grid-column:1/-1">
+        <div class="stats-card-title">📋 ম্যাচ ইতিহাস · ${enNameRanked(statsTeam)}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+          <div>
+            <div class="mh-header">✅ খেলা হয়েছে (${played.length})</div>
+            ${played.length?played.map(r=>matchRow(r,true)).join(''):`<div class="stats-empty">এখনো কোনো ম্যাচ খেলা হয়নি</div>`}
+          </div>
+          <div style="border-left:1px solid var(--border2)">
+            <div class="mh-header">⏳ বাকি আছে (${upcoming.length})</div>
+            ${upcoming.length?upcoming.map(r=>matchRow(r,false)).join(''):`<div class="stats-empty">সব ম্যাচ খেলা হয়ে গেছে</div>`}
+          </div>
+        </div>
+      </div>`;
+  }
 
   document.getElementById('statsGrid').innerHTML=`
+    ${matchHistoryHTML}
     <div class="stats-card">
       <div class="stats-card-title">⚽ সর্বোচ্চ গোলদাতা ${titleSuffix}</div>
-      ${scorers.length===0
-        ?`<div class="stats-empty">এখনো গোলের তথ্য নেই</div>`
+      ${scorers.length===0?`<div class="stats-empty">এখনো গোলের তথ্য নেই</div>`
         :scorers.slice(0,20).map((s,i)=>`
           <div class="scorer-row">
             <div class="sr-rank ${i===0?'g1':i===1?'g2':i===2?'g3':''}">${i+1}</div>
             ${fImg(s.team,26,19)}
-            <div class="sr-info">
-              <div class="sr-name">${esc(s.name)}</div>
-              <div class="sr-team">${enNameRanked(s.team)}</div>
-            </div>
+            <div class="sr-info"><div class="sr-name">${esc(s.name)}</div><div class="sr-team">${enNameRanked(s.team)}</div></div>
             <div class="sr-goals">${s.goals}</div>
-          </div>`).join('')
-      }
+          </div>`).join('')}
     </div>
     <div class="stats-card">
       <div class="stats-card-title">🏳️ দলীয় গোল ${titleSuffix}</div>
-      ${teamList.length===0
-        ?`<div class="stats-empty">এখনো গোলের তথ্য নেই</div>`
+      ${teamList.length===0?`<div class="stats-empty">এখনো গোলের তথ্য নেই</div>`
         :teamList.map(([name,v])=>`
           <div class="team-row">
             ${fImg(name,28,21)}
             <div class="tr-name">${enNameRanked(name)}</div>
             <div class="tr-bar-wrap"><div class="tr-bar" style="width:${Math.round(v.goals/maxG*100)}%"></div></div>
             <div class="tr-goals">${v.goals}</div>
-          </div>`).join('')
-      }
+          </div>`).join('')}
+    </div>
+    <div class="stats-card">
+      <div class="stats-card-title">🟨🟥 কার্ড ${titleSuffix}</div>
+      ${cardList.length===0?`<div class="stats-empty">এখনো কার্ডের তথ্য নেই</div>`
+        :cardList.map(c=>`
+          <div class="scorer-row">
+            ${fImg(c.team,26,19)}
+            <div class="sr-info"><div class="sr-name">${esc(c.name)}</div><div class="sr-team">${enNameRanked(c.team)}</div></div>
+            <div style="display:flex;gap:.4rem;flex-shrink:0">
+              ${c.yellow?`<span style="background:rgba(255,200,0,.15);border:1px solid rgba(255,200,0,.4);border-radius:4px;padding:.1rem .45rem;font-size:.78rem;color:#ffc800">🟨 ${c.yellow}</span>`:''}
+              ${c.red?`<span style="background:rgba(255,50,50,.15);border:1px solid rgba(255,50,50,.4);border-radius:4px;padding:.1rem .45rem;font-size:.78rem;color:#ff5050">🟥 ${c.red}</span>`:''}
+            </div>
+          </div>`).join('')}
     </div>`;
 }
 window._stg=function(g){statsGrp=g;statsTeam='ALL';const grps=calcGroups();renderStats(grps);};
