@@ -362,10 +362,10 @@ body::before{content:'';position:fixed;inset:0;
 }
 @media(max-width:380px){.mc-flag{display:none}}
 /* ══ SQUADS PAGE ══ */
-.sq-controls{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem}
-.sq-team-scroll{display:flex;gap:.35rem;overflow-x:auto;padding-bottom:.3rem;scrollbar-width:none;flex:1}
-.sq-team-scroll::-webkit-scrollbar{display:none}
-.sq-team-btn{display:flex;align-items:center;gap:.4rem;font-family:'Bebas Neue',sans-serif;font-size:.78rem;letter-spacing:1px;padding:.32rem .75rem;background:var(--neon-glow2);border:1px solid var(--border2);border-radius:20px;color:var(--gray);cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0}
+.sq-controls{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1rem}
+.sq-top-row{display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
+.sq-team-scroll{display:flex;gap:.35rem;flex-wrap:wrap;padding-bottom:.3rem}
+.sq-team-btn{display:inline-flex;align-items:center;gap:.35rem;font-family:'Bebas Neue',sans-serif;font-size:.78rem;letter-spacing:1px;padding:.3rem .7rem;background:var(--neon-glow2);border:1px solid var(--border2);border-radius:20px;color:var(--gray);cursor:pointer;white-space:nowrap;transition:all .2s}
 .sq-team-btn:hover{border-color:var(--border);color:var(--text)}
 .sq-team-btn.on{background:rgba(161,240,0,.15);border-color:var(--neon);color:var(--neon);box-shadow:0 0 8px var(--neon-glow)}
 .sq-team-btn img{width:20px;height:15px;object-fit:cover;border-radius:2px}
@@ -493,14 +493,16 @@ body::before{content:'';position:fixed;inset:0;
   <div id="p-squads" class="panel">
     <div class="sec-title">🧑‍⚽ Squads</div>
     <div class="sq-controls">
-      <div class="sq-team-scroll" id="sqTeamBtns"></div>
-      <div class="sq-pos-btns">
-        <button class="sq-pos-btn on" onclick="setSqPos('ALL',this)">সকল</button>
-        <button class="sq-pos-btn" onclick="setSqPos('GK',this)" style="color:#ffaa00">GK</button>
-        <button class="sq-pos-btn" onclick="setSqPos('DF',this)">DF</button>
-        <button class="sq-pos-btn" onclick="setSqPos('MF',this)" style="color:#00aaff">MF</button>
-        <button class="sq-pos-btn" onclick="setSqPos('FW',this)" style="color:#ff4d4d">FW</button>
+      <div class="sq-top-row">
+        <div class="sq-pos-btns">
+          <button class="sq-pos-btn on" onclick="setSqPos('ALL',this)">সকল</button>
+          <button class="sq-pos-btn" onclick="setSqPos('GK',this)" style="color:#ffaa00">GK</button>
+          <button class="sq-pos-btn" onclick="setSqPos('DF',this)">DF</button>
+          <button class="sq-pos-btn" onclick="setSqPos('MF',this)" style="color:#00aaff">MF</button>
+          <button class="sq-pos-btn" onclick="setSqPos('FW',this)" style="color:#ff4d4d">FW</button>
+        </div>
       </div>
+      <div class="sq-team-scroll" id="sqTeamBtns"></div>
     </div>
     <div id="sqHeader"></div>
     <div class="sq-grid" id="sqGrid"></div>
@@ -1339,44 +1341,59 @@ function clubFlagHTML(clubCountry){
   return`<img src="https://flagcdn.com/20x15/${code}.png" style="width:16px;height:12px;object-fit:cover;border-radius:1px" loading="lazy" title="${esc(clubCountry)}" onerror="this.style.display='none'">`;
 }
 
+// Firebase key → original TEAMS key (underscore back to dot)
+function fbKeyToTeamKey(fbKey){
+  // Firebase-এ "১৫_ মেক্সিকো" → TEAMS-এ "১৫. মেক্সিকো"
+  return fbKey.replace(/_/g,'.');
+}
+// TEAMS key → Firebase key
+function teamKeyToFbKey(teamKey){
+  return teamKey.replace(/[.#$[\]]/g,'_');
+}
+
 function loadSquads(){
   document.getElementById('sqGrid').innerHTML=`<div class="sq-loading" style="grid-column:1/-1">⏳ লোড হচ্ছে...</div>`;
   onValue(ref(db,'squads'),snap=>{
     sqData=snap.val()||{};
     sqLoaded=true;
     buildSqTeamBtns();
-    // Auto-select first team
-    const firstKey=Object.keys(sqData)[0];
-    if(firstKey){sqTeam=firstKey;renderSquad();}
+    // Auto-select first team by rank
+    const sorted=Object.keys(sqData).sort((a,b)=>{
+      const ra=parseInt(getRank(fbKeyToTeamKey(a)))||999;
+      const rb=parseInt(getRank(fbKeyToTeamKey(b)))||999;
+      return ra-rb;
+    });
+    if(sorted.length>0){sqTeam=sorted[0];renderSquad();}
     else document.getElementById('sqGrid').innerHTML=`<div class="sq-empty" style="grid-column:1/-1">Firebase-এ squad data নেই</div>`;
   },{onlyOnce:true});
 }
 
 function buildSqTeamBtns(){
-  // Sort teams by rank
+  // Sort by FIFA rank using original team key
   const sorted=Object.keys(sqData).sort((a,b)=>{
-    const ra=parseInt(getRank(a))||999;
-    const rb=parseInt(getRank(b))||999;
+    const ra=parseInt(getRank(fbKeyToTeamKey(a)))||999;
+    const rb=parseInt(getRank(fbKeyToTeamKey(b)))||999;
     return ra-rb;
   });
   const container=document.getElementById('sqTeamBtns');
-  container.innerHTML=sorted.map(key=>{
-    const t=TEAMS[key];
+  container.innerHTML=sorted.map(fbKey=>{
+    const teamKey=fbKeyToTeamKey(fbKey);
+    const t=TEAMS[teamKey];
     const code=t?.code||'';
-    const rank=getRank(key);
-    const en=t?.en||key;
+    const rank=getRank(teamKey);
+    const en=t?.en||sqData[fbKey]?.coach||fbKey; // fallback
     const flagHtml=code?`<img src="https://flagcdn.com/20x15/${code}.png" loading="lazy" onerror="this.style.display='none'">`:'';
-    return`<button class="sq-team-btn ${sqTeam===key?'on':''}" onclick="setSqTeam('${key.replace(/'/g,"\\'")}')" data-key="${esc(key)}">
+    return`<button class="sq-team-btn ${sqTeam===fbKey?'on':''}" onclick="setSqTeam('${fbKey.replace(/'/g,"\\'")}')" data-key="${esc(fbKey)}">
       ${flagHtml}
-      <span style="font-size:.6rem;opacity:.55">${rank}</span>
+      <span style="font-size:.6rem;opacity:.55">${rank}.</span>
       ${esc(en)}
     </button>`;
   }).join('');
 }
 
-window.setSqTeam=function(key){
-  sqTeam=key;sqPos='ALL';
-  document.querySelectorAll('.sq-team-btn').forEach(b=>b.classList.toggle('on',b.dataset.key===key));
+window.setSqTeam=function(fbKey){
+  sqTeam=fbKey;sqPos='ALL';
+  document.querySelectorAll('.sq-team-btn').forEach(b=>b.classList.toggle('on',b.dataset.key===fbKey));
   document.querySelectorAll('.sq-pos-btn').forEach((b,i)=>b.classList.toggle('on',i===0));
   renderSquad();
 };
@@ -1391,36 +1408,37 @@ window.setSqPos=function(pos,btn){
 function renderSquad(){
   if(!sqTeam||!sqData[sqTeam])return;
   const data=sqData[sqTeam];
-  const t=TEAMS[sqTeam];
+  const teamKey=fbKeyToTeamKey(sqTeam);
+  const t=TEAMS[teamKey];
   const code=t?.code||'';
-  const en=t?.en||sqTeam;
-  const rank=getRank(sqTeam);
+  const en=t?.en||teamKey;
+  const rank=getRank(teamKey);
 
-  // Header
+  // Header stats
   const players=data.players||[];
-  const caps=players.reduce((s,p)=>s+(p.caps||0),0);
-  const intlGoals=players.reduce((s,p)=>s+(p.goals||0),0);
-  const avgAge=(players.reduce((s,p)=>s+(p.age||0),0)/players.length).toFixed(1);
+  const totalCaps=players.reduce((s,p)=>s+(p.caps||0),0);
+  const totalGoals=players.reduce((s,p)=>s+(p.goals||0),0);
+  const avgAge=players.length?(players.reduce((s,p)=>s+(p.age||0),0)/players.length).toFixed(1):'—';
   const captain=players.find(p=>p.captain);
 
   document.getElementById('sqHeader').innerHTML=`
     <div class="sq-header">
       ${code?`<img class="sq-header-flag" src="https://flagcdn.com/80x60/${code}.png" loading="lazy" onerror="this.style.display='none'">`:''}
       <div class="sq-header-info">
-        <div class="sq-header-name">${rank?rank+'. ':''} ${esc(en)}</div>
+        <div class="sq-header-name">${rank?rank+'.':''} ${esc(en)}</div>
         <div class="sq-header-sub">Group ${data.group||'?'}</div>
-        <div class="sq-header-coach">👔 ${esc(data.coach||'')}</div>
+        <div class="sq-header-coach">👔 Coach: ${esc(data.coach||'—')}</div>
         <div class="sq-header-stats">
-          <div class="sq-stat"><div class="sq-stat-n">${players.length}</div><div class="sq-stat-l">খেলোয়াড়</div></div>
-          <div class="sq-stat"><div class="sq-stat-n">${caps}</div><div class="sq-stat-l">মোট Caps</div></div>
-          <div class="sq-stat"><div class="sq-stat-n">${intlGoals}</div><div class="sq-stat-l">মোট গোল</div></div>
-          <div class="sq-stat"><div class="sq-stat-n">${avgAge}</div><div class="sq-stat-l">গড় বয়স</div></div>
-          ${captain?`<div class="sq-stat"><div class="sq-stat-n" style="font-size:.75rem">©</div><div class="sq-stat-l">${esc(captain.name)}</div></div>`:''}
+          <div class="sq-stat"><div class="sq-stat-n">${players.length}</div><div class="sq-stat-l">Players</div></div>
+          <div class="sq-stat"><div class="sq-stat-n">${totalCaps}</div><div class="sq-stat-l">Caps</div></div>
+          <div class="sq-stat"><div class="sq-stat-n">${totalGoals}</div><div class="sq-stat-l">Goals</div></div>
+          <div class="sq-stat"><div class="sq-stat-n">${avgAge}</div><div class="sq-stat-l">Avg Age</div></div>
+          ${captain?`<div class="sq-stat"><div class="sq-stat-n" style="font-size:.75rem;color:var(--neon)">© Captain</div><div class="sq-stat-l">${esc(captain.name)}</div></div>`:''}
         </div>
       </div>
     </div>`;
 
-  // Filter players
+  // Filter by position
   const filtered=sqPos==='ALL'?players:players.filter(p=>p.pos===sqPos);
 
   if(filtered.length===0){
@@ -1443,7 +1461,7 @@ function renderSquad(){
         </div>
         <div class="sq-club">
           ${clubFlagHTML(p.clubCountry)}
-          <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.club||'')}</span>
+          <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.club||'—')}</span>
         </div>
         <div class="sq-meta">
           <span title="বয়স">🎂 ${p.age||'?'}</span>
