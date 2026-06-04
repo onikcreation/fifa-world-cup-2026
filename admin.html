@@ -491,6 +491,30 @@ let activeGrp='ALL';
 window._activeGrp='ALL';
 let modalMatchId=null;
 let modalIsKO=false;
+let adminSquads={}; // Firebase squads data for player autocomplete
+
+// Load squads for autocomplete (background)
+function loadAdminSquads(){
+  onValue(ref(db,'squads'),snap=>{
+    adminSquads=snap.val()||{};
+  },{onlyOnce:true});
+}
+
+// Get players list for a team key (Firebase key format)
+function getSquadPlayers(teamKey){
+  // Try direct key first, then safeKey conversion
+  const safeKey=teamKey.replace(/[.#$[\]]/g,'_');
+  const data=adminSquads[safeKey]||adminSquads[teamKey]||null;
+  return data?.players||[];
+}
+
+// Build datalist for player input autocomplete
+function buildPlayerDatalist(id,players){
+  let dl=document.getElementById('dl_'+id);
+  if(!dl){dl=document.createElement('datalist');dl.id='dl_'+id;document.body.appendChild(dl);}
+  dl.innerHTML=players.map(p=>`<option value="${p.name}" label="${p.no}. ${p.pos} · ${p.club}">`).join('');
+  return 'dl_'+id;
+}
 // Track changed rows
 const pendingChanges=new Set();
 
@@ -515,7 +539,8 @@ if(sessionStorage.getItem('fa')==='1'){
 }
 
 function initAdmin(){
-  loadSettings(); // Load saved settings from Firebase
+  loadSettings();
+  loadAdminSquads(); // Load squad data for player autocomplete
   onValue(ref(db,'scores'),snap=>{
     dbSc=snap.val()||{};
     document.getElementById('fbSt').innerHTML='<span style="color:var(--neon)">✓ Live</span>';
@@ -918,19 +943,33 @@ window.openGoalModal=function(id,isKO){
   document.getElementById('modal-goals-panel').style.display='';
   document.getElementById('modal-cards-panel').style.display='none';
 
+  // Squad players for autocomplete
+  const p1=getSquadPlayers(t1);
+  const p2=getSquadPlayers(t2);
+  const dl1=buildPlayerDatalist('mg_t1',p1);
+  const dl2=buildPlayerDatalist('mg_t2',p2);
+  const cdl1=buildPlayerDatalist('mc_t1',p1);
+  const cdl2=buildPlayerDatalist('mc_t2',p2);
+
   // Goals
   const g1=sc.goals1||[],g2=sc.goals2||[];
   function goalEntry(side,i,name='',min='',pen=false){
+    const dl=side==='t1'?dl1:dl2;
     return`<div class="goal-entry" id="ge_${side}_${i}">
-      <input class="gn-in" placeholder="গোলদাতার নাম" value="${esc(name)}" id="gn_${side}_${i}">
+      <input class="gn-in" placeholder="গোলদাতার নাম" value="${esc(name)}" id="gn_${side}_${i}" list="${dl}" autocomplete="off">
       <input class="gm-in" type="number" min="1" max="130" placeholder="মি." value="${min}" id="gm_${side}_${i}">
       <input type="checkbox" class="pen-cb" id="gp_${side}_${i}" ${pen?'checked':''}><label class="pen-lbl" for="gp_${side}_${i}">P</label>
       <button class="rm-btn" onclick="rmGoal('${side}',${i})">✕</button>
     </div>`;
   }
   function goalSection(side,teamName,goals){
+    const pc=side==='t1'?p1.length:p2.length;
     return`<div>
-      <div class="modal-team-title">${teamName}</div>
+      <div class="modal-team-title">${teamName}
+        <span style="font-size:.6rem;${pc?'color:var(--neon)':'color:rgba(255,170,0,.7)'};margin-left:.4rem">
+          ${pc?`⚽ ${pc} জন স্কোয়াড`:'⚠ স্কোয়াড নেই'}
+        </span>
+      </div>
       <div id="glist_${side}">${goals.map((g,i)=>goalEntry(side,i,g.name,g.min,g.pen)).join('')}</div>
       <button class="add-goal-btn" onclick="addGoal('${side}')">+ গোল যোগ</button>
     </div>`;
@@ -940,21 +979,26 @@ window.openGoalModal=function(id,isKO){
   // Cards
   const c1=sc.cards1||[],c2=sc.cards2||[];
   function cardEntry(side,i,name='',min='',type='yellow'){
+    const cdl=side==='t1'?cdl1:cdl2;
     return`<div class="card-entry" id="ce_${side}_${i}">
       <div class="card-type-btns">
         <button class="card-type-btn yellow ${type==='yellow'?'on':''}" onclick="setCardType('${side}',${i},'yellow',this)">🟨</button>
         <button class="card-type-btn red ${type==='red'?'on':''}" onclick="setCardType('${side}',${i},'red',this)">🟥</button>
         <button class="card-type-btn red ${type==='yr'?'on':''}" onclick="setCardType('${side}',${i},'yr',this)" title="২য় হলুদ = লাল" style="font-size:.6rem">🟨🟥</button>
       </div>
-      <input class="cn-in" placeholder="খেলোয়াড়ের নাম" value="${esc(name)}" id="cn_${side}_${i}">
+      <input class="cn-in" placeholder="খেলোয়াড়ের নাম" value="${esc(name)}" id="cn_${side}_${i}" list="${cdl}" autocomplete="off">
       <input class="cm-in" type="number" min="1" max="130" placeholder="মি." value="${min}" id="cm_${side}_${i}">
       <input type="hidden" id="ct_${side}_${i}" value="${type}">
       <button class="rm-btn" onclick="rmCard('${side}',${i})">✕</button>
     </div>`;
   }
   function cardSection(side,teamName,cards){
+    const teamKey=side==='t1'?t1:t2;
+    const code=TEAMS[teamKey]?.code||'';
     return`<div class="card-section">
-      <div class="card-section-title">${TEAMS[t1&&side==='t1'?t1:t2]?.code?`<img src="https://flagcdn.com/20x15/${TEAMS[side==='t1'?t1:t2]?.code}.png" style="width:18px;height:13px;object-fit:cover;border-radius:2px" loading="lazy">`:''} ${teamName}</div>
+      <div class="card-section-title">
+        ${code?`<img src="https://flagcdn.com/20x15/${code}.png" style="width:18px;height:13px;object-fit:cover;border-radius:2px" loading="lazy">`:''} ${teamName}
+      </div>
       <div id="clist_${side}">${cards.map((c,i)=>cardEntry(side,i,c.name,c.min,c.type)).join('')}</div>
       <button class="add-card-btn" onclick="addCard('${side}')">+ কার্ড যোগ</button>
     </div>`;
@@ -973,9 +1017,12 @@ window.setCardType=function(side,i,type,btn){
 window.addGoal=function(side){
   const c=document.getElementById('glist_'+side);
   const i=c.children.length;
+  // Find datalist id from existing entries
+  const existingInput=c.querySelector('input.gn-in');
+  const dlid=existingInput?.getAttribute('list')||'';
   const d=document.createElement('div');
   d.innerHTML=`<div class="goal-entry" id="ge_${side}_${i}">
-    <input class="gn-in" placeholder="গোলদাতার নাম" id="gn_${side}_${i}">
+    <input class="gn-in" placeholder="গোলদাতার নাম" id="gn_${side}_${i}" list="${dlid}" autocomplete="off">
     <input class="gm-in" type="number" min="1" max="130" placeholder="মি." id="gm_${side}_${i}">
     <input type="checkbox" class="pen-cb" id="gp_${side}_${i}"><label class="pen-lbl" for="gp_${side}_${i}">P</label>
     <button class="rm-btn" onclick="rmGoal('${side}',${i})">✕</button>
@@ -987,6 +1034,8 @@ window.rmGoal=function(side,i){const el=document.getElementById(`ge_${side}_${i}
 window.addCard=function(side){
   const c=document.getElementById('clist_'+side);
   const i=c.children.length;
+  const existingInput=c.querySelector('input.cn-in');
+  const dlid=existingInput?.getAttribute('list')||'';
   const d=document.createElement('div');
   d.innerHTML=`<div class="card-entry" id="ce_${side}_${i}">
     <div class="card-type-btns">
@@ -994,7 +1043,7 @@ window.addCard=function(side){
       <button class="card-type-btn red" onclick="setCardType('${side}',${i},'red',this)">🟥</button>
       <button class="card-type-btn red" onclick="setCardType('${side}',${i},'yr',this)" style="font-size:.6rem">🟨🟥</button>
     </div>
-    <input class="cn-in" placeholder="খেলোয়াড়ের নাম" id="cn_${side}_${i}">
+    <input class="cn-in" placeholder="খেলোয়াড়ের নাম" id="cn_${side}_${i}" list="${dlid}" autocomplete="off">
     <input class="cm-in" type="number" min="1" max="130" placeholder="মি." id="cm_${side}_${i}">
     <input type="hidden" id="ct_${side}_${i}" value="yellow">
     <button class="rm-btn" onclick="rmCard('${side}',${i})">✕</button>

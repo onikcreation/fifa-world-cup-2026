@@ -1262,22 +1262,41 @@ function renderStats(grps){
       const row={m,opp,oppCode,myScore,opScore,result,done};
       if(done)played.push(row);else upcoming.push(row);
     }
-    // KO matches
-    for(const round of KO_ROUNDS){for(const m of round.matches){
-      const sc=scores[m.id]||{};
-      const t1=sc.t1||'',t2=sc.t2||'';
-      if(t1!==statsTeam&&t2!==statsTeam)continue;
-      const done=sc.s1!==undefined&&sc.s1!==null;
-      const isHome=t1===statsTeam;
-      const opp=isHome?t2:t1;
-      const oppCode=TEAMS[opp]?.code||'';
-      const myScore=done?(isHome?sc.s1:sc.s2):'';
-      const opScore=done?(isHome?sc.s2:sc.s1):'';
-      let result='';
-      if(done){const ms=Number(myScore),os=Number(opScore);result=ms>os?'W':ms<os?'L':'D';}
-      const row={m,opp,oppCode,myScore,opScore,result,done,round:round.name};
-      if(done)played.push(row);else upcoming.push(row);
-    }}
+    // KO matches — resolveKOSlot দিয়ে actual team বের করি
+    const grps2=calcGroups();
+    const b3map2=buildBest3rdMap(grps2);
+    const wmap2=buildWinnerMap(grps2,b3map2);
+
+    for(const round of KO_ROUNDS){
+      for(const m of round.matches){
+        const sc=scores[m.id]||{};
+
+        // Resolve actual teams (from Firebase or from slot logic)
+        let t1=sc.t1||resolveKOSlot(m.s1,grps2,b3map2,wmap2)||'';
+        let t2=sc.t2||resolveKOSlot(m.s2,grps2,b3map2,wmap2)||'';
+
+        // TBD slot — not yet determined
+        const t1known=t1&&t1!==m.s1&&!t1.startsWith('W ')&&!t1.startsWith('L ')&&!t1.startsWith('3rd');
+        const t2known=t2&&t2!==m.s2&&!t2.startsWith('W ')&&!t2.startsWith('L ')&&!t2.startsWith('3rd');
+
+        const teamInMatch=(t1===statsTeam)||(t2===statsTeam);
+        if(!teamInMatch)continue;
+
+        const done=sc.s1!==undefined&&sc.s1!==null;
+        const isHome=t1===statsTeam;
+        const opp=isHome?t2:t1;
+        const oppKnown=isHome?t2known:t1known;
+        const oppCode=TEAMS[opp]?.code||'';
+        const myScore=done?(isHome?sc.s1:sc.s2):'';
+        const opScore=done?(isHome?sc.s2:sc.s1):'';
+        let result='';
+        if(done){const ms=Number(myScore),os=Number(opScore);result=ms>os?'W':ms<os?'L':'D';}
+
+        const oppDisplay=oppKnown?opp:(opp||'TBD');
+        const row={m,opp:oppDisplay,oppCode,myScore,opScore,result,done,round:round.name};
+        if(done)played.push(row);else upcoming.push(row);
+      }
+    }
 
     const resultColor={W:'#A1F000',D:'#ffaa00',L:'#ff4d4d'};
     const matchRow=(row,isDone)=>`
