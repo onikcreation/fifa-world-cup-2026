@@ -229,7 +229,7 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getDatabase,ref,set,update,onValue,remove}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import{FIREBASE_CONFIG,ADMIN_PASSWORD}from'./firebase-config.js';
-import{TEAMS,MATCHES,KO_ROUNDS}from'./data.js';
+import{TEAMS,GROUPS,MATCHES,KO_ROUNDS}from'./data.js';
 
 const app=initializeApp(FIREBASE_CONFIG);
 const db=getDatabase(app);
@@ -410,19 +410,76 @@ window.clearOne=async function(id){
 window.confirmClear=function(){if(confirm('⚠️ সব স্কোর ও গোল ডেটা মুছে ফেলবেন?'))remove(ref(db,'scores')).then(()=>{pendingChanges.clear();updateChangedCount();toast('সব clear হয়েছে','ok');});};
 
 // KO
+// ── Auto-populate helpers (same logic as index.html) ──
+function calcGroupsAdmin(){
+  const t={};
+  for(const[g,teams]of Object.entries(GROUPS)){t[g]={};for(const tm of teams)t[g][tm]={pl:0,w:0,d:0,l:0,gf:0,ga:0,pts:0};}
+  for(const m of MATCHES){
+    const sc=dbSc[m.id];if(!sc||sc.s1===undefined)continue;
+    const tbl=t[m.grp];if(!tbl||!tbl[m.t1]||!tbl[m.t2])continue;
+    const s1=Number(sc.s1),s2=Number(sc.s2);
+    tbl[m.t1].pl++;tbl[m.t2].pl++;tbl[m.t1].gf+=s1;tbl[m.t1].ga+=s2;tbl[m.t2].gf+=s2;tbl[m.t2].ga+=s1;
+    if(s1>s2){tbl[m.t1].w++;tbl[m.t1].pts+=3;tbl[m.t2].l++;}
+    else if(s1<s2){tbl[m.t2].w++;tbl[m.t2].pts+=3;tbl[m.t1].l++;}
+    else{tbl[m.t1].d++;tbl[m.t1].pts++;tbl[m.t2].d++;tbl[m.t2].pts++;}
+  }
+  const s={};
+  for(const[g,tbl]of Object.entries(t)){s[g]=Object.entries(tbl).map(([n,v])=>({name:n,...v,gd:v.gf-v.ga})).sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);}
+  return s;
+}
+function resolveSlotAdmin(slot,grps){
+  if(!slot)return'';
+  if(TEAMS[slot])return slot;
+  const m1=slot.match(/^([12])([A-L])$/);
+  if(m1){const rank=parseInt(m1[1])-1;const grp=m1[2];const team=grps[grp]?.[rank];return(team&&team.pl>0)?team.name:'';}
+  return'';
+}
+function buildB3MapAdmin(grps){
+  const best3rd=Object.entries(grps).map(([g,teams])=>teams[2]?{...teams[2],group:g}:null)
+    .filter(t=>t&&t.pl>0).sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf).slice(0,8);
+  const map={};let idx=0;
+  for(const m of KO_ROUNDS[0].matches){
+    if(m.s1&&m.s1.includes('Best 3rd')){if(best3rd[idx])map[`${m.id}_s1`]=best3rd[idx++].name;}
+    if(m.s2&&m.s2.includes('Best 3rd')){if(best3rd[idx])map[`${m.id}_s2`]=best3rd[idx++].name;}
+  }
+  return map;
+}
+
 function renderKO(){
+  const grps=calcGroupsAdmin();
+  const b3map=buildB3MapAdmin(grps);
   const allKO=KO_ROUNDS.flatMap(r=>r.matches.map(m=>({...m,roundName:r.name})));
   document.getElementById('koGrid').innerHTML=allKO.map(m=>{
     const sc=dbSc[m.id]||{};
     const hg=(sc.goals1?.length||0)+(sc.goals2?.length||0);
+    // Auto-resolve team names
+    let autoT1='',autoT2='';
+    if(!sc.t1){
+      if(m.s1&&m.s1.includes('Best 3rd'))autoT1=b3map[`${m.id}_s1`]||'';
+      else autoT1=resolveSlotAdmin(m.s1,grps)||'';
+    }
+    if(!sc.t2){
+      if(m.s2&&m.s2.includes('Best 3rd'))autoT2=b3map[`${m.id}_s2`]||'';
+      else autoT2=resolveSlotAdmin(m.s2,grps)||'';
+    }
+    const t1val=sc.t1||autoT1;
+    const t2val=sc.t2||autoT2;
+    const isAuto1=!sc.t1&&autoT1;
+    const isAuto2=!sc.t2&&autoT2;
     return`<div class="ko-card">
       <div class="ko-hd"><span class="ko-rname">${m.roundName}</span><span class="ko-mid">${m.id}</span></div>
       <div class="ko-body">
         <div class="ko-date">📅 ${fD(m.date)} · ⏰ ${fT(m.time)}</div>
-        <div class="ko-tr"><input class="ko-ti" id="kt1_${m.id}" placeholder="দল ১ নাম" value="${sc.t1||''}"><input class="ko-si" type="number" min="0" id="ks1_${m.id}" value="${sc.s1!==undefined?sc.s1:''}"></div>
-        <div class="ko-tr"><input class="ko-ti" id="kt2_${m.id}" placeholder="দল ২ নাম" value="${sc.t2||''}"><input class="ko-si" type="number" min="0" id="ks2_${m.id}" value="${sc.s2!==undefined?sc.s2:''}"></div>
+        <div class="ko-tr">
+          <input class="ko-ti" id="kt1_${m.id}" placeholder="দল ১ নাম" value="${t1val}" style="${isAuto1?'color:var(--gold);opacity:.85':''}">
+          <input class="ko-si" type="number" min="0" id="ks1_${m.id}" value="${sc.s1!==undefined?sc.s1:''}">
+        </div>
+        <div class="ko-tr">
+          <input class="ko-ti" id="kt2_${m.id}" placeholder="দল ২ নাম" value="${t2val}" style="${isAuto2?'color:var(--gold);opacity:.85':''}">
+          <input class="ko-si" type="number" min="0" id="ks2_${m.id}" value="${sc.s2!==undefined?sc.s2:''}">
+        </div>
         <div class="ko-actions">
-          <button class="ko-sv" onclick="window.saveKO('${m.id}')">💾 Save</button>
+          <button class="ko-sv" onclick="window.saveKO('${m.id}')">💾 Confirm & Save</button>
           <button class="ko-goal-btn" onclick="openGoalModal('${m.id}',true)">${hg?`⚽ ${hg}`:'+ গোল'}</button>
         </div>
       </div>

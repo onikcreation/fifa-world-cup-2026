@@ -446,10 +446,6 @@ function renderGroups(grps){
 }
 
 // ══ BRACKET AUTO-POPULATE ══
-// FIFA 2026: Groups A,B,D,E,G,I,K,L winner faces a Best 3rd team
-// 1st vs 2nd fixed matches: 2A-2B, 1C-2F, 1F-2C, 1H-2J, 1J-2H, 2E-2I, 2K-2L, 2D-2G
-
-// Get top 8 best 3rd-place teams sorted by FIFA rules
 function getBest3rd(grps){
   return Object.entries(grps)
     .map(([g,teams])=>teams[2]?{...teams[2],group:g}:null)
@@ -458,79 +454,48 @@ function getBest3rd(grps){
     .slice(0,8);
 }
 
-// FIFA 2026 Annex C: predefined slot assignment for Best 3rd teams
-// Key = sorted string of qualifying groups (e.g. "ABCDEFGH")
-// Value = [slot_r32_1, slot_r32_7, slot_r32_9, slot_r32_10, slot_r32_3, slot_r32_6, slot_r32_8, slot_r32_13]
-// mapping: which R32 match each 3rd-place team (from sorted groups) goes to
-// Simplified: assign best 3rd teams to R32 slots 1,3,6,7,8,9,10,13 (where "Best 3rd" appears)
-// in order of their ranking (best 3rd gets best slot by points)
-const BEST3RD_SLOTS=['r32_1','r32_3','r32_6','r32_7','r32_8','r32_9','r32_10','r32_13'];
+// Collect all R32 slots that have "Best 3rd" in s1 or s2
+function buildBest3rdMap(grps){
+  const best3rd=getBest3rd(grps);
+  const map={}; // key: `${matchId}_s1` or `${matchId}_s2`, value: team name
+  let idx=0;
+  for(const m of KO_ROUNDS[0].matches){
+    if(m.s1&&m.s1.includes('Best 3rd')){
+      if(best3rd[idx])map[`${m.id}_s1`]=best3rd[idx++].name;
+    }
+    if(m.s2&&m.s2.includes('Best 3rd')){
+      if(best3rd[idx])map[`${m.id}_s2`]=best3rd[idx++].name;
+    }
+  }
+  return map;
+}
 
-function resolveSlot(slot,grps,best3rdMap={}){
+function resolveSlot(slot,grps){
   if(!slot)return'TBD';
-  if(TEAMS[slot])return slot; // already a team name
-
-  // "1A" or "2B" pattern
+  if(TEAMS[slot])return slot;
   const m1=slot.match(/^([12])([A-L])$/);
   if(m1){
     const rank=parseInt(m1[1])-1;
     const grp=m1[2];
     const team=grps[grp]?.[rank];
-    return team?.pl>0?team.name:slot;
-  }
-
-  // Best 3rd slot
-  if(slot.includes('Best 3rd')){
-    return best3rdMap[slot]||slot;
+    return(team&&team.pl>0)?team.name:slot;
   }
   return slot;
-}
-
-function buildBest3rdMap(grps){
-  const best3rd=getBest3rd(grps);
-  const map={};
-  // Assign top 8 best 3rd teams to the 8 "Best 3rd" slots in R32
-  // in order: best team gets first slot
-  BEST3RD_SLOTS.forEach((slotId,i)=>{
-    const matchInKO=KO_ROUNDS[0].matches.find(m=>m.id===slotId);
-    if(matchInKO&&best3rd[i]){
-      // s2 contains "Best 3rd" for these slots
-      map[matchInKO.s2]=best3rd[i].name;
-      map[matchInKO.s1]=best3rd[i].name; // check both sides
-    }
-  });
-  // Also build by index
-  const indexMap={};
-  best3rd.forEach((t,i)=>{indexMap[i]=t.name;});
-  // Map each "Best 3rd" occurrence in R32 to a team
-  let b3idx=0;
-  KO_ROUNDS[0].matches.forEach(m=>{
-    if(m.s1&&m.s1.includes('Best 3rd')&&best3rd[b3idx]){
-      map[`${m.id}_s1`]=best3rd[b3idx++]?.name||'Best 3rd';
-    }
-    if(m.s2&&m.s2.includes('Best 3rd')&&best3rd[b3idx]){
-      map[`${m.id}_s2`]=best3rd[b3idx++]?.name||'Best 3rd';
-    }
-  });
-  return map;
 }
 
 function buildMatch(m,grps={},b3map={}){
   const sc=scores[m.id]||{};
   const done=sc.s1!==undefined&&sc.s1!==null;
-
-  // Resolve: Firebase saved name > auto from groups/best3rd > slot label
   let t1=sc.t1||'';
   let t2=sc.t2||'';
   if(!t1){
-    if(m.s1&&m.s1.includes('Best 3rd')) t1=b3map[`${m.id}_s1`]||'Best 3rd';
-    else t1=resolveSlot(m.s1,grps)||'TBD';
+    if(m.s1&&m.s1.includes('Best 3rd'))t1=b3map[`${m.id}_s1`]||'Best 3rd';
+    else t1=resolveSlot(m.s1,grps)||m.s1||'TBD';
   }
   if(!t2){
-    if(m.s2&&m.s2.includes('Best 3rd')) t2=b3map[`${m.id}_s2`]||'Best 3rd';
-    else t2=resolveSlot(m.s2,grps)||'TBD';
+    if(m.s2&&m.s2.includes('Best 3rd'))t2=b3map[`${m.id}_s2`]||'Best 3rd';
+    else t2=resolveSlot(m.s2,grps)||m.s2||'TBD';
   }
-
   const s1win=done&&Number(sc.s1)>Number(sc.s2);
   const s2win=done&&Number(sc.s2)>Number(sc.s1);
   const f1=TEAMS[t1]?fImg(t1,18,13):'';
