@@ -1016,7 +1016,7 @@ function renderBracket(grps={}){
         <span class="sym-score">${s2}</span>
       </div>
       ${hasPen?`<div class="sym-extra">PSO: ${sc.pen1}–${sc.pen2}</div>`:hasET?`<div class="sym-extra">ET: ${sc.et1}–${sc.et2}</div>`:''}
-      <div class="sym-date">${m.num?`Match #${m.num} · `:''}${compact?'':`${fD(m.date)} · `}${fT(m.time)}</div>
+      <div class="sym-date">${m.num?`Match #${m.num}`:''}${!compact&&m.date?` · ${fD(m.date)}`:''}${` · ${fT(m.time)}`}</div>
     </div>`;
   }
   // Column builder — evenly distribute spacers
