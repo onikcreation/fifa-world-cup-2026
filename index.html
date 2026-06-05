@@ -593,7 +593,7 @@ function applySettingsPub(s){
     const L=NAV_LABELS[s.lang]||NAV_LABELS.bn;
     const navBtns=document.querySelectorAll('.nav-btn');
     const keys=['schedule','groups','thirdplace','knockout','stats','squads'];
-    navBtns.forEach((b,i)=>{if(keys[i]&&L[keys[i]])b.textContent=L[keys[i]];});
+    navBtns.forEach((b,i)=>{if(keys[i]&&L[keys[i]])b.innerHTML=L[keys[i]];});
   }
 }
 
