@@ -247,13 +247,26 @@ body::before{content:'';position:fixed;inset:0;
 .ko-hd{background:linear-gradient(135deg,rgba(161,240,0,.22) 0%,rgba(12,43,45,.95) 100%);padding:.42rem .8rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(161,240,0,.12)}
 .ko-rname{font-family:'Bebas Neue',sans-serif;font-size:.75rem;letter-spacing:1px;color:#050f10;background:var(--neon);padding:.15rem .55rem;border-radius:20px}
 .ko-mid{font-family:'Bebas Neue',sans-serif;font-size:.75rem;color:rgba(255,255,255,.88);letter-spacing:.5px}
-.ko-body{padding:.65rem}
-.ko-date{font-size:.58rem;color:var(--gray);margin-bottom:.45rem}
-.ko-tr{display:flex;align-items:center;gap:.35rem;margin-bottom:.35rem}
-.ko-ti{flex:1;background:var(--inp);border:1px solid var(--border2);border-radius:5px;padding:.32rem .45rem;color:var(--text);font-size:.74rem;outline:none}
+.ko-body{padding:.6rem}
+.ko-date{font-family:'Bebas Neue',sans-serif;font-size:.65rem;color:rgba(255,255,255,.55);margin-bottom:.5rem;letter-spacing:.3px}
+/* Score grid: 6 inputs in a structured layout */
+.ko-score-grid{display:grid;grid-template-columns:1fr auto auto auto auto;gap:.3rem;align-items:center;margin-bottom:.3rem}
+.ko-score-grid + .ko-score-grid{margin-top:0}
+.ko-ti{background:var(--inp);border:1px solid var(--border2);border-radius:5px;padding:.32rem .45rem;color:var(--text);font-size:.74rem;outline:none;min-width:0}
 .ko-ti:focus{border-color:var(--neon)}
-.ko-si{width:34px;height:27px;background:var(--inp);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:'Bebas Neue',sans-serif;font-size:.9rem;text-align:center;outline:none}
+/* Score input boxes */
+.ko-si{width:36px;height:30px;background:var(--inp);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:'Bebas Neue',sans-serif;font-size:.95rem;text-align:center;outline:none;transition:border .15s}
 .ko-si:focus{border-color:var(--neon)}
+.ko-si.ko-et{border-color:rgba(255,170,0,.3);background:rgba(255,170,0,.05)}
+.ko-si.ko-et:focus{border-color:var(--orange)}
+.ko-si.ko-pen{border-color:rgba(255,77,77,.3);background:rgba(255,77,77,.05)}
+.ko-si.ko-pen:focus{border-color:var(--red)}
+.ko-si-lbl{font-family:'Bebas Neue',sans-serif;font-size:.55rem;letter-spacing:.5px;text-align:center;margin-top:1px}
+.ko-si-lbl.lbl-90{color:var(--neon)}
+.ko-si-lbl.lbl-et{color:var(--orange)}
+.ko-si-lbl.lbl-pen{color:var(--red)}
+/* Input group column */
+.ko-inp-grp{display:flex;flex-direction:column;align-items:center;gap:1px}
 .ko-actions{display:flex;gap:.35rem;padding:.5rem .65rem;border-top:1px solid rgba(161,240,0,.08);background:rgba(0,0,0,.2)}
 .ko-sv{flex:1;font-family:'Bebas Neue',sans-serif;font-size:.78rem;letter-spacing:1px;padding:.35rem;background:rgba(161,240,0,.15);border:1px solid var(--border);border-radius:5px;color:#fff;cursor:pointer}
 .ko-sv:hover{background:rgba(161,240,0,.22)}
@@ -859,6 +872,8 @@ function renderKO(){
     const isAuto1=!sc.t1&&autoT1, isAuto2=!sc.t2&&autoT2;
     const hasET=sc.et1!==undefined, hasPen=sc.pen1!==undefined;
 
+    // Grid layout: [team-name] [90t1] [90t2] [ET1] [ET2] [PSO1] [PSO2]
+    // Labels row, then t1 row, then t2 row
     return`<div class="ko-card">
       <div class="ko-hd">
         <span class="ko-rname">${m.roundName}</span>
@@ -866,36 +881,36 @@ function renderKO(){
       </div>
       <div class="ko-body">
         <div class="ko-date">📅 ${fD(m.date)} · ⏰ ${fT(m.time)}</div>
-        <div class="ko-tr">
-          <input class="ko-ti" id="kt1_${m.id}" placeholder="দল ১" value="${t1val}" style="${isAuto1?'color:var(--gold);opacity:.85':''}">
-          <input class="ko-si" type="number" min="0" id="ks1_${m.id}" placeholder="90'" value="${sc.s1!==undefined?sc.s1:''}">
-        </div>
-        <div class="ko-tr" style="margin-top:.25rem">
-          <input class="ko-ti" id="kt2_${m.id}" placeholder="দল ২" value="${t2val}" style="${isAuto2?'color:var(--gold);opacity:.85':''}">
-          <input class="ko-si" type="number" min="0" id="ks2_${m.id}" placeholder="90'" value="${sc.s2!==undefined?sc.s2:''}">
-        </div>
-        <label style="font-size:.63rem;color:var(--gold);cursor:pointer;display:flex;align-items:center;gap:.35rem;margin:.4rem 0 .2rem">
-          <input type="checkbox" id="etC_${m.id}" ${hasET?'checked':''} onchange="window.toggleET('${m.id}',this.checked)" style="accent-color:var(--gold)">
-          ⏱ অতিরিক্ত সময় (ET)
-        </label>
-        <div id="etS_${m.id}" style="display:${hasET?'block':'none'}">
-          <div class="ko-tr"><span style="font-size:.6rem;color:var(--gray);width:55px">ET দল ১</span><input class="ko-si" type="number" min="0" id="ket1_${m.id}" placeholder="ET" value="${sc.et1!==undefined?sc.et1:''}"></div>
-          <div class="ko-tr" style="margin-top:.2rem"><span style="font-size:.6rem;color:var(--gray);width:55px">ET দল ২</span><input class="ko-si" type="number" min="0" id="ket2_${m.id}" placeholder="ET" value="${sc.et2!==undefined?sc.et2:''}"></div>
-        </div>
-        <label style="font-size:.63rem;color:var(--orange);cursor:pointer;display:flex;align-items:center;gap:.35rem;margin:.35rem 0 .2rem">
-          <input type="checkbox" id="penC_${m.id}" ${hasPen?'checked':''} onchange="window.togglePen('${m.id}',this.checked)" style="accent-color:var(--orange)">
-          🎯 পেনাল্টি শুটআউট (PSO)
-        </label>
-        <div id="penS_${m.id}" style="display:${hasPen?'block':'none'}">
-          <div class="ko-tr"><span style="font-size:.6rem;color:var(--gray);width:55px">PSO দল ১</span><input class="ko-si" type="number" min="0" id="kp1_${m.id}" placeholder="PSO" value="${sc.pen1!==undefined?sc.pen1:''}"></div>
-          <div class="ko-tr" style="margin-top:.2rem"><span style="font-size:.6rem;color:var(--gray);width:55px">PSO দল ২</span><input class="ko-si" type="number" min="0" id="kp2_${m.id}" placeholder="PSO" value="${sc.pen2!==undefined?sc.pen2:''}"></div>
+        <div style="display:grid;grid-template-columns:1fr repeat(6,32px);gap:.25rem;align-items:center">
+          <div style="font-size:.55rem;color:var(--gray);padding-bottom:2px"></div>
+          <div class="ko-si-lbl lbl-90">90'</div>
+          <div class="ko-si-lbl lbl-et">ET</div>
+          <div class="ko-si-lbl lbl-pen">P</div>
+          <div class="ko-si-lbl lbl-90">90'</div>
+          <div class="ko-si-lbl lbl-et">ET</div>
+          <div class="ko-si-lbl lbl-pen">P</div>
+
+          <input class="ko-ti" id="kt1_${m.id}" placeholder="দল ১" value="${t1val}" style="${isAuto1?'color:var(--gold)':''}">
+          <input class="ko-si" type="number" min="0" id="ks1_${m.id}" placeholder="-" value="${sc.s1!==undefined?sc.s1:''}">
+          <input class="ko-si ko-et" type="number" min="0" id="ket1_${m.id}" placeholder="-" value="${sc.et1!==undefined?sc.et1:''}">
+          <input class="ko-si ko-pen" type="number" min="0" id="kp1_${m.id}" placeholder="-" value="${sc.pen1!==undefined?sc.pen1:''}">
+          <div style="width:32px;height:30px"></div>
+          <div style="width:32px;height:30px"></div>
+          <div style="width:32px;height:30px"></div>
+
+          <input class="ko-ti" id="kt2_${m.id}" placeholder="দল ২" value="${t2val}" style="${isAuto2?'color:var(--gold)':''}">
+          <div style="width:32px;height:30px"></div>
+          <div style="width:32px;height:30px"></div>
+          <div style="width:32px;height:30px"></div>
+          <input class="ko-si" type="number" min="0" id="ks2_${m.id}" placeholder="-" value="${sc.s2!==undefined?sc.s2:''}">
+          <input class="ko-si ko-et" type="number" min="0" id="ket2_${m.id}" placeholder="-" value="${sc.et2!==undefined?sc.et2:''}">
+          <input class="ko-si ko-pen" type="number" min="0" id="kp2_${m.id}" placeholder="-" value="${sc.pen2!==undefined?sc.pen2:''}">
         </div>
       </div>
-      <!-- বাটন কার্ডের বাইরে footer-এ -->
       <div class="ko-actions">
         <button class="ko-sv" onclick="window.saveKO('${m.id}')">💾 Save</button>
         <button class="ko-goal-btn" onclick="openGoalModal('${m.id}',true)">⚽${hg?' '+hg:' গোল'}</button>
-        <button class="ko-goal-btn" onclick="openGoalModal('${m.id}',true);switchModalTab('cards',document.querySelector('.modal-tab:nth-child(2)'))">🟨${hc?' '+hc:' কার্ড'}</button>
+        <button class="ko-goal-btn" onclick="openGoalModal('${m.id}',true);setTimeout(()=>switchModalTab('cards',document.querySelector('.modal-tab:nth-child(2)')),50)">🟨${hc?' '+hc:' কার্ড'}</button>
       </div>
     </div>`;
   }
@@ -927,19 +942,22 @@ window.saveKO=async function(id){
   if(t1)data.t1=t1;if(t2)data.t2=t2;
   if(s1!=='')data.s1=Number(s1);if(s2!=='')data.s2=Number(s2);
   // ET
-  const etOn=document.getElementById('etC_'+id)?.checked;
+  // ET — input-এ value থাকলেই save করবে
+  const et1=document.getElementById('ket1_'+id)?.value;
+  const et2=document.getElementById('ket2_'+id)?.value;
+  const etOn=et1!==''||et2!=='';
   if(etOn){
-    const et1=document.getElementById('ket1_'+id)?.value;
-    const et2=document.getElementById('ket2_'+id)?.value;
-    if(et1!=='')data.et1=Number(et1);if(et2!=='')data.et2=Number(et2);
-  } else {delete data.et1;delete data.et2;}
-  // Penalty
-  const penOn=document.getElementById('penC_'+id)?.checked;
+    if(et1!=='')data.et1=Number(et1);
+    if(et2!=='')data.et2=Number(et2);
+  }
+  // Penalty — input-এ value থাকলেই save করবে
+  const p1=document.getElementById('kp1_'+id)?.value;
+  const p2=document.getElementById('kp2_'+id)?.value;
+  const penOn=p1!==''||p2!=='';
   if(penOn){
-    const p1=document.getElementById('kp1_'+id)?.value;
-    const p2=document.getElementById('kp2_'+id)?.value;
-    if(p1!=='')data.pen1=Number(p1);if(p2!=='')data.pen2=Number(p2);
-  } else {delete data.pen1;delete data.pen2;}
+    if(p1!=='')data.pen1=Number(p1);
+    if(p2!=='')data.pen2=Number(p2);
+  }
   if(!Object.keys(data).length){toast('কিছু একটা দিন!','err');return;}
   try{
     const ex=dbSc[id]||{};
@@ -947,7 +965,7 @@ window.saveKO=async function(id){
     if(!etOn){delete newData.et1;delete newData.et2;}
     if(!penOn){delete newData.pen1;delete newData.pen2;}
     await set(ref(db,'scores/'+id),newData);
-    toast(`${id} সেভ ✓`,'ok');
+    toast(`Match #${koNum({id})||id} সেভ ✓`,'ok');
   }catch(e){toast('সেভ ব্যর্থ!','err');}
 };
 
