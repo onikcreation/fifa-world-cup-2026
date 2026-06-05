@@ -326,30 +326,66 @@ body::after{content:'';position:fixed;inset:0;
 .sq-pos-btn{font-family:'Bebas Neue',sans-serif;font-size:.75rem;letter-spacing:1px;padding:.3rem .65rem;background:var(--neon-glow2);border:1px solid var(--border2);border-radius:5px;color:var(--gray);cursor:pointer;transition:all .2s}
 .sq-pos-btn.on{background:rgba(161,240,0,.15);border-color:var(--neon);color:var(--neon)}
 
-/* Squad header card */
-/* Squad header — Format B */
-.sq-header{background:#0a1e20;border:1px solid rgba(161,240,0,.2);border-radius:12px;overflow:hidden;margin-bottom:1rem}
-.sq-header-body{display:grid;grid-template-columns:auto 1fr;gap:0}
-.sq-header-left{padding:1rem 1rem 1rem 1.2rem;display:flex;flex-direction:column;justify-content:center;gap:.35rem;border-right:1px solid rgba(161,240,0,.08)}
-.sq-header-flag{width:80px;height:60px;object-fit:cover;border-radius:8px;border:1px solid rgba(161,240,0,.2);box-shadow:0 0 12px rgba(161,240,0,.1)}
-.sq-header-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;color:var(--neon);line-height:1;text-shadow:0 0 10px var(--neon-glow)}
-.sq-header-sub{font-size:.68rem;color:var(--gray)}
-.sq-header-coach{font-size:.75rem;color:var(--text2);display:flex;align-items:center;gap:.3rem}
-.sq-cap-row{display:flex;align-items:center;gap:.35rem;font-size:.72rem;color:rgba(255,255,255,.7)}
-.sq-cap-tag{font-family:'Bebas Neue',sans-serif;font-size:.58rem;padding:.1rem .4rem;background:rgba(161,240,0,.12);border:1px solid rgba(161,240,0,.3);border-radius:3px;color:var(--neon);letter-spacing:.5px}
-.sq-cap-no{font-size:.62rem;color:rgba(255,255,255,.35)}
-/* Right: 2x2 stat boxes + wide extra row */
-.sq-header-right{padding:.7rem 1.2rem .7rem .8rem;display:grid;grid-template-columns:repeat(4,1fr);gap:.45rem;align-content:center}
-.sq-stat-box{background:rgba(161,240,0,.05);border:1px solid rgba(161,240,0,.08);border-radius:7px;padding:.45rem .5rem;text-align:center}
-.sq-stat-box.wide{grid-column:1/-1;background:rgba(161,240,0,.08);border-color:rgba(161,240,0,.12)}
-.sq-stat-n{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;color:var(--neon);line-height:1}
-.sq-stat-l{font-size:.58rem;color:rgba(255,255,255,.4);letter-spacing:.5px;margin-top:2px}
-.sq-extra-row{font-size:.7rem;color:rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;gap:.4rem}
-.sq-extra-row span{color:var(--neon)}
-@media(max-width:600px){
-  .sq-header-body{grid-template-columns:1fr}
-  .sq-header-right{grid-template-columns:repeat(2,1fr)}
-  .sq-header-left{border-right:none;border-bottom:1px solid rgba(161,240,0,.08)}
+/* Squad header — redesigned */
+.sq-header{
+  background:linear-gradient(135deg,rgba(10,30,32,.97) 0%,rgba(5,15,16,.99) 100%);
+  border:1px solid rgba(161,240,0,.22);border-radius:14px;overflow:hidden;
+  margin-bottom:1rem;position:relative;
+}
+.sq-header::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 100% at 0% 50%,rgba(161,240,0,.07) 0%,transparent 65%);
+  pointer-events:none;
+}
+.sq-header-body{display:flex;align-items:stretch;position:relative;z-index:1}
+.sq-header-left{
+  display:flex;align-items:center;gap:1rem;
+  padding:1.1rem 1.4rem;flex-shrink:0;
+  border-right:1px solid rgba(161,240,0,.1);
+}
+.sq-header-flag{
+  width:96px;height:72px;object-fit:cover;border-radius:6px;flex-shrink:0;
+  box-shadow:0 4px 20px rgba(0,0,0,.55),0 0 0 1px rgba(161,240,0,.18);
+}
+.sq-header-info{display:flex;flex-direction:column;gap:.3rem}
+.sq-header-name{
+  font-family:'Bebas Neue',sans-serif;font-size:1.65rem;letter-spacing:2px;
+  color:var(--neon);line-height:1;text-shadow:0 0 18px var(--neon-glow);
+}
+.sq-header-sub{font-size:.62rem;color:var(--gray);letter-spacing:1.2px;text-transform:uppercase}
+.sq-header-coach{font-size:.72rem;color:var(--text2);display:flex;align-items:center;gap:.35rem}
+.sq-cap-row{display:flex;align-items:center;gap:.35rem;font-size:.7rem;color:rgba(255,255,255,.7)}
+.sq-cap-tag{
+  font-family:'Bebas Neue',sans-serif;font-size:.56rem;padding:.1rem .4rem;
+  background:rgba(161,240,0,.12);border:1px solid rgba(161,240,0,.35);
+  border-radius:3px;color:var(--neon);letter-spacing:.5px;
+}
+.sq-cap-no{font-size:.6rem;color:rgba(255,255,255,.3)}
+.sq-header-right{
+  flex:1;display:flex;align-items:center;gap:.7rem;
+  padding:1rem 1.3rem;flex-wrap:wrap;
+}
+.sq-stat-box{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(161,240,0,.05);border:1px solid rgba(161,240,0,.1);
+  border-radius:9px;padding:.55rem 1rem;flex-shrink:0;
+}
+.sq-stat-n{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;color:var(--neon);line-height:1;text-shadow:0 0 8px var(--neon-glow)}
+.sq-stat-l{font-size:.54rem;color:rgba(255,255,255,.38);letter-spacing:.8px;text-transform:uppercase;margin-top:3px;white-space:nowrap}
+.sq-extra-box{
+  flex:1;min-width:170px;background:rgba(161,240,0,.04);
+  border:1px solid rgba(161,240,0,.1);border-radius:9px;
+  padding:.55rem .9rem;display:flex;flex-direction:column;gap:.3rem;
+}
+.sq-extra-row{font-size:.7rem;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:.45rem}
+.sq-extra-row i{color:var(--neon);font-size:.62rem;width:12px;flex-shrink:0}
+.sq-extra-row span{color:var(--text);font-weight:600}
+.sq-extra-label{font-size:.54rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:.1rem}
+@media(max-width:700px){
+  .sq-header-body{flex-direction:column}
+  .sq-header-left{border-right:none;border-bottom:1px solid rgba(161,240,0,.08);padding:1rem}
+  .sq-header-right{gap:.45rem;padding:.8rem 1rem}
+  .sq-extra-box{min-width:100%}
 }
 
 /* Player grid */
@@ -1702,23 +1738,23 @@ function renderSquad(){
     <div class="sq-header">
       <div class="sq-header-body">
         <div class="sq-header-left">
-          ${code?`<img class="sq-header-flag" src="https://flagcdn.com/80x60/${code}.png" loading="lazy" onerror="this.style.display='none'">`:''}
-          <div class="sq-header-name">${rank?rank+'.':''} ${esc(en)}</div>
-          <div class="sq-header-sub">Group ${data.group||'?'}</div>
-          <div class="sq-header-coach"><i class='fas fa-user-tie'></i> ${esc(data.coach||'—')}</div>
-          ${captain?`<div class="sq-cap-row">
-            <span class="sq-cap-tag">© CAPTAIN</span>
-            <span>${esc(captain.name)}</span>
-            <span class="sq-cap-no">#${captain.no||''} · ${captain.pos||''}</span>
-          </div>`:''}
+          ${code?`<img class="sq-header-flag" src="https://flagcdn.com/96x72/${code}.png" loading="lazy" onerror="this.style.display='none'">`:''}
+          <div class="sq-header-info">
+            <div class="sq-header-name">${rank?rank+'.':''} ${esc(en)}</div>
+            <div class="sq-header-sub">GROUP ${data.group||'?'}</div>
+            <div class="sq-header-coach"><i class='fas fa-user-tie'></i> ${esc(data.coach||'—')}</div>
+            ${captain?`<div class="sq-cap-row">
+              <span class="sq-cap-tag">© CAPTAIN</span>
+              <span>${esc(captain.name)}</span>
+              <span class="sq-cap-no">#${captain.no||''} · ${captain.pos||''}</span>
+            </div>`:''}
+          </div>
         </div>
         <div class="sq-header-right">
           <div class="sq-stat-box"><div class="sq-stat-n">${players.length}</div><div class="sq-stat-l">${SQ.sqPlayers}</div></div>
-          <div class="sq-stat-box"><div class="sq-stat-n">${totalCaps}</div><div class="sq-stat-l">${SQ.sqCaps}</div></div>
-          <div class="sq-stat-box"><div class="sq-stat-n">${totalGoals}</div><div class="sq-stat-l">${SQ.sqGoals}</div></div>
           <div class="sq-stat-box"><div class="sq-stat-n">${avgAge}</div><div class="sq-stat-l">${SQ.sqAge}</div></div>
-          ${mostCapped&&mostCapped.caps?`<div class="sq-stat-box wide"><div class="sq-extra-row"><i class='fas fa-trophy'></i> ${SQ.sqMostCapped}: <span>${esc(mostCapped.name)}</span> · ${mostCapped.caps} · ${mostCapped.pos||''}</div></div>`:''}
-          ${topScorer&&topScorer.goals?`<div class="sq-stat-box wide"><div class="sq-extra-row"><i class='fas fa-futbol'></i> ${SQ.sqTopScorer}: <span>${esc(topScorer.name)}</span> · ${topScorer.goals} ${SQ.sqGoalSuffix} · ${topScorer.pos||''}</div></div>`:''}
+          ${mostCapped&&mostCapped.caps?`<div class="sq-extra-box"><div class="sq-extra-label">${SQ.sqMostCapped}</div><div class="sq-extra-row"><i class='fas fa-trophy'></i><span>${esc(mostCapped.name)}</span> · ${mostCapped.caps} caps · ${mostCapped.pos||''}</div></div>`:''}
+          ${topScorer&&topScorer.goals?`<div class="sq-extra-box"><div class="sq-extra-label">${SQ.sqTopScorer}</div><div class="sq-extra-row"><i class='fas fa-futbol'></i><span>${esc(topScorer.name)}</span> · ${topScorer.goals} ${SQ.sqGoalSuffix} · ${topScorer.pos||''}</div></div>`:''}
         </div>
       </div>
     </div>`;
