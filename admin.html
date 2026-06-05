@@ -567,6 +567,9 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 function fD(d){const dt=new Date(d+'T00:00:00');return`${DAYS[dt.getDay()]}, ${dt.getDate()} ${MON[dt.getMonth()]}`;}
 function fT(t){const[h,m]=t.split(':').map(Number);const ap=h<12?'AM':'PM';const h12=h===0?12:h>12?h-12:h;return`${h12}:${String(m).padStart(2,'0')} ${ap}`;}
 function flag(name){const t=TEAMS[name];if(!t)return'';return`<img class="flag-sm" src="https://flagcdn.com/32x24/${t.code}.png" loading="lazy" onerror="this.style.display='none'">`;}
+function getRank(name){const m=name.match(/^([\d০-৯]+)\./);if(!m)return'';const bn='০১২৩৪৫৬৭৮৯';return m[1].split('').map(c=>{const i=bn.indexOf(c);return i>=0?i:c;}).join('');}
+function tNameA(name){if(!TEAMS[name])return name;if(window._lang==='en')return TEAMS[name].en;return name.replace(/^[\d০-৯]+\.\s*/,'');}
+function tNameRankedA(name){const rank=getRank(name);const n=tNameA(name);return rank?`${rank}. ${n}`:n;}
 
 let dbSc={};
 let activeGrp='ALL';
@@ -722,7 +725,7 @@ function renderTable(grp){
         <div class="amc-teams">
           <div class="amc-team">
             <img class="amc-flag" src="https://flagcdn.com/24x18/${TEAMS[m.t1]?.code||'un'}.png" loading="lazy" onerror="this.style.display='none'">
-            <span class="amc-tname">${TEAMS[m.t1]?.en||m.t1}</span>
+            <span class="amc-tname">${tNameRankedA(m.t1)}</span>
           </div>
           <div class="amc-scores">
             <input class="asc ${s1!==''?'filled':''} ${isPending?'changed':''}" type="number" min="0" max="30"
@@ -735,7 +738,7 @@ function renderTable(grp){
           </div>
           <div class="amc-team right">
             <img class="amc-flag" src="https://flagcdn.com/24x18/${TEAMS[m.t2]?.code||'un'}.png" loading="lazy" onerror="this.style.display='none'">
-            <span class="amc-tname">${TEAMS[m.t2]?.en||m.t2}</span>
+            <span class="amc-tname">${tNameRankedA(m.t2)}</span>
           </div>
         </div>
       </div>
@@ -1057,8 +1060,8 @@ window.openGoalModal=function(id,isKO){
     if(!m)return;
     t1=m.t1;t2=m.t2;
   }
-  const en1=TEAMS[t1]?.en||t1;
-  const en2=TEAMS[t2]?.en||t2;
+  const en1=tNameRankedA(t1);
+  const en2=tNameRankedA(t2);
   const matchNum=koNum({id,num:undefined});
   document.getElementById('modalTitle').innerHTML=`<i class='fas fa-futbol'></i> ${en1} vs ${en2} — Match #${matchNum||id}`;
 

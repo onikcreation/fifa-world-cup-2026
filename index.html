@@ -655,7 +655,7 @@ function tNameRanked(name){
   return rank?`${rank}. ${n}`:n;
 }
 // Display name: language-aware if known team, else raw (TBD/slot strings)
-function displayName(name){return TEAMS[name]?tName(name):name;}
+function displayName(name){return TEAMS[name]?tNameRanked(name):name;}
 
 let scores={};
 let schedGrp='ALL';
@@ -979,7 +979,7 @@ function renderGroups(grps){
         <thead><tr><th>${S.team}</th><th>${S.pl}</th><th>${S.won}</th><th>${S.draw}</th><th>${S.lost}</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead>
         <tbody>${teams.map((t,i)=>`
           <tr class="${i<2?'row-q':i===2?'row-3':''}">
-            <td><div class="gt-team"><span class="gt-rank">${i+1}</span>${fImg(t.name,20,15)}<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${tName(t.name)}</span></div></td>
+            <td><div class="gt-team"><span class="gt-rank">${i+1}</span>${fImg(t.name,20,15)}<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${tNameRanked(t.name)}</span></div></td>
             <td>${t.pl}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
             <td>${t.gf}</td><td>${t.ga}</td>
             <td class="${t.gd>0?'gdp':t.gd<0?'gdn':'gdz'}">${t.gd>0?'+'+t.gd:t.gd}</td>
@@ -1299,11 +1299,9 @@ function renderStats(grps){
     `<button class="fb ${statsTeam==='ALL'?'on':''}" onclick="window._stt('ALL')">${S.allTeams}</button>`
     +sortedTeams.map(n=>{
       const code=TEAMS[n]?.code||'';
-      const dn=tName(n);
-      const rank=getRank(n);
       return`<button class="fb ${statsTeam===n?'on':''}" onclick="window._stt('${n.replace(/'/g,"\\'")}')">
         ${code?`<img src="https://flagcdn.com/20x15/${code}.png" style="width:18px;height:13px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:3px" loading="lazy">`:''}
-        <span style="font-size:.6rem;opacity:.6;margin-right:2px">${rank}</span>${dn}
+        ${tNameRanked(n)}
       </button>`;
     }).join('');
 
@@ -1547,7 +1545,7 @@ function renderThirdPlace(grps){
         <tbody>${thirds.map((t,i)=>`
           <tr class="${i<8?'row-q':''}">
             <td>${i+1}</td>
-            <td><div class="gt-team">${fImg(t.name,20,15)}<span>${tName(t.name)}</span></div></td>
+            <td><div class="gt-team">${fImg(t.name,20,15)}<span>${tNameRanked(t.name)}</span></div></td>
             <td><span class="mc-grp">Grp ${t.group}</span></td>
             <td>${t.pl}</td><td class="pts-c">${t.pts}</td>
             <td>${t.gf}</td><td>${t.ga}</td>
@@ -1695,12 +1693,10 @@ function buildSqTeamBtns(){
     const t=TEAMS[teamKey];
     const code=t?.code||'';
     const rank=getRank(teamKey);
-    const dn=teamKey?tName(teamKey):fbKey;
     const flagHtml=code?`<img src="https://flagcdn.com/20x15/${code}.png" loading="lazy" onerror="this.style.display='none'">`:'';
     return`<button class="sq-team-btn ${sqTeam===fbKey?'on':''}" onclick="setSqTeam('${fbKey.replace(/'/g,"\\'")}')" data-key="${esc(fbKey)}">
       ${flagHtml}
-      <span style="font-size:.6rem;opacity:.55">${rank}.</span>
-      ${esc(dn)}
+      ${esc(tNameRanked(teamKey)||fbKey)}
     </button>`;
   }).join('');
 }
