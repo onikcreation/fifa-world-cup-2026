@@ -242,7 +242,7 @@ body::before{content:'';position:fixed;inset:0;
 .ko-card{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
 .ko-hd{background:rgba(161,240,0,.06);padding:.4rem .8rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
 .ko-rname{font-family:'Bebas Neue',sans-serif;font-size:.78rem;letter-spacing:1.5px;color:var(--neon)}
-.ko-mid{font-size:.57rem;color:var(--gray)}
+.ko-mid{font-family:'Bebas Neue',sans-serif;font-size:.72rem;color:rgba(255,255,255,.8);letter-spacing:.5px}
 .ko-body{padding:.65rem}
 .ko-date{font-size:.58rem;color:var(--gray);margin-bottom:.45rem}
 .ko-tr{display:flex;align-items:center;gap:.35rem;margin-bottom:.35rem}
@@ -614,8 +614,8 @@ function renderTable(grp){
     const isPending=pendingChanges.has(m.id);
     return`<div class="amc ${isPending?'changed-card':''}" id="tr-${m.id}">
       <div class="amc-hdr">
-        <span class="amc-grp">Match #${m.id} · Group ${m.grp} · MD${m.md||1}${isPending?'<span class="changed-dot"></span>':''}</span>
-        <span class="amc-meta">⏰ ${fT(m.time)}</span>
+        <span class="amc-grp">Group ${m.grp}${isPending?'<span class="changed-dot"></span>':''}</span>
+        <span class="amc-meta">Match #${m.id} · ⏰ ${fT(m.time)}</span>
       </div>
       <div class="amc-body">
         <div class="amc-teams">
@@ -844,7 +844,7 @@ function renderKO(){
     const hasET=sc.et1!==undefined, hasPen=sc.pen1!==undefined;
 
     return`<div class="ko-card">
-      <div class="ko-hd"><span class="ko-rname">${m.roundName}</span><span class="ko-mid">Match #${m.num||''} · ${m.id}</span></div>
+      <div class="ko-hd"><span class="ko-rname">${m.roundName}</span><span class="ko-mid">Match #${m.num||m.id}</span></div>
       <div class="ko-body">
         <div class="ko-date">📅 ${fD(m.date)} · ⏰ ${fT(m.time)}</div>
         <div class="ko-tr">
