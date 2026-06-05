@@ -700,7 +700,7 @@ function renderTable(grp){
       <div class="amc-footer">
         <span class="amc-stadium">🏟 ${m.stadium||''}</span>
         <div class="amc-actions">
-          <button class="goal-btn" onclick="openGoalModal(${m.id},false)">${hg?`⚽${hg}`:'⚽'}</button>
+          <button class="goal-btn" onclick="openGoalModal(${m.id},false)">${hg?`⚽${hg} <svg width="9" height="13" viewBox="0 0 9 13" style="vertical-align:middle"><rect x="0" y="0" width="4" height="13" rx="1" fill="#ffc800"/><rect x="4.5" y="0" width="4.5" height="13" rx="1" fill="#ff3232"/></svg>${hc||''}`:'⚽'}</button>
           <button class="sv-btn" id="sb_${m.id}" onclick="window.saveOne(${m.id})">Save</button>
           <button class="cl-btn" onclick="window.clearOne(${m.id})">✕</button>
         </div>
@@ -935,7 +935,7 @@ function renderKO(){
       <div class="ko-actions">
         <button class="ko-sv" onclick="window.saveKO('${m.id}')">💾 Save</button>
         <button class="ko-goal-btn" onclick="openGoalModal('${m.id}',true)">⚽${hg?' '+hg:' গোল'}</button>
-        <button class="ko-goal-btn" onclick="openGoalModal('${m.id}',true);setTimeout(()=>switchModalTab('cards',document.querySelector('.modal-tab:nth-child(2)')),50)">🟨${hc?' '+hc:' কার্ড'}</button>
+        <button class="ko-goal-btn" onclick="openGoalModal('${m.id}',true);setTimeout(()=>switchModalTab('cards',document.querySelector('.modal-tab:nth-child(2)')),50)"><svg width="11" height="15" viewBox="0 0 11 15" style="vertical-align:middle;margin-right:3px"><rect x="0" y="0" width="5" height="15" rx="1" fill="#ffc800"/><rect x="5.5" y="0" width="5.5" height="15" rx="1" fill="#ff3232"/></svg>${hc?' '+hc:' কার্ড'}</button>
       </div>
     </div>`;
   }
@@ -1054,10 +1054,14 @@ window.openGoalModal=function(id,isKO){
 
   function goalSection(side,teamName,goals){
     const pc=side==='t1'?p1.length:p2.length;
-    return`<div>
-      <div class="modal-team-title">${teamName}
-        <span style="font-size:.6rem;${pc?'color:var(--neon)':'color:rgba(255,170,0,.7)'};margin-left:.4rem">
-          ${pc?`⚽ ${pc} জন স্কোয়াড`:'⚠ স্কোয়াড নেই'}
+    const teamKey=side==='t1'?t1:t2;
+    const code=TEAMS[teamKey]?.code||'';
+    return`<div style="background:rgba(161,240,0,.03);border:1px solid var(--border2);border-radius:8px;padding:.6rem .7rem;margin-bottom:.5rem">
+      <div class="modal-team-title">
+        ${code?`<img src="https://flagcdn.com/20x15/${code}.png" style="width:18px;height:13px;object-fit:cover;border-radius:2px" loading="lazy">`:''}
+        ${teamName}
+        <span style="font-size:.6rem;${pc?'color:var(--neon)':'color:rgba(255,170,0,.7)'};margin-left:.2rem">
+          ${pc?`· ${pc} জন স্কোয়াড`:'· স্কোয়াড নেই'}
         </span>
       </div>
       <div id="glist_${side}">${goals.map((g,i)=>goalEntry(side,i,g.name,g.min,g.pen)).join('')}</div>
