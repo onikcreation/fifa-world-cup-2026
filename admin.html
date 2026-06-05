@@ -60,7 +60,8 @@ body::before{content:'';position:fixed;inset:0;
 .nav-link.danger:hover{background:rgba(231,76,60,.18)}
 
 /* ── NAV TABS (same style as main nav) ── */
-.admin-nav{position:sticky;top:0;z-index:100;background:rgba(5,15,16,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;padding:0 1rem;scrollbar-width:none}
+.admin-nav{position:sticky;top:0;z-index:100;background:rgba(5,15,16,0.96);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;padding:0 1rem;scrollbar-width:none}
+.admin-nav::-webkit-scrollbar{display:none}
 [data-theme="light"] .admin-nav{background:rgba(240,244,248,0.97)}
 .admin-nav::-webkit-scrollbar{display:none}
 .admin-tab{font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:2px;color:var(--gray);background:none;border:none;border-bottom:3px solid transparent;padding:.85rem 1.1rem;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;flex-shrink:0;text-decoration:none;display:inline-block}
@@ -152,7 +153,7 @@ body::before{content:'';position:fixed;inset:0;
 /* ══ SETTINGS ══ */
 .settings-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
 @media(max-width:700px){.settings-grid{grid-template-columns:1fr}}
-.settings-card{background:var(--card);border:1px solid var(--border2);border-radius:12px;overflow:hidden;backdrop-filter:blur(10px)}
+.settings-card{background:var(--card);border:1px solid var(--border2);border-radius:12px;overflow:hidden;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .settings-card-wide{grid-column:1/-1}
 .settings-card-title{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:2px;color:var(--neon);padding:.65rem 1rem;background:rgba(161,240,0,.06);border-bottom:1px solid var(--border2)}
 .settings-body{padding:1rem}
@@ -198,7 +199,7 @@ body::before{content:'';position:fixed;inset:0;
 .preset-btn:hover{border-color:var(--neon);color:var(--neon);background:rgba(161,240,0,.12)}
 
 /* GOAL & CARD MODAL */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem}
 .modal-bg.hide{display:none}
 .modal{background:#071517;border:1px solid var(--border);border-radius:12px;width:min(700px,96vw);max-height:90vh;overflow-y:auto;overflow-x:hidden;padding:1.2rem}
 .modal-tabs{display:flex;gap:.4rem;margin:.7rem 0;border-bottom:1px solid var(--border2);padding-bottom:.5rem}
@@ -281,6 +282,24 @@ body::before{content:'';position:fixed;inset:0;
 .ko-sv:hover{background:rgba(161,240,0,.22)}
 .ko-goal-btn{font-size:.68rem;padding:.3rem .6rem;background:rgba(161,240,0,.1);border:1px solid var(--border);border-radius:5px;color:var(--neon);cursor:pointer;white-space:nowrap}
 .ko-goal-btn:hover{background:rgba(161,240,0,.15)}
+/* Extracted from inline styles */
+#fbSt{font-size:.6rem;color:var(--gray)}
+.icon-btn-sm{font-size:.75rem;padding:.28rem .5rem}
+.s-font-btn[data-val="barlow"]{font-family:'Barlow Condensed',sans-serif}
+.s-font-btn[data-val="hind"]{font-family:'Hind Siliguri',sans-serif}
+.s-font-btn[data-val="roboto"]{font-family:'Roboto Condensed',sans-serif}
+.s-font-btn[data-val="oswald"]{font-family:'Oswald',sans-serif}
+.s-font-btn[data-val="exo"]{font-family:'Exo 2',sans-serif}
+.preset-label{margin-bottom:.5rem}
+.preset-list{display:flex;gap:.5rem;flex-wrap:wrap}
+.settings-actions{margin-top:1.5rem;display:flex;gap:.8rem;align-items:center;flex-wrap:wrap}
+.bbtn-wide{padding:.55rem 1.5rem}
+.bbtn-med{padding:.55rem 1.2rem}
+#settingSt{font-size:.75rem;color:var(--gray)}
+.firebase-notice{margin-top:.8rem;padding:.6rem .9rem;background:rgba(255,170,0,.06);border:1px solid rgba(255,170,0,.2);border-radius:7px;font-size:.68rem;color:rgba(255,170,0,.8)}
+.firebase-notice code{background:rgba(0,0,0,.3);padding:1px 4px;border-radius:3px}
+.tab-svg{vertical-align:middle;margin-right:4px}
+#modal-cards-panel{display:none}
 </style>
 </head>
 <body>
@@ -305,8 +324,8 @@ body::before{content:'';position:fixed;inset:0;
         <div class="hdr-sub">⚙️ Admin Panel · Al Amin Onik</div>
       </div>
       <div class="hdr-right">
-        <span id="fbSt" style="font-size:.6rem;color:var(--gray)">Firebase...</span>
-        <button class="icon-btn" onclick="location.reload()" title="রিফ্রেশ" style="font-size:.75rem;padding:.28rem .5rem">🔄</button>
+        <span id="fbSt">Firebase...</span>
+        <button class="icon-btn icon-btn-sm" onclick="location.reload()" title="রিফ্রেশ">🔄</button>
         <a href="index.html" class="nav-link">🏠 সাইট</a>
         <button class="nav-link danger" onclick="window.doLogout()">🚪 Logout</button>
       </div>
@@ -387,11 +406,11 @@ body::before{content:'';position:fixed;inset:0;
           <div class="settings-body">
             <label class="s-label">সাইটের ফন্ট পরিবর্তন করো</label>
             <div class="s-font-list" id="cfg-font">
-              <button class="s-font-btn on" data-val="barlow" onclick="setFont(this)" style="font-family:'Barlow Condensed',sans-serif">Barlow Condensed</button>
-              <button class="s-font-btn" data-val="hind" onclick="setFont(this)" style="font-family:'Hind Siliguri',sans-serif">Hind Siliguri</button>
-              <button class="s-font-btn" data-val="roboto" onclick="setFont(this)" style="font-family:'Roboto Condensed',sans-serif">Roboto Condensed</button>
-              <button class="s-font-btn" data-val="oswald" onclick="setFont(this)" style="font-family:'Oswald',sans-serif">Oswald</button>
-              <button class="s-font-btn" data-val="exo" onclick="setFont(this)" style="font-family:'Exo 2',sans-serif">Exo 2</button>
+              <button class="s-font-btn on" data-val="barlow" onclick="setFont(this)">Barlow Condensed</button>
+              <button class="s-font-btn" data-val="hind" onclick="setFont(this)">Hind Siliguri</button>
+              <button class="s-font-btn" data-val="roboto" onclick="setFont(this)">Roboto Condensed</button>
+              <button class="s-font-btn" data-val="oswald" onclick="setFont(this)">Oswald</button>
+              <button class="s-font-btn" data-val="exo" onclick="setFont(this)">Exo 2</button>
             </div>
             <div class="s-preview" id="fontPreview">FIFA World Cup 2026 · ২০২৬ ফিফা বিশ্বকাপ</div>
           </div>
@@ -446,8 +465,8 @@ body::before{content:'';position:fixed;inset:0;
             </div>
 
             <div class="color-presets">
-              <div class="s-label" style="margin-bottom:.5rem">প্রিসেট থিম:</div>
-              <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+              <div class="s-label preset-label">প্রিসেট থিম:</div>
+              <div class="preset-list">
                 <button class="preset-btn" onclick="applyPreset('#050f10','#A1F000','#ffffff')">🟢 Neon (Default)</button>
                 <button class="preset-btn" onclick="applyPreset('#080d18','#c9a84c','#eef2ff')">🟡 Gold Classic</button>
                 <button class="preset-btn" onclick="applyPreset('#0a0a1a','#00d4ff','#ffffff')">🔵 Cyber Blue</button>
@@ -460,13 +479,13 @@ body::before{content:'';position:fixed;inset:0;
 
       </div>
 
-      <div style="margin-top:1.5rem;display:flex;gap:.8rem;align-items:center;flex-wrap:wrap">
-        <button class="bbtn bbtn-save" onclick="saveSettings()" style="padding:.55rem 1.5rem">💾 Settings Save করো</button>
-        <button class="bbtn bbtn-clear" onclick="resetSettings()" style="padding:.55rem 1.2rem">↺ Reset Default</button>
-        <span id="settingSt" style="font-size:.75rem;color:var(--gray)"></span>
+      <div class="settings-actions">
+        <button class="bbtn bbtn-save bbtn-wide" onclick="saveSettings()">💾 Settings Save করো</button>
+        <button class="bbtn bbtn-clear bbtn-med" onclick="resetSettings()">↺ Reset Default</button>
+        <span id="settingSt"></span>
       </div>
-      <div style="margin-top:.8rem;padding:.6rem .9rem;background:rgba(255,170,0,.06);border:1px solid rgba(255,170,0,.2);border-radius:7px;font-size:.68rem;color:rgba(255,170,0,.8)">
-        ⚠️ <strong>Firebase Rules:</strong> Settings Firebase-এ save করতে হলে Console → Realtime Database → Rules-এ <code style="background:rgba(0,0,0,.3);padding:1px 4px;border-radius:3px">"settings": {".read": true, ".write": true}</code> যোগ করতে হবে। না হলে শুধু LocalStorage-এ save হবে।
+      <div class="firebase-notice">
+        ⚠️ <strong>Firebase Rules:</strong> Settings Firebase-এ save করতে হলে Console → Realtime Database → Rules-এ <code>"settings": {".read": true, ".write": true}</code> যোগ করতে হবে। না হলে শুধু LocalStorage-এ save হবে।
       </div>
     </div>
   </div>
@@ -482,14 +501,14 @@ body::before{content:'';position:fixed;inset:0;
     <!-- Tabs -->
     <div class="modal-tabs">
       <button class="modal-tab on" onclick="switchModalTab('goals',this)">⚽ গোল</button>
-      <button class="modal-tab" onclick="switchModalTab('cards',this)"><svg width="12" height="16" viewBox="0 0 12 16" style="vertical-align:middle;margin-right:4px"><rect x="0" y="0" width="5" height="16" rx="1" fill="#ffc800"/><rect x="6" y="0" width="6" height="16" rx="1" fill="#ff3232"/></svg>কার্ড</button>
+      <button class="modal-tab" onclick="switchModalTab('cards',this)"><svg class="tab-svg" width="12" height="16" viewBox="0 0 12 16"><rect x="0" y="0" width="5" height="16" rx="1" fill="#ffc800"/><rect x="6" y="0" width="6" height="16" rx="1" fill="#ff3232"/></svg>কার্ড</button>
     </div>
     <!-- Goals tab -->
     <div id="modal-goals-panel" class="modal-tab-panel">
       <div class="modal-teams" id="modalBody"></div>
     </div>
     <!-- Cards tab -->
-    <div id="modal-cards-panel" class="modal-tab-panel" style="display:none">
+    <div id="modal-cards-panel" class="modal-tab-panel">
       <div class="modal-teams" id="modalCardsBody"></div>
     </div>
     <button class="modal-save" onclick="saveGoalsAndCards()">💾 সেভ করো</button>
