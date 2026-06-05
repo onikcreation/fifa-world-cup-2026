@@ -305,7 +305,8 @@ body::before{content:'';position:fixed;inset:0;
 @media(max-width:380px){.mc-flag{display:none}}
 /* ══ SQUADS PAGE ══ */
 .sq-controls{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1rem}
-.sq-top-row{display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
+.sq-pos-row{display:flex;align-items:center;gap:.5rem;padding:.5rem .8rem;background:rgba(161,240,0,.04);border:1px solid var(--border2);border-radius:8px}
+.sq-pos-row::before{content:'포지션';font-family:'Bebas Neue',sans-serif;font-size:.68rem;letter-spacing:1px;color:var(--gray);white-space:nowrap;display:none}
 .sq-team-scroll{display:flex;gap:.35rem;flex-wrap:wrap;padding-bottom:.3rem}
 .sq-team-btn{display:inline-flex;align-items:center;gap:.35rem;font-family:'Bebas Neue',sans-serif;font-size:.78rem;letter-spacing:1px;padding:.3rem .7rem;background:var(--neon-glow2);border:1px solid var(--border2);border-radius:20px;color:var(--gray);cursor:pointer;white-space:nowrap;transition:all .2s}
 .sq-team-btn:hover{border-color:var(--border);color:var(--text)}
@@ -438,18 +439,18 @@ body::before{content:'';position:fixed;inset:0;
   <div id="p-squads" class="panel">
     <div class="sec-title">🧑‍⚽ Squads</div>
     <div class="sq-controls">
-      <div class="sq-top-row">
-        <div class="sq-pos-btns">
-          <button class="sq-pos-btn on" onclick="setSqPos('ALL',this)">সকল</button>
-          <button class="sq-pos-btn" onclick="setSqPos('GK',this)" style="color:#ffaa00">GK</button>
-          <button class="sq-pos-btn" onclick="setSqPos('DF',this)">DF</button>
-          <button class="sq-pos-btn" onclick="setSqPos('MF',this)" style="color:#00aaff">MF</button>
-          <button class="sq-pos-btn" onclick="setSqPos('FW',this)" style="color:#ff4d4d">FW</button>
-        </div>
-      </div>
       <div class="sq-team-scroll" id="sqTeamBtns"></div>
     </div>
     <div id="sqHeader"></div>
+    <div class="sq-pos-row" id="sqPosRow" style="display:none;margin-bottom:.8rem">
+      <div class="sq-pos-btns">
+        <button class="sq-pos-btn on" onclick="setSqPos('ALL',this)">সকল</button>
+        <button class="sq-pos-btn" onclick="setSqPos('GK',this)" style="color:#ffaa00">GK</button>
+        <button class="sq-pos-btn" onclick="setSqPos('DF',this)">DF</button>
+        <button class="sq-pos-btn" onclick="setSqPos('MF',this)" style="color:#00aaff">MF</button>
+        <button class="sq-pos-btn" onclick="setSqPos('FW',this)" style="color:#ff4d4d">FW</button>
+      </div>
+    </div>
     <div class="sq-grid" id="sqGrid"></div>
   </div>
 </main>
@@ -1465,20 +1466,31 @@ function loadSquads(){
   onValue(ref(db,'squads'),snap=>{
     sqData=snap.val()||{};
     sqLoaded=true;
-    buildSqTeamBtns();
-    // Auto-select first team by rank
+
+    // Sort and pick first team
     const sorted=Object.keys(sqData).sort((a,b)=>{
       const ra=parseInt(getRank(fbKeyToTeamKey(a)))||999;
       const rb=parseInt(getRank(fbKeyToTeamKey(b)))||999;
       return ra-rb;
     });
-    if(sorted.length>0){sqTeam=sorted[0];renderSquad();}
-    else document.getElementById('sqGrid').innerHTML=`<div class="sq-empty" style="grid-column:1/-1">Firebase-এ squad data নেই</div>`;
+
+    // Set first team as active BEFORE building buttons
+    if(sorted.length>0)sqTeam=sorted[0];
+
+    buildSqTeamBtns();
+
+    if(sqTeam){
+      // Show position filter
+      const posRow=document.getElementById('sqPosRow');
+      if(posRow)posRow.style.display='';
+      renderSquad();
+    } else {
+      document.getElementById('sqGrid').innerHTML=`<div class="sq-empty" style="grid-column:1/-1">Firebase-এ squad data নেই</div>`;
+    }
   },{onlyOnce:true});
 }
 
 function buildSqTeamBtns(){
-  // Sort by FIFA rank using original team key
   const sorted=Object.keys(sqData).sort((a,b)=>{
     const ra=parseInt(getRank(fbKeyToTeamKey(a)))||999;
     const rb=parseInt(getRank(fbKeyToTeamKey(b)))||999;
@@ -1490,7 +1502,7 @@ function buildSqTeamBtns(){
     const t=TEAMS[teamKey];
     const code=t?.code||'';
     const rank=getRank(teamKey);
-    const en=t?.en||sqData[fbKey]?.coach||fbKey; // fallback
+    const en=t?.en||sqData[fbKey]?.coach||fbKey;
     const flagHtml=code?`<img src="https://flagcdn.com/20x15/${code}.png" loading="lazy" onerror="this.style.display='none'">`:'';
     return`<button class="sq-team-btn ${sqTeam===fbKey?'on':''}" onclick="setSqTeam('${fbKey.replace(/'/g,"\\'")}')" data-key="${esc(fbKey)}">
       ${flagHtml}
@@ -1502,8 +1514,13 @@ function buildSqTeamBtns(){
 
 window.setSqTeam=function(fbKey){
   sqTeam=fbKey;sqPos='ALL';
+  // Update team buttons
   document.querySelectorAll('.sq-team-btn').forEach(b=>b.classList.toggle('on',b.dataset.key===fbKey));
+  // Reset position buttons
   document.querySelectorAll('.sq-pos-btn').forEach((b,i)=>b.classList.toggle('on',i===0));
+  // Show position filter row
+  const posRow=document.getElementById('sqPosRow');
+  if(posRow)posRow.style.display='';
   renderSquad();
 };
 
