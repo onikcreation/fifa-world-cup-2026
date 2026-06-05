@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin | FIFA 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
 <style>
 /* ══ V3 NEON THEME ══ */
 :root{
@@ -287,6 +288,9 @@ body::after{content:'';position:fixed;inset:0;
 .ko-sv:hover{background:rgba(161,240,0,.22)}
 .ko-goal-btn{font-size:.68rem;padding:.3rem .6rem;background:rgba(161,240,0,.1);border:1px solid var(--border);border-radius:5px;color:var(--neon);cursor:pointer;white-space:nowrap}
 .ko-goal-btn:hover{background:rgba(161,240,0,.15)}
+.preset-dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex-shrink:0;border:1px solid rgba(255,255,255,.25)}
+.pd-neon{background:#A1F000}.pd-gold{background:#c9a84c}.pd-blue{background:#00d4ff}.pd-volcano{background:#ff6b35}.pd-github{background:#58a6ff}
+.lang-flag{font-size:.6rem;font-weight:700;letter-spacing:.5px;opacity:.85}
 /* Extracted from inline styles */
 #fbSt{font-size:.6rem;color:var(--gray)}
 .icon-btn-sm{font-size:.75rem;padding:.28rem .5rem}
@@ -311,36 +315,36 @@ body::after{content:'';position:fixed;inset:0;
 
 <div class="login-wrap" id="loginWrap">
   <div class="login-box">
-    <div class="login-ic">🔐</div>
+    <div class="login-ic"><i class="fas fa-lock fa-2x"></i></div>
     <div class="login-title">ADMIN LOGIN</div>
     <div class="login-sub">FIFA WORLD CUP 2026 · Al Amin Onik</div>
     <input class="pw-in" type="password" id="pwIn" placeholder="••••••••" onkeydown="if(event.key==='Enter')window.tryLogin()">
     <button class="login-btn" onclick="window.tryLogin()">LOGIN →</button>
-    <div class="login-err" id="loginErr">❌ ভুল Password!</div>
+    <div class="login-err" id="loginErr"><i class="fas fa-circle-xmark"></i> ভুল Password!</div>
   </div>
 </div>
 
 <div class="admin-wrap" id="adminWrap">
   <header class="hdr">
     <div class="hdr-in">
-      <div class="hdr-logo">🏆</div>
+      <div class="hdr-logo"><i class="fas fa-trophy"></i></div>
       <div class="hdr-text">
         <div class="hdr-title">FIFA WORLD CUP 2026</div>
-        <div class="hdr-sub">⚙️ Admin Panel · Al Amin Onik</div>
+        <div class="hdr-sub"><i class="fas fa-gear"></i> Admin Panel · Al Amin Onik</div>
       </div>
       <div class="hdr-right">
         <span id="fbSt">Firebase...</span>
-        <button class="icon-btn icon-btn-sm" onclick="location.reload()" title="রিফ্রেশ">🔄</button>
-        <a href="index.html" class="nav-link">🏠 সাইট</a>
-        <button class="nav-link danger" onclick="window.doLogout()">🚪 Logout</button>
+        <button class="icon-btn icon-btn-sm" onclick="location.reload()" title="রিফ্রেশ"><i class="fas fa-rotate-right"></i></button>
+        <a href="index.html" class="nav-link"><i class="fas fa-house"></i> সাইট</a>
+        <button class="nav-link danger" onclick="window.doLogout()"><i class="fas fa-right-from-bracket"></i> Logout</button>
       </div>
     </div>
   </header>
 
   <nav class="admin-nav">
-    <a class="admin-tab on"  href="#group"    onclick="switchAdminTab('group',this)">📊 Group Stage</a>
-    <a class="admin-tab"     href="#knockout" onclick="switchAdminTab('knockout',this)">🏅 Knockout</a>
-    <a class="admin-tab"     href="#settings" onclick="switchAdminTab('settings',this)">⚙️ Settings</a>
+    <a class="admin-tab on"  href="#group"    onclick="switchAdminTab('group',this)"><i class="fas fa-chart-column"></i> Group Stage</a>
+    <a class="admin-tab"     href="#knockout" onclick="switchAdminTab('knockout',this)"><i class="fas fa-medal"></i> Knockout</a>
+    <a class="admin-tab"     href="#settings" onclick="switchAdminTab('settings',this)"><i class="fas fa-gear"></i> Settings</a>
   </nav>
 
   <div class="main">
@@ -351,8 +355,8 @@ body::after{content:'';position:fixed;inset:0;
       <div class="bulk">
         <div class="bulk-info">পরিবর্তিত: <span id="changedCount">0</span>টি ম্যাচ। একসাথে সব সেভ করতে "সব Save করো" চাপো।</div>
         <span class="save-progress" id="saveProgress"></span>
-        <button class="bbtn bbtn-clear" onclick="window.confirmClear()">🗑️ Clear All</button>
-        <button class="bbtn bbtn-save" id="bulkSaveBtn" onclick="window.batchSave()" disabled>💾 সব Save করো</button>
+        <button class="bbtn bbtn-clear" onclick="window.confirmClear()"><i class="fas fa-trash"></i> Clear All</button>
+        <button class="bbtn bbtn-save" id="bulkSaveBtn" onclick="window.batchSave()" disabled><i class="fas fa-floppy-disk"></i> সব Save করো</button>
       </div>
       <div class="sec-title">গ্রুপ পর্যায় স্কোর</div>
       <div class="filters" id="gFilters"></div>
@@ -367,13 +371,13 @@ body::after{content:'';position:fixed;inset:0;
 
     <!-- SETTINGS PANEL -->
     <div id="ap-settings" class="admin-panel">
-      <div class="sec-title">⚙️ সেটিংস</div>
+      <div class="sec-title"><i class="fas fa-gear"></i> সেটিংস</div>
 
       <div class="settings-grid">
 
         <!-- Timezone -->
         <div class="settings-card">
-          <div class="settings-card-title">🕐 Timezone</div>
+          <div class="settings-card-title"><i class="fas fa-clock"></i> Timezone</div>
           <div class="settings-body">
             <label class="s-label">সাইটে সময় কোন Timezone-এ দেখাবে?</label>
             <select class="s-select" id="cfg-tz">
@@ -394,12 +398,12 @@ body::after{content:'';position:fixed;inset:0;
 
         <!-- Language -->
         <div class="settings-card">
-          <div class="settings-card-title">🌐 Language</div>
+          <div class="settings-card-title"><i class="fas fa-globe"></i> Language</div>
           <div class="settings-body">
             <label class="s-label">সাইটের ভাষা নির্বাচন করো</label>
             <div class="s-toggle-group" id="cfg-lang">
-              <button class="s-toggle on" data-val="bn" onclick="setToggle('lang',this)">🇧🇩 বাংলা</button>
-              <button class="s-toggle" data-val="en" onclick="setToggle('lang',this)">🇬🇧 English</button>
+              <button class="s-toggle on" data-val="bn" onclick="setToggle('lang',this)"><span class="lang-flag">BD</span> বাংলা</button>
+              <button class="s-toggle" data-val="en" onclick="setToggle('lang',this)"><span class="lang-flag">EN</span> English</button>
             </div>
             <div class="s-hint">নেভিগেশন, লেবেল এবং বাটনের ভাষা পরিবর্তন হবে</div>
           </div>
@@ -407,7 +411,7 @@ body::after{content:'';position:fixed;inset:0;
 
         <!-- Font -->
         <div class="settings-card">
-          <div class="settings-card-title">🔤 Font</div>
+          <div class="settings-card-title"><i class="fas fa-font"></i> Font</div>
           <div class="settings-body">
             <label class="s-label">সাইটের ফন্ট পরিবর্তন করো</label>
             <div class="s-font-list" id="cfg-font">
@@ -423,7 +427,7 @@ body::after{content:'';position:fixed;inset:0;
 
         <!-- Color Theme -->
         <div class="settings-card settings-card-wide">
-          <div class="settings-card-title">🎨 Color Theme</div>
+          <div class="settings-card-title"><i class="fas fa-palette"></i> Color Theme</div>
           <div class="settings-body">
             <label class="s-label">৩টি প্রধান রঙ কাস্টমাইজ করো</label>
             <div class="color-pickers">
@@ -472,11 +476,11 @@ body::after{content:'';position:fixed;inset:0;
             <div class="color-presets">
               <div class="s-label preset-label">প্রিসেট থিম:</div>
               <div class="preset-list">
-                <button class="preset-btn" onclick="applyPreset('#050f10','#A1F000','#ffffff')">🟢 Neon (Default)</button>
-                <button class="preset-btn" onclick="applyPreset('#080d18','#c9a84c','#eef2ff')">🟡 Gold Classic</button>
-                <button class="preset-btn" onclick="applyPreset('#0a0a1a','#00d4ff','#ffffff')">🔵 Cyber Blue</button>
-                <button class="preset-btn" onclick="applyPreset('#1a0a2e','#ff6b35','#ffffff')">🔴 Volcano</button>
-                <button class="preset-btn" onclick="applyPreset('#0d1117','#58a6ff','#c9d1d9')">⚪ GitHub Dark</button>
+                <button class="preset-btn" onclick="applyPreset('#050f10','#A1F000','#ffffff')"><span class="preset-dot pd-neon"></span> Neon (Default)</button>
+                <button class="preset-btn" onclick="applyPreset('#080d18','#c9a84c','#eef2ff')"><span class="preset-dot pd-gold"></span> Gold Classic</button>
+                <button class="preset-btn" onclick="applyPreset('#0a0a1a','#00d4ff','#ffffff')"><span class="preset-dot pd-blue"></span> Cyber Blue</button>
+                <button class="preset-btn" onclick="applyPreset('#1a0a2e','#ff6b35','#ffffff')"><span class="preset-dot pd-volcano"></span> Volcano</button>
+                <button class="preset-btn" onclick="applyPreset('#0d1117','#58a6ff','#c9d1d9')"><span class="preset-dot pd-github"></span> GitHub Dark</button>
               </div>
             </div>
           </div>
@@ -485,12 +489,12 @@ body::after{content:'';position:fixed;inset:0;
       </div>
 
       <div class="settings-actions">
-        <button class="bbtn bbtn-save bbtn-wide" onclick="saveSettings()">💾 Settings Save করো</button>
-        <button class="bbtn bbtn-clear bbtn-med" onclick="resetSettings()">↺ Reset Default</button>
+        <button class="bbtn bbtn-save bbtn-wide" onclick="saveSettings()"><i class="fas fa-floppy-disk"></i> Settings Save করো</button>
+        <button class="bbtn bbtn-clear bbtn-med" onclick="resetSettings()"><i class="fas fa-rotate-left"></i> Reset Default</button>
         <span id="settingSt"></span>
       </div>
       <div class="firebase-notice">
-        ⚠️ <strong>Firebase Rules:</strong> Settings Firebase-এ save করতে হলে Console → Realtime Database → Rules-এ <code>"settings": {".read": true, ".write": true}</code> যোগ করতে হবে। না হলে শুধু LocalStorage-এ save হবে।
+        <i class="fas fa-triangle-exclamation"></i> <strong>Firebase Rules:</strong> Settings Firebase-এ save করতে হলে Console → Realtime Database → Rules-এ <code>"settings": {".read": true, ".write": true}</code> যোগ করতে হবে। না হলে শুধু LocalStorage-এ save হবে।
       </div>
     </div>
   </div>
@@ -500,12 +504,12 @@ body::after{content:'';position:fixed;inset:0;
 <div class="modal-bg hide" id="goalModal">
   <div class="modal">
     <div class="modal-title">
-      <span id="modalTitle">⚽ ম্যাচ বিস্তারিত</span>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <span id="modalTitle"><i class="fas fa-futbol"></i> ম্যাচ বিস্তারিত</span>
+      <button class="modal-close" onclick="closeModal()"><i class="fas fa-xmark"></i></button>
     </div>
     <!-- Tabs -->
     <div class="modal-tabs">
-      <button class="modal-tab on" onclick="switchModalTab('goals',this)">⚽ গোল</button>
+      <button class="modal-tab on" onclick="switchModalTab('goals',this)"><i class="fas fa-futbol"></i> গোল</button>
       <button class="modal-tab" onclick="switchModalTab('cards',this)"><svg class="tab-svg" width="12" height="16" viewBox="0 0 12 16"><rect x="0" y="0" width="5" height="16" rx="1" fill="#ffc800"/><rect x="6" y="0" width="6" height="16" rx="1" fill="#ff3232"/></svg>কার্ড</button>
     </div>
     <!-- Goals tab -->
@@ -516,7 +520,7 @@ body::after{content:'';position:fixed;inset:0;
     <div id="modal-cards-panel" class="modal-tab-panel">
       <div class="modal-teams" id="modalCardsBody"></div>
     </div>
-    <button class="modal-save" onclick="saveGoalsAndCards()">💾 সেভ করো</button>
+    <button class="modal-save" onclick="saveGoalsAndCards()"><i class="fas fa-floppy-disk"></i> সেভ করো</button>
   </div>
 </div>
 
@@ -697,7 +701,7 @@ function renderTable(grp){
     return`<div class="amc ${isPending?'changed-card':''}" id="tr-${m.id}">
       <div class="amc-hdr">
         <span class="amc-grp">Group ${m.grp}${isPending?'<span class="changed-dot"></span>':''}</span>
-        <span class="amc-meta">Match #${m.id} · ⏰ ${fT(m.time)}</span>
+        <span class="amc-meta">Match #${m.id} · <i class='fas fa-clock'></i> ${fT(m.time)}</span>
       </div>
       <div class="amc-body">
         <div class="amc-teams">
@@ -721,11 +725,11 @@ function renderTable(grp){
         </div>
       </div>
       <div class="amc-footer">
-        <span class="amc-stadium">🏟 ${m.stadium||''}</span>
+        <span class="amc-stadium"><i class='fas fa-landmark'></i> ${m.stadium||''}</span>
         <div class="amc-actions">
-          <button class="goal-btn" onclick="openGoalModal(${m.id},false)">${hg?`⚽${hg} <svg width="9" height="13" viewBox="0 0 9 13" style="vertical-align:middle"><rect x="0" y="0" width="4" height="13" rx="1" fill="#ffc800"/><rect x="4.5" y="0" width="4.5" height="13" rx="1" fill="#ff3232"/></svg>${hc||''}`:'⚽'}</button>
+          <button class="goal-btn" onclick="openGoalModal(${m.id},false)">${hg?`<i class='fas fa-futbol'></i>${hg} <svg width="9" height="13" viewBox="0 0 9 13" style="vertical-align:middle"><rect x="0" y="0" width="4" height="13" rx="1" fill="#ffc800"/><rect x="4.5" y="0" width="4.5" height="13" rx="1" fill="#ff3232"/></svg>${hc||''}`:"<i class='fas fa-futbol'></i>"}</button>
           <button class="sv-btn" id="sb_${m.id}" onclick="window.saveOne(${m.id})">Save</button>
-          <button class="cl-btn" onclick="window.clearOne(${m.id})">✕</button>
+          <button class="cl-btn" onclick="window.clearOne(${m.id})"><i class='fas fa-xmark'></i></button>
         </div>
       </div>
     </div>`;
@@ -738,7 +742,7 @@ function renderTable(grp){
 
   document.getElementById('mTbody').innerHTML=sortedDates.map(date=>`
     <div>
-      <div class="adm-date-title">📅 ${dtitle(date)}</div>
+      <div class="adm-date-title"><i class='fas fa-calendar-days'></i> ${dtitle(date)}</div>
       <div class="adm-match-grid">${byDate[date].map(m=>cardHTML(m)).join('')}</div>
     </div>
   `).join('');
@@ -803,7 +807,7 @@ window.clearOne=async function(id){
   try{await remove(ref(db,'scores/'+id));pendingChanges.delete(id);updateChangedCount();toast(`Match #${id} clear ✓`,'ok');}
   catch(e){toast('Clear ব্যর্থ!','err');}
 };
-window.confirmClear=function(){if(confirm('⚠️ সব স্কোর ও গোল ডেটা মুছে ফেলবেন?'))remove(ref(db,'scores')).then(()=>{pendingChanges.clear();updateChangedCount();toast('সব clear হয়েছে','ok');});};
+window.confirmClear=function(){if(confirm('! সব স্কোর ও গোল ডেটা মুছে ফেলবেন?'))remove(ref(db,'scores')).then(()=>{pendingChanges.clear();updateChangedCount();toast('সব clear হয়েছে','ok');});};
 
 // KO
 // ── Auto-populate helpers (same logic as index.html) ──
@@ -931,7 +935,7 @@ function renderKO(){
         <span class="ko-mid">Match #${koNum(m)}</span>
       </div>
       <div class="ko-body">
-        <div class="ko-date">📅 ${fD(m.date)} · ⏰ ${fT(m.time)}</div>
+        <div class="ko-date"><i class='fas fa-calendar-days'></i> ${fD(m.date)} · <i class='fas fa-clock'></i> ${fT(m.time)}</div>
         <table class="ko-tbl">
           <thead><tr>
             <th></th>
@@ -956,25 +960,25 @@ function renderKO(){
         </table>
       </div>
       <div class="ko-actions">
-        <button class="ko-sv" onclick="window.saveKO('${m.id}')">💾 Save</button>
-        <button class="ko-goal-btn" onclick="openGoalModal('${m.id}',true)">⚽${hg?' '+hg:' গোল'}</button>
+        <button class="ko-sv" onclick="window.saveKO('${m.id}')"><i class='fas fa-floppy-disk'></i> Save</button>
+        <button class="ko-goal-btn" onclick="openGoalModal('${m.id}',true)"><i class='fas fa-futbol'></i>${hg?' '+hg:' গোল'}</button>
         <button class="ko-goal-btn" onclick="openGoalModal('${m.id}',true);setTimeout(()=>switchModalTab('cards',document.querySelector('.modal-tab:nth-child(2)')),50)"><svg width="11" height="15" viewBox="0 0 11 15" style="vertical-align:middle;margin-right:3px"><rect x="0" y="0" width="5" height="15" rx="1" fill="#ffc800"/><rect x="5.5" y="0" width="5.5" height="15" rx="1" fill="#ff3232"/></svg>${hc?' '+hc:' কার্ড'}</button>
       </div>
     </div>`;
   }
 
   const sections=[
-    {name:'🏅 শেষ বত্রিশ',matches:KO_ROUNDS[0].matches},
-    {name:'⚔️ শেষ ষোলো',matches:KO_ROUNDS[1].matches},
-    {name:'🎯 কোয়ার্টার ফাইনাল',matches:KO_ROUNDS[2].matches},
-    {name:'🔥 সেমি ফাইনাল',matches:KO_ROUNDS[3].matches},
-    {name:'🥉 তৃতীয় স্থান',matches:KO_ROUNDS[4].matches},
-    {name:'🏆 ফাইনাল',matches:KO_ROUNDS[5].matches},
+    {icon:'<i class="fas fa-medal"></i>',    name:'শেষ বত্রিশ',      matches:KO_ROUNDS[0].matches},
+    {icon:'<i class="fas fa-shield-halved"></i>', name:'শেষ ষোলো',   matches:KO_ROUNDS[1].matches},
+    {icon:'<i class="fas fa-crosshairs"></i>',name:'কোয়ার্টার ফাইনাল',matches:KO_ROUNDS[2].matches},
+    {icon:'<i class="fas fa-fire"></i>',      name:'সেমি ফাইনাল',    matches:KO_ROUNDS[3].matches},
+    {icon:'<i class="fas fa-award"></i>',     name:'তৃতীয় স্থান',   matches:KO_ROUNDS[4].matches},
+    {icon:'<i class="fas fa-trophy"></i>',    name:'ফাইনাল',         matches:KO_ROUNDS[5].matches},
   ];
 
   document.getElementById('koGrid').innerHTML=sections.map(sec=>`
-    <div class="ko-section-title">${sec.name} <span style="font-size:.65rem;opacity:.5">(${sec.matches.length}টি)</span></div>
-    ${sec.matches.map(m=>cardHTML({...m,roundName:sec.name.replace(/^[^ ]+ /,'')})).join('')}
+    <div class="ko-section-title">${sec.icon} ${sec.name} <span style="font-size:.65rem;opacity:.5">(${sec.matches.length}টি)</span></div>
+    ${sec.matches.map(m=>cardHTML({...m,roundName:sec.name})).join('')}
   `).join('');
 }
 
@@ -1040,7 +1044,7 @@ window.openGoalModal=function(id,isKO){
   const en1=TEAMS[t1]?.en||t1;
   const en2=TEAMS[t2]?.en||t2;
   const matchNum=koNum({id,num:undefined});
-  document.getElementById('modalTitle').textContent=`⚽ ${en1} vs ${en2} — Match #${matchNum||id}`;
+  document.getElementById('modalTitle').innerHTML=`<i class='fas fa-futbol'></i> ${en1} vs ${en2} — Match #${matchNum||id}`;
 
   // Reset tab to goals
   document.querySelectorAll('.modal-tab').forEach((b,i)=>b.classList.toggle('on',i===0));
@@ -1071,7 +1075,7 @@ window.openGoalModal=function(id,isKO){
       }
       <input class="gm-in" type="number" min="1" max="130" placeholder="মি." value="${min}" id="gm_${side}_${i}">
       <input type="checkbox" class="pen-cb" id="gp_${side}_${i}" ${pen?'checked':''}><label class="pen-lbl" for="gp_${side}_${i}">P</label>
-      <button class="rm-btn" onclick="rmGoal('${side}',${i})">✕</button>
+      <button class="rm-btn" onclick="rmGoal('${side}',${i})"><i class='fas fa-xmark'></i></button>
     </div>`;
   }
 
@@ -1111,7 +1115,7 @@ window.openGoalModal=function(id,isKO){
       }
       <input class="cm-in" type="number" min="1" max="130" placeholder="মি." value="${min}" id="cm_${side}_${i}">
       <input type="hidden" id="ct_${side}_${i}" value="${type}">
-      <button class="rm-btn" onclick="rmCard('${side}',${i})">✕</button>
+      <button class="rm-btn" onclick="rmCard('${side}',${i})"><i class='fas fa-xmark'></i></button>
     </div>`;
   }
   function cardSection(side,teamName,cards){
@@ -1150,7 +1154,7 @@ window.addGoal=function(side){
     }
     <input class="gm-in" type="number" min="1" max="130" placeholder="মি." id="gm_${side}_${i}">
     <input type="checkbox" class="pen-cb" id="gp_${side}_${i}"><label class="pen-lbl" for="gp_${side}_${i}">P</label>
-    <button class="rm-btn" onclick="rmGoal('${side}',${i})">✕</button>
+    <button class="rm-btn" onclick="rmGoal('${side}',${i})"><i class='fas fa-xmark'></i></button>
   </div>`;
   c.appendChild(d.firstElementChild);
 };
@@ -1175,7 +1179,7 @@ window.addCard=function(side){
     }
     <input class="cm-in" type="number" min="1" max="130" placeholder="মি." id="cm_${side}_${i}">
     <input type="hidden" id="ct_${side}_${i}" value="yellow">
-    <button class="rm-btn" onclick="rmCard('${side}',${i})">✕</button>
+    <button class="rm-btn" onclick="rmCard('${side}',${i})"><i class='fas fa-xmark'></i></button>
   </div>`;
   c.appendChild(d.firstElementChild);
 };
@@ -1321,19 +1325,19 @@ function lighten(hex, pct){
 // Language labels
 const LABELS = {
   bn:{
-    schedule:'📅 ম্যাচ সূচি', groups:'📊 Group Table',
-    knockout:'🏅 Knockout', stats:'📈 Stats',
-    thirdplace:'🥉 3rd Places', groupStage:'📊 Group Stage',
-    koRound:'🏅 Knockout', settings:'⚙️ Settings',
-    saveAll:'💾 সব Save করো', clearAll:'🗑️ Clear All',
+    schedule:"<i class='fas fa-calendar-days'></i> ম্যাচ সূচি", groups:"<i class='fas fa-chart-column'></i> Group Table",
+    knockout:"<i class='fas fa-medal'></i> Knockout", stats:"<i class='fas fa-chart-line'></i> Stats",
+    thirdplace:"<i class='fas fa-award'></i> 3rd Places", groupStage:"<i class='fas fa-chart-column'></i> Group Stage",
+    koRound:"<i class='fas fa-medal'></i> Knockout", settings:"<i class='fas fa-gear'></i> Settings",
+    saveAll:"<i class='fas fa-floppy-disk'></i> সব Save করো", clearAll:"<i class='fas fa-trash'></i> Clear All",
     changed:'পরিবর্তিত:', matches:'টি ম্যাচ',
   },
   en:{
-    schedule:'📅 Schedule', groups:'📊 Groups',
-    knockout:'🏅 Knockout', stats:'📈 Stats',
-    thirdplace:'🥉 3rd Places', groupStage:'📊 Group Stage',
-    koRound:'🏅 Knockout', settings:'⚙️ Settings',
-    saveAll:'💾 Save All', clearAll:'🗑️ Clear All',
+    schedule:"<i class='fas fa-calendar-days'></i> Schedule", groups:"<i class='fas fa-chart-column'></i> Groups",
+    knockout:"<i class='fas fa-medal'></i> Knockout", stats:"<i class='fas fa-chart-line'></i> Stats",
+    thirdplace:"<i class='fas fa-award'></i> 3rd Places", groupStage:"<i class='fas fa-chart-column'></i> Group Stage",
+    koRound:"<i class='fas fa-medal'></i> Knockout", settings:"<i class='fas fa-gear'></i> Settings",
+    saveAll:"<i class='fas fa-floppy-disk'></i> Save All", clearAll:"<i class='fas fa-trash'></i> Clear All",
     changed:'Changed:', matches:' matches',
   }
 };

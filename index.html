@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FIFA World Cup 2026 | Al Amin Onik</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
 <style>
 /* ══ V3 NEON FUTURISTIC THEME ══ */
 :root{
@@ -380,33 +381,33 @@ body::after{content:'';position:fixed;inset:0;
 <body>
 
 <div class="loader" id="loader">
-  <div class="loader-ic">🏆</div>
+  <div class="loader-ic"><i class="fas fa-trophy"></i></div>
   <div class="loader-txt">লোড হচ্ছে...</div>
   <div class="loader-bar"><div class="loader-fill"></div></div>
 </div>
 
 <header class="hdr">
   <div class="hdr-in">
-    <div class="hdr-logo">🏆</div>
+    <div class="hdr-logo"><i class="fas fa-trophy"></i></div>
     <div class="hdr-text">
       <div class="hdr-title">FIFA WORLD CUP 2026</div>
       <div class="hdr-sub">২০২৬ ফিফা বিশ্বকাপ · Al Amin Onik</div>
     </div>
     <div class="hdr-right">
       <div class="live-pill" id="dbSt"><div class="dot"></div>LIVE</div>
-      <button class="icon-btn" onclick="window._reload&&window._reload()" title="রিফ্রেশ" style="font-size:.75rem;padding:.28rem .5rem">🔄</button>
-      <a href="admin.html" class="admin-btn">🔐 Admin</a>
+      <button class="icon-btn icon-btn-sm" onclick="window._reload&&window._reload()" title="রিফ্রেশ"><i class="fas fa-rotate-right"></i></button>
+      <a href="admin.html" class="admin-btn"><i class="fas fa-lock"></i> Admin</a>
     </div>
   </div>
 </header>
 
 <nav class="nav">
-  <a class="nav-btn on"  href="#schedule"   onclick="goTab('schedule',this)">📅 ম্যাচ সূচি</a>
-  <a class="nav-btn"     href="#groups"     onclick="goTab('groups',this)">📊 Group Table</a>
-  <a class="nav-btn"     href="#thirdplace" onclick="goTab('thirdplace',this)">🥉 Best 3rd Places From Groups</a>
-  <a class="nav-btn"     href="#knockout"   onclick="goTab('knockout',this)">🏅 Knockout</a>
-  <a class="nav-btn"     href="#stats"      onclick="goTab('stats',this)">📈 Stats</a>
-  <a class="nav-btn"     href="#squads"     onclick="goTab('squads',this)">🧑‍⚽ Squads</a>
+  <a class="nav-btn on"  href="#schedule"   onclick="goTab('schedule',this)"><i class="fas fa-calendar-days"></i> ম্যাচ সূচি</a>
+  <a class="nav-btn"     href="#groups"     onclick="goTab('groups',this)"><i class="fas fa-chart-column"></i> Group Table</a>
+  <a class="nav-btn"     href="#thirdplace" onclick="goTab('thirdplace',this)"><i class="fas fa-award"></i> Best 3rd Places</a>
+  <a class="nav-btn"     href="#knockout"   onclick="goTab('knockout',this)"><i class="fas fa-medal"></i> Knockout</a>
+  <a class="nav-btn"     href="#stats"      onclick="goTab('stats',this)"><i class="fas fa-chart-line"></i> Stats</a>
+  <a class="nav-btn"     href="#squads"     onclick="goTab('squads',this)"><i class="fas fa-shirt"></i> Squads</a>
 </nav>
 
 <main class="main">
@@ -431,13 +432,13 @@ body::after{content:'';position:fixed;inset:0;
 
   <!-- BEST 3RD PLACES FROM GROUPS -->
   <div id="p-thirdplace" class="panel">
-    <div class="sec-title">🥉 Best 3rd Places From Groups</div>
+    <div class="sec-title"><i class="fas fa-award"></i> Best 3rd Places From Groups</div>
     <div id="thirdPlace"></div>
   </div>
 
   <!-- KNOCKOUT -->
   <div id="p-knockout" class="panel">
-    <div class="sec-title">🏅 Knockout Bracket</div>
+    <div class="sec-title"><i class="fas fa-medal"></i> Knockout Bracket</div>
     <div class="bracket-desktop">
       <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:.5rem">
         <div class="sym-bracket" id="symDesktop"></div>
@@ -451,7 +452,7 @@ body::after{content:'';position:fixed;inset:0;
 
   <!-- STATS -->
   <div id="p-stats" class="panel">
-    <div class="sec-title">📈 Stats</div>
+    <div class="sec-title"><i class="fas fa-chart-line"></i> Stats</div>
     <div class="filters" id="statsGrpFilters"></div>
     <div class="filters" id="statsTeamFilters" style="margin-top:-.4rem"></div>
     <div class="stats-grid" id="statsGrid"></div>
@@ -459,7 +460,7 @@ body::after{content:'';position:fixed;inset:0;
 
   <!-- SQUADS -->
   <div id="p-squads" class="panel">
-    <div class="sec-title">🧑‍⚽ Squads</div>
+    <div class="sec-title"><i class="fas fa-shirt"></i> Squads</div>
     <div class="sq-controls">
       <div class="sq-team-scroll" id="sqTeamBtns"></div>
     </div>
@@ -556,8 +557,8 @@ const FONT_URLS_PUB={roboto:'https://fonts.googleapis.com/css2?family=Roboto+Con
 
 // Main site nav labels
 const NAV_LABELS={
-  bn:{schedule:'📅 ম্যাচ সূচি',groups:'📊 Group Table',thirdplace:'🥉 Best 3rd Places From Groups',knockout:'🏅 Knockout',stats:'📈 Stats',squads:'🧑‍⚽ Squads'},
-  en:{schedule:'📅 Schedule',groups:'📊 Groups',thirdplace:'🥉 Best 3rd Places From Groups',knockout:'🏅 Knockout',stats:'📈 Stats',squads:'🧑‍⚽ Squads'}
+  bn:{schedule:"<i class='fas fa-calendar-days'></i> ম্যাচ সূচি",groups:"<i class='fas fa-chart-column'></i> Group Table",thirdplace:"<i class='fas fa-award'></i> Best 3rd Places",knockout:"<i class='fas fa-medal'></i> Knockout",stats:"<i class='fas fa-chart-line'></i> Stats",squads:"<i class='fas fa-shirt'></i> Squads"},
+  en:{schedule:"<i class='fas fa-calendar-days'></i> Schedule",groups:"<i class='fas fa-chart-column'></i> Groups",thirdplace:"<i class='fas fa-award'></i> Best 3rd Places",knockout:"<i class='fas fa-medal'></i> Knockout",stats:"<i class='fas fa-chart-line'></i> Stats",squads:"<i class='fas fa-shirt'></i> Squads"}
 };
 
 function applySettingsPub(s){
@@ -710,12 +711,12 @@ function renderMatches(grp){
         </div>
       </div>
       ${hasGoals?`<div class="mc-goals">
-        <div class="mc-goals-side">${g1.map(g=>`<div class="goal-item">⚽ ${esc(g.name)} <span class="gmin">${esc(g.min)}'</span>${g.pen?` <span class="gpen">(P)</span>`:''}</div>`).join('')}</div>
-        <div class="mc-goals-side right">${g2.map(g=>`<div class="goal-item">${g.pen?`<span class="gpen">(P) </span>`:''}<span class="gmin">${esc(g.min)}'</span> ${esc(g.name)} ⚽</div>`).join('')}</div>
+        <div class="mc-goals-side">${g1.map(g=>`<div class="goal-item"><i class='fas fa-futbol'></i> ${esc(g.name)} <span class="gmin">${esc(g.min)}'</span>${g.pen?` <span class="gpen">(P)</span>`:''}</div>`).join('')}</div>
+        <div class="mc-goals-side right">${g2.map(g=>`<div class="goal-item">${g.pen?`<span class="gpen">(P) </span>`:''}<span class="gmin">${esc(g.min)}'</span> ${esc(g.name)} <i class='fas fa-futbol'></i></div>`).join('')}</div>
       </div>`:''}
       <div class="mc-footer">
-        <span class="mc-footer-date">⏰ ${fT(m.time)}</span>
-        <span class="mc-footer-stadium">🏟 ${m.stadium||''}</span>
+        <span class="mc-footer-date"><i class='fas fa-clock'></i> ${fT(m.time)}</span>
+        <span class="mc-footer-stadium"><i class='fas fa-landmark'></i> ${m.stadium||''}</span>
       </div>
     </div>`;
   }
@@ -767,7 +768,7 @@ function renderMatches(grp){
 
     return`<div class="date-section" data-date="${date}">
       <div class="date-section-title" onclick="toggleSection(this)">
-        <span style="font-size:.85rem">📅</span>
+        <i class='fas fa-calendar-days'></i>
         <span>${dateTitle(date)}</span>
         ${todayBadge}
         ${statusBadge}
@@ -1087,7 +1088,7 @@ function renderBracket(grps={}){
   html+=symCol('সেমি ফাইনাল',[SF[0]],15,0);
 
   html+=`<div class="sym-center">
-    <div class="sym-final-label">🏆 ফাইনাল</div>
+    <div class="sym-final-label"><i class='fas fa-trophy'></i> ফাইনাল</div>
     <div class="sym-champion">
       ${champFlagURL?`<img class="sym-champ-flag" src="${champFlagURL}" loading="lazy" onerror="this.style.display='none'">`
         :`<div style="width:44px;height:33px;background:rgba(201,168,76,.15);border-radius:4px;margin:0 auto 5px"></div>`}
@@ -1095,7 +1096,7 @@ function renderBracket(grps={}){
     </div>
     <div style="width:100%">${symMatch(FINAL,true)}</div>
     <div class="sym-3rd-wrap">
-      <div class="sym-3rd-label">🥉 তৃতীয় স্থান</div>
+      <div class="sym-3rd-label"><i class='fas fa-award'></i> তৃতীয় স্থান</div>
       <div style="width:100%">${symMatch(THIRD,true)}</div>
     </div>
   </div>`;
@@ -1113,7 +1114,7 @@ function renderBracket(grps={}){
     {name:'শেষ ষোলো',matches:R16},
     {name:'কোয়ার্টার',matches:QF},
     {name:'সেমি',matches:SF},
-    {name:'🏆 ফাইনাল',matches:[FINAL,THIRD]},
+    {name:"<i class='fas fa-trophy'></i> ফাইনাল",matches:[FINAL,THIRD]},
   ];
   document.getElementById('bkTabs').innerHTML=mRounds.map((r,i)=>
     `<button class="bk-rtab ${i===activeBkTab?'on':''}" onclick="window._bktab(${i})">${r.name}</button>`
@@ -1342,7 +1343,7 @@ function renderStats(grps){
   document.getElementById('statsGrid').innerHTML=`
     ${matchHistoryHTML}
     <div class="stats-card">
-      <div class="stats-card-title">⚽ সর্বোচ্চ গোলদাতা ${titleSuffix}</div>
+      <div class="stats-card-title"><i class='fas fa-futbol'></i> সর্বোচ্চ গোলদাতা ${titleSuffix}</div>
       ${scorers.length===0?`<div class="stats-empty">এখনো গোলের তথ্য নেই</div>`
         :scorers.slice(0,20).map((s,i)=>`
           <div class="scorer-row">
@@ -1607,8 +1608,8 @@ function renderSquad(){
           <div class="sq-stat-box"><div class="sq-stat-n">${totalCaps}</div><div class="sq-stat-l">মোট Caps</div></div>
           <div class="sq-stat-box"><div class="sq-stat-n">${totalGoals}</div><div class="sq-stat-l">মোট গোল</div></div>
           <div class="sq-stat-box"><div class="sq-stat-n">${avgAge}</div><div class="sq-stat-l">গড় বয়স</div></div>
-          ${mostCapped&&mostCapped.caps?`<div class="sq-stat-box wide"><div class="sq-extra-row">🏆 সর্বোচ্চ caps: <span>${esc(mostCapped.name)}</span> · ${mostCapped.caps} · ${mostCapped.pos||''}</div></div>`:''}
-          ${topScorer&&topScorer.goals?`<div class="sq-stat-box wide"><div class="sq-extra-row">⚽ সর্বোচ্চ গোল: <span>${esc(topScorer.name)}</span> · ${topScorer.goals} গোল · ${topScorer.pos||''}</div></div>`:''}
+          ${mostCapped&&mostCapped.caps?`<div class="sq-stat-box wide"><div class="sq-extra-row"><i class='fas fa-trophy'></i> সর্বোচ্চ caps: <span>${esc(mostCapped.name)}</span> · ${mostCapped.caps} · ${mostCapped.pos||''}</div></div>`:''}
+          ${topScorer&&topScorer.goals?`<div class="sq-stat-box wide"><div class="sq-extra-row"><i class='fas fa-futbol'></i> সর্বোচ্চ গোল: <span>${esc(topScorer.name)}</span> · ${topScorer.goals} গোল · ${topScorer.pos||''}</div></div>`:''}
         </div>
       </div>
     </div>`;
@@ -1640,8 +1641,8 @@ function renderSquad(){
         </div>
         <div class="sq-meta">
           <span title="বয়স">🎂 ${p.age||'?'}</span>
-          <span title="Caps">🏆 ${p.caps||0}</span>
-          <span title="আন্তর্জাতিক গোল">⚽ ${p.goals||0}</span>
+          <span title="Caps"><i class='fas fa-trophy'></i> ${p.caps||0}</span>
+          <span title="আন্তর্জাতিক গোল"><i class='fas fa-futbol'></i> ${p.goals||0}</span>
         </div>
       </div>
     </div>
