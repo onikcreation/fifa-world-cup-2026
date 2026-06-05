@@ -64,7 +64,7 @@ body::before{content:'';position:fixed;inset:0;
 /* NAV */
 .nav{position:sticky;top:0;z-index:100;background:var(--tbg);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;padding:0 1rem;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
-.nav-btn{font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:2px;color:var(--gray);background:none;border:none;border-bottom:3px solid transparent;padding:.85rem 1.1rem;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;flex-shrink:0}
+.nav-btn{font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:2px;color:var(--gray);background:none;border:none;border-bottom:3px solid transparent;padding:.85rem 1.1rem;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;flex-shrink:0;text-decoration:none;display:inline-block}
 .nav-btn:hover{color:var(--neon-l)}
 .nav-btn.on{color:var(--neon);border-bottom-color:var(--neon);text-shadow:0 0 10px var(--neon-glow)}
 
@@ -443,12 +443,12 @@ body::before{content:'';position:fixed;inset:0;
 </header>
 
 <nav class="nav">
-  <button class="nav-btn on"  onclick="goTab('schedule',this)">📅 ম্যাচ সূচি</button>
-  <button class="nav-btn"     onclick="goTab('groups',this)">📊 Group Table</button>
-  <button class="nav-btn"     onclick="goTab('thirdplace',this)">🥉 Best 3rd Places From Groups</button>
-  <button class="nav-btn"     onclick="goTab('knockout',this)">🏅 Knockout</button>
-  <button class="nav-btn"     onclick="goTab('stats',this)">📈 Stats</button>
-  <button class="nav-btn"     onclick="goTab('squads',this)">🧑‍⚽ Squads</button>
+  <a class="nav-btn on"  href="#schedule"   onclick="goTab('schedule',this)">📅 ম্যাচ সূচি</a>
+  <a class="nav-btn"     href="#groups"     onclick="goTab('groups',this)">📊 Group Table</a>
+  <a class="nav-btn"     href="#thirdplace" onclick="goTab('thirdplace',this)">🥉 Best 3rd Places From Groups</a>
+  <a class="nav-btn"     href="#knockout"   onclick="goTab('knockout',this)">🏅 Knockout</a>
+  <a class="nav-btn"     href="#stats"      onclick="goTab('stats',this)">📈 Stats</a>
+  <a class="nav-btn"     href="#squads"     onclick="goTab('squads',this)">🧑‍⚽ Squads</a>
 </nav>
 
 <main class="main">
@@ -1292,8 +1292,19 @@ function renderStats(grps){
         let result='';
         if(done){const ms=Number(myScore),os=Number(opScore);result=ms>os?'W':ms<os?'L':'D';}
 
-        const oppDisplay=oppKnown?opp:(opp||'TBD');
-        const row={m,opp:oppDisplay,oppCode,myScore,opScore,result,done,round:round.name};
+        // Display-friendly opponent name
+        let oppDisplay,oppDisplayCode='';
+        if(oppKnown&&TEAMS[opp]){
+          oppDisplay=enNameRanked(opp);
+          oppDisplayCode=TEAMS[opp]?.code||'';
+        } else if(opp&&opp.startsWith('3rd ')){
+          oppDisplay=`Best 3rd (${opp.replace('3rd ','')})`;
+        } else if(opp&&(opp.startsWith('W ')||opp.startsWith('L '))){
+          oppDisplay=`TBD (${opp})`;
+        } else {
+          oppDisplay=opp||'TBD';
+        }
+        const row={m,opp:oppDisplay,oppCode:oppDisplayCode,myScore,opScore,result,done,round:round.name};
         if(done)played.push(row);else upcoming.push(row);
       }
     }
@@ -1304,7 +1315,7 @@ function renderStats(grps){
         <div class="mh-date">${fD(row.m.date)}</div>
         <div class="mh-opp">
           ${row.oppCode?`<img src="https://flagcdn.com/20x15/${row.oppCode}.png" style="width:18px;height:13px;object-fit:cover;border-radius:2px" loading="lazy">`:''}
-          ${enNameRanked(row.opp)}
+          <span>${row.opp}</span>
           ${row.round?`<span style="font-size:.6rem;opacity:.5;margin-left:3px">(${row.round})</span>`:''}
         </div>
         ${isDone
@@ -1395,13 +1406,38 @@ function renderThirdPlace(grps){
 }
 
 // Tab
-window.goTab=function(id,btn){
+const VALID_TABS=['schedule','groups','thirdplace','knockout','stats','squads'];
+
+window.goTab=function(id,el){
+  if(!VALID_TABS.includes(id))id='schedule';
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
   document.getElementById('p-'+id).classList.add('on');
-  btn.classList.add('on');
+  // Mark active nav link
+  document.querySelectorAll('.nav-btn').forEach(b=>{
+    if(b.getAttribute('href')==='#'+id||b===el)b.classList.add('on');
+  });
+  // Update hash without scroll
+  history.replaceState(null,'','#'+id);
   if(id==='squads'&&!sqLoaded)loadSquads();
 };
+
+// On page load — read hash and activate correct tab
+(function initHash(){
+  const hash=(location.hash||'#schedule').replace('#','');
+  const id=VALID_TABS.includes(hash)?hash:'schedule';
+  const link=document.querySelector(`.nav-btn[href="#${id}"]`);
+  if(id!=='schedule'&&link){
+    // Delay until renderAll is done
+    setTimeout(()=>{
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+      document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
+      document.getElementById('p-'+id)?.classList.add('on');
+      link.classList.add('on');
+      if(id==='squads'&&!sqLoaded)loadSquads();
+    },200);
+  }
+})();
 
 // ── SQUADS ──
 let sqData={};       // Firebase-এর raw data
