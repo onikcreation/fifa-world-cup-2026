@@ -257,10 +257,9 @@ body::before{content:'';position:fixed;inset:0;
 /* Score grid: 6 inputs in a structured layout */
 .ko-score-grid{display:grid;grid-template-columns:1fr auto auto auto auto;gap:.3rem;align-items:center;margin-bottom:.3rem}
 .ko-score-grid + .ko-score-grid{margin-top:0}
-.ko-ti{width:100%;background:var(--inp);border:1px solid var(--border2);border-radius:5px;padding:.32rem .45rem;color:var(--text);font-size:.74rem;outline:none;min-width:0;box-sizing:border-box}
+.ko-ti{width:100%;height:32px;background:var(--inp);border:1px solid var(--border2);border-radius:5px;padding:.32rem .45rem;color:var(--text);font-size:.74rem;outline:none;min-width:0;box-sizing:border-box}
 .ko-ti:focus{border-color:var(--neon)}
-/* Score input boxes */
-.ko-si{width:36px;height:30px;background:var(--inp);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:'Bebas Neue',sans-serif;font-size:.95rem;text-align:center;outline:none;transition:border .15s}
+.ko-si{width:36px;height:32px;background:var(--inp);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:'Bebas Neue',sans-serif;font-size:.95rem;text-align:center;outline:none;transition:border .15s;box-sizing:border-box}
 .ko-si:focus{border-color:var(--neon)}
 .ko-si.ko-et{border-color:rgba(255,170,0,.3);background:rgba(255,170,0,.05)}
 .ko-si.ko-et:focus{border-color:var(--orange)}
@@ -272,9 +271,9 @@ body::before{content:'';position:fixed;inset:0;
 .ko-si-lbl.lbl-pen{color:var(--red)}
 /* Input group column */
 .ko-inp-grp{display:flex;flex-direction:column;align-items:center;gap:1px}
-.ko-tbl{width:100%;border-collapse:separate;border-spacing:0 .25rem}
+.ko-tbl{width:100%;border-collapse:separate;border-spacing:0 .3rem}
 .ko-tbl th{font-family:'Bebas Neue',sans-serif;font-size:.6rem;letter-spacing:.5px;text-align:center;padding-bottom:2px}
-.ko-tbl td{vertical-align:middle;padding:1px 2px 1px 0}
+.ko-tbl td{vertical-align:middle;padding:0 2px 0 0;height:32px}
 .ko-tbl td:first-child{width:100%}
 .ko-tbl td:not(:first-child){width:36px}
 .ko-actions{display:flex;gap:.35rem;padding:.5rem .65rem;border-top:1px solid rgba(161,240,0,.08);background:rgba(0,0,0,.2)}
