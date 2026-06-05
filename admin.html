@@ -1021,8 +1021,8 @@ window.saveKO=async function(id){
 window.switchModalTab=function(tab,btn){
   document.querySelectorAll('.modal-tab').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
-  document.getElementById('modal-goals-panel').style.display=tab==='goals'?'':'none';
-  document.getElementById('modal-cards-panel').style.display=tab==='cards'?'':'none';
+  document.getElementById('modal-goals-panel').style.display=tab==='goals'?'block':'none';
+  document.getElementById('modal-cards-panel').style.display=tab==='cards'?'block':'none';
 };
 
 window.openGoalModal=function(id,isKO){
