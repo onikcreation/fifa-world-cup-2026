@@ -35,6 +35,10 @@
   --tbg:rgba(5,15,16,0.96);
   --sbg:rgba(161,240,0,0.06);
   --inp:rgba(161,240,0,0.06);
+  --body-grad1:rgba(161,240,0,0.11);
+  --body-grad2:rgba(12,43,45,0.95);
+  --body-grad3:rgba(161,240,0,0.04);
+  --body-dot:rgba(161,240,0,0.05);
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
@@ -42,12 +46,12 @@ html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed','Hind Siliguri',sans-serif;min-height:100vh}
 body::before{content:'';position:fixed;inset:0;
   background:
-    radial-gradient(ellipse 70% 55% at -5% -5%,rgba(161,240,0,0.11) 0%,transparent 55%),
-    radial-gradient(ellipse 50% 40% at 105% 105%,rgba(12,43,45,0.95) 0%,transparent 55%),
-    radial-gradient(ellipse 35% 30% at 50% 50%,rgba(161,240,0,0.04) 0%,transparent 65%);
+    radial-gradient(ellipse 70% 55% at -5% -5%,var(--body-grad1) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 40% at 105% 105%,var(--body-grad2) 0%,transparent 55%),
+    radial-gradient(ellipse 35% 30% at 50% 50%,var(--body-grad3) 0%,transparent 65%);
   pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;inset:0;
-  background-image:radial-gradient(circle,rgba(161,240,0,.05) 1px,transparent 1px);
+  background-image:radial-gradient(circle,var(--body-dot) 1px,transparent 1px);
   background-size:32px 32px;
   pointer-events:none;z-index:0}
 
@@ -667,6 +671,8 @@ window._siteTZ=6; // default GMT+6, overridden by settings
 // Settings helpers (same as admin)
 function hexToRgba(hex,a){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return`rgba(${r},${g},${b},${a})`;}
 function lightenHex(hex,pct){let r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);r=Math.min(255,r+Math.round(pct*2.55));g=Math.min(255,g+Math.round(pct*2.55));b=Math.min(255,b+Math.round(pct*2.55));return`#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;}
+function darkenHex(hex,pct){let r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);r=Math.max(0,r-Math.round(pct*2.55));g=Math.max(0,g-Math.round(pct*2.55));b=Math.max(0,b-Math.round(pct*2.55));return`#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;}
+function isLight(hex){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return(0.299*r+0.587*g+0.114*b)>145;}
 const FONT_MAP_PUB={
   barlow:"'Barlow Condensed',sans-serif",hind:"'Hind Siliguri',sans-serif",
   roboto:"'Roboto Condensed',sans-serif",oswald:"'Oswald',sans-serif",exo:"'Exo 2',sans-serif",
@@ -736,17 +742,48 @@ function applySettingsPub(s){
   const r=document.documentElement.style;
   if(s.colors){
     const{bg,accent,text}=s.colors;
-    if(bg){r.setProperty('--bg',bg);r.setProperty('--bg2',lightenHex(bg,3));r.setProperty('--bg3',lightenHex(bg,7));}
+    if(bg){
+      const light=isLight(bg);
+      r.setProperty('--bg',bg);
+      if(light){
+        r.setProperty('--bg2',darkenHex(bg,3));r.setProperty('--bg3',darkenHex(bg,7));
+        r.setProperty('--card',hexToRgba(darkenHex(bg,4),0.75));r.setProperty('--card2',hexToRgba(darkenHex(bg,9),0.85));
+        r.setProperty('--teal',darkenHex(bg,5));r.setProperty('--teal2',darkenHex(bg,10));
+        r.setProperty('--hbg',bg);r.setProperty('--tbg',hexToRgba(bg,0.97));
+        r.setProperty('--sbg',hexToRgba(accent||'#1a56db',0.09));
+        r.setProperty('--shadow','rgba(0,0,0,0.12)');
+        r.setProperty('--body-grad1',hexToRgba(accent||'#1a56db',0.07));
+        r.setProperty('--body-grad2',hexToRgba(darkenHex(bg,18),0.3));
+        r.setProperty('--body-grad3',hexToRgba(accent||'#1a56db',0.03));
+        r.setProperty('--body-dot',hexToRgba(accent||'#1a56db',0.06));
+      }else{
+        r.setProperty('--bg2',lightenHex(bg,3));r.setProperty('--bg3',lightenHex(bg,7));
+        r.setProperty('--card',hexToRgba(lightenHex(bg,4),0.85));r.setProperty('--card2',hexToRgba(lightenHex(bg,2),0.9));
+        r.setProperty('--teal',lightenHex(bg,6));r.setProperty('--teal2',lightenHex(bg,8));
+        r.setProperty('--hbg',bg);r.setProperty('--tbg',hexToRgba(bg,0.96));
+        r.setProperty('--sbg',hexToRgba(accent||'#A1F000',0.06));
+        r.setProperty('--shadow','rgba(0,0,0,0.7)');
+        r.setProperty('--body-grad1',hexToRgba(accent||'#A1F000',0.11));
+        r.setProperty('--body-grad2',hexToRgba(lightenHex(bg,6),0.95));
+        r.setProperty('--body-grad3',hexToRgba(accent||'#A1F000',0.04));
+        r.setProperty('--body-dot',hexToRgba(accent||'#A1F000',0.05));
+      }
+    }
     if(accent){
       r.setProperty('--neon',accent);
       r.setProperty('--neon-l',lightenHex(accent,15));
+      r.setProperty('--neon-d',darkenHex(accent,10));
       r.setProperty('--neon-glow',hexToRgba(accent,0.25));
       r.setProperty('--neon-glow2',hexToRgba(accent,0.08));
       r.setProperty('--border',hexToRgba(accent,0.25));
       r.setProperty('--border2',hexToRgba(accent,0.1));
       r.setProperty('--inp',hexToRgba(accent,0.06));
     }
-    if(text)r.setProperty('--text',text);
+    if(text){
+      r.setProperty('--text',text);
+      r.setProperty('--text2',hexToRgba(text,0.75));
+      r.setProperty('--gray',hexToRgba(text,0.4));
+    }
   }
   if(s.font){
     const fUrl=FONT_URLS_PUB[s.font];
