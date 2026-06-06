@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin | FIFA 2026</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='14' fill='%23050f10'/><polygon points='50,4 52,10 58,10 53,14 55,20 50,16 45,20 47,14 42,10 48,10' fill='%23A1F000'/><path d='M27,24h46l-4,34a23,23 0 0,1-38,0z' stroke='%23A1F000' stroke-width='4' fill='%23A1F00018' stroke-linejoin='round'/><path d='M27,30q-13,0-13,14q0,14 13,10' stroke='%23A1F000' stroke-width='4' fill='none' stroke-linecap='round'/><path d='M73,30q13,0 13,14q0,14-13,10' stroke='%23A1F000' stroke-width='4' fill='none' stroke-linecap='round'/><line x1='50' y1='58' x2='50' y2='70' stroke='%23A1F000' stroke-width='5' stroke-linecap='round'/><rect x='34' y='70' width='32' height='8' rx='4' fill='%23A1F000'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
 <style>
@@ -214,7 +214,8 @@ body::after{content:'';position:fixed;inset:0;
 .cpb-title{font-family:"Google Sans",sans-serif;font-size:.95rem;letter-spacing:3px}
 .cpb-badge{font-size:.58rem;letter-spacing:1px;padding:2px 9px;border-radius:20px}
 .cpb-card{margin:.55rem .55rem .3rem;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.1);position:relative;background:#1a1a1a}
-.cpb-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#8b1538,#D4AF37);z-index:1}
+.cpb-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--cpb-acc,#8b1538),var(--cpb-acc,#D4AF37));z-index:1}
+.color-preview-box.preview-flat .cpb-card::before{opacity:0}
 .cpb-card-hdr{display:flex;justify-content:space-between;padding:.48rem .9rem;align-items:center;background:linear-gradient(135deg,rgba(139,21,56,.45),rgba(20,20,20,.98));border-bottom:1px solid rgba(255,255,255,.06)}
 .cpb-grp{font-size:.63rem;font-weight:700;letter-spacing:.5px}
 .cpb-cbadge{font-family:"Google Sans",sans-serif;font-size:.68rem;letter-spacing:1px;padding:.15rem .5rem;border-radius:20px;background:#D4AF37;color:#141414}
@@ -522,7 +523,7 @@ body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
             <div class="st-card st-card-sm">
               <div class="st-card-hd"><i class="fas fa-clock"></i><span>Timezone</span></div>
               <div class="st-card-body">
-                <select class="s-select" id="cfg-tz">
+                <select class="s-select" id="cfg-tz" onchange="window.tzPreviewChange()">
                   <option value="6">GMT+6 · BDT</option>
                   <option value="5.5">GMT+5:30 · IST</option>
                   <option value="0">GMT+0 · UTC</option>
@@ -613,7 +614,7 @@ body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
           <!-- Save row -->
           <div class="st-save-row-c">
             <button type="button" class="bbtn bbtn-save" id="saveSettingsBtn" onclick="saveSettings()"><i class="fas fa-floppy-disk"></i> Save Settings</button>
-            <button type="button" class="bbtn bbtn-clear" onclick="resetSettings()"><i class="fas fa-rotate-left"></i> Reset</button>
+            <button type="button" id="settingsResetBtn" class="bbtn bbtn-clear" onclick="resetSettings()"><i class="fas fa-rotate-left"></i> Reset</button>
             <span id="settingSt" class="st-save-st"></span>
           </div>
 
@@ -1589,7 +1590,7 @@ const LABELS = {
     koRound:"<i class='fas fa-medal'></i> নকআউট",
     settings:"<i class='fas fa-gear'></i> সেটিংস",
     saveAll:"<i class='fas fa-floppy-disk'></i> সব Save করো",
-    clearAll:"<i class='fas fa-trash'></i> সব মুছুন",
+    clearAll:"<i class='fas fa-trash'></i> সব এন্ট্রি ডেটা মুছুন",
     changed:'পরিবর্তিত:', matches:'টি ম্যাচ',
     bulkHint:'একসাথে সব সেভ করতে "সব Save করো" চাপো।',
     bulkHintEn:'Click "Save All" to save together.',
@@ -1613,7 +1614,7 @@ const LABELS = {
     koRound:"<i class='fas fa-medal'></i> Knockout",
     settings:"<i class='fas fa-gear'></i> Settings",
     saveAll:"<i class='fas fa-floppy-disk'></i> Save All",
-    clearAll:"<i class='fas fa-trash'></i> Clear All",
+    clearAll:"<i class='fas fa-trash'></i> Clear All Entry Data",
     changed:'Changed:', matches:' matches',
     bulkHint:'Click "Save All" to save together.',
     bulkHintEn:'Click "Save All" to save together.',
@@ -1642,7 +1643,7 @@ function applyLang(lang){
   // Bulk save buttons
   const bsBtn=document.getElementById('bulkSaveBtn');
   if(bsBtn)bsBtn.innerHTML=L.saveAll;
-  document.querySelectorAll('.bbtn-clear').forEach(b=>{if(b.id!='bulkSaveBtn')b.innerHTML=L.clearAll;});
+  document.querySelectorAll('.bbtn-clear').forEach(b=>{if(b.id!='bulkSaveBtn'&&b.id!='settingsResetBtn')b.innerHTML=L.clearAll;});
   // Bulk info text
   const bulkInfo=document.querySelector('.bulk-info');
   if(bulkInfo){
@@ -1683,7 +1684,7 @@ function populateSettingsUI(s){
   document.getElementById('cp-bg-hex').textContent=s.colors.bg;
   document.getElementById('cp-accent-hex').textContent=s.colors.accent;
   document.getElementById('cp-text-hex').textContent=s.colors.text;
-  updateColorPreview(s.colors.bg, s.colors.accent, s.colors.text);
+  updateFullPreview();
   syncPresetDropdown(s.colors.bg, s.colors.accent);
 }
 
@@ -1694,6 +1695,7 @@ window.setToggle=function(type, btn){
   btn.classList.add('on');
   currentSettings.lang=btn.dataset.val;
   applyLang(btn.dataset.val);
+  updateFullPreview();
 };
 
 // Card gradient toggle
@@ -1704,6 +1706,7 @@ window.setCardGradient=function(btn){
   const enabled=btn.dataset.val==='true';
   currentSettings.cardGradient=enabled;
   document.body.classList.toggle('flat-cards',!enabled);
+  updateFullPreview();
 };
 
 // Font select (select element)
@@ -1720,6 +1723,30 @@ function updateFontPreview(key){
   if(el){el.style.fontFamily=FONT_MAP[key]||FONT_MAP.barlow;}
 }
 
+// Full preview — reads currentSettings and updates ALL preview elements
+function updateFullPreview(){
+  const s=currentSettings;
+  const bg=s.colors?.bg||'#050f10';
+  const acc=s.colors?.accent||'#A1F000';
+  const txt=s.colors?.text||'#ffffff';
+  updateColorPreview(bg,acc,txt);
+  // Card gradient bar
+  const box=document.getElementById('colorPreviewBox');
+  if(box)box.classList.toggle('preview-flat',s.cardGradient===false);
+  // Language
+  const isBn=s.lang==='bn';
+  const grpEl=document.getElementById('cpb-grp');
+  if(grpEl)grpEl.textContent=isBn?'গ্রুপ A · ম্যাচ ১':'Group A · Match 1';
+  const fstadEl=document.querySelector('#colorPreviewBox .cpb-fstad');
+  if(fstadEl)fstadEl.textContent=isBn?'🏟 মেটলাইফ স্টেডিয়াম':'🏟 MetLife Stadium';
+  // Timezone
+  const tz=parseFloat(s.tz)||6;
+  const sign=tz>=0?'+':'';
+  const tzStr=Number.isInteger(tz)?String(tz):tz.toFixed(1).replace('.0','');
+  const ftimeEl=document.getElementById('cpb-ftime');
+  if(ftimeEl)ftimeEl.textContent=`20:00 GMT${sign}${tzStr}`;
+}
+
 // Live color preview
 window.previewColor=function(){
   const bg=document.getElementById('cp-bg').value;
@@ -1728,11 +1755,15 @@ window.previewColor=function(){
   document.getElementById('cp-bg-hex').textContent=bg;
   document.getElementById('cp-accent-hex').textContent=acc;
   document.getElementById('cp-text-hex').textContent=txt;
-  updateColorPreview(bg, acc, txt);
-  syncPresetDropdown(bg, acc);
-  // Live apply
   currentSettings.colors={bg,accent:acc,text:txt};
+  syncPresetDropdown(bg,acc);
+  updateFullPreview();
   applySettings(currentSettings);
+};
+
+window.tzPreviewChange=function(){
+  currentSettings.tz=document.getElementById('cfg-tz').value;
+  updateFullPreview();
 };
 
 function updateColorPreview(bg, acc, txt){
@@ -1797,7 +1828,7 @@ window.applyPreset=function(bg, acc, txt){
   document.getElementById('cp-accent-hex').textContent=acc;
   document.getElementById('cp-text-hex').textContent=txt;
   currentSettings.colors={bg,accent:acc,text:txt};
-  updateColorPreview(bg,acc,txt);
+  updateFullPreview();
   applySettings(currentSettings);
 };
 

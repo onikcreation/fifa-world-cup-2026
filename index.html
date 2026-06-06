@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FIFA World Cup 2026 | Al Amin Onik</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='14' fill='%23050f10'/><polygon points='50,4 52,10 58,10 53,14 55,20 50,16 45,20 47,14 42,10 48,10' fill='%23A1F000'/><path d='M27,24h46l-4,34a23,23 0 0,1-38,0z' stroke='%23A1F000' stroke-width='4' fill='%23A1F00018' stroke-linejoin='round'/><path d='M27,30q-13,0-13,14q0,14 13,10' stroke='%23A1F000' stroke-width='4' fill='none' stroke-linecap='round'/><path d='M73,30q13,0 13,14q0,14-13,10' stroke='%23A1F000' stroke-width='4' fill='none' stroke-linecap='round'/><line x1='50' y1='58' x2='50' y2='70' stroke='%23A1F000' stroke-width='5' stroke-linecap='round'/><rect x='34' y='70' width='32' height='8' rx='4' fill='%23A1F000'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
 <style>
@@ -192,8 +192,8 @@ body::after{content:'';position:fixed;inset:0;
   min-width:1050px;
 }
 .sym-col{display:flex;flex-direction:column;padding:0 5px;min-height:600px}
-.sym-col-title{font-family:"Google Sans",sans-serif;font-size:.68rem;letter-spacing:1.5px;background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;padding:.4rem .5rem .6rem;position:relative;z-index:1}
-.sym-col-title::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.35);border-radius:5px;z-index:-1}
+.sym-col-title{font-family:"Google Sans",sans-serif;font-size:.68rem;letter-spacing:1.5px;color:#ffffff;text-align:center;padding:.4rem .5rem .6rem;position:relative;z-index:1}
+.sym-col-title::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.40);border-radius:5px;z-index:-1}
 .sym-spacer{flex:1;min-height:4px}
 
 /* Match card — mc-style */
@@ -408,8 +408,7 @@ body.stadium-light-theme .mc-grp-badge{background:#D4AF37;color:#041020}
   border-right:1px solid rgba(255,255,255,0.06);
 }
 .sq-header-flag{
-  width:96px;height:72px;object-fit:cover;border-radius:6px;flex-shrink:0;
-  box-shadow:0 4px 20px rgba(0,0,0,.6),0 0 0 1px rgba(212,175,55,.2);
+  width:96px;height:72px;object-fit:cover;flex-shrink:0;
 }
 .sq-header-info{display:flex;flex-direction:column;gap:.3rem}
 .sq-header-name{
@@ -627,6 +626,7 @@ const STRINGS={
     noPlayedYet:'এখনো কোনো ম্যাচ খেলা হয়নি',allDone:'সব ম্যাচ খেলা হয়ে গেছে',
     upcomingScore:'বাকি',
     thirdDesc:'১২টি গ্রুপের ৩য় স্থানের দলের মধ্যে সেরা ৮টি শেষ বত্রিশে যাবে। র‍্যাংকিং: পয়েন্ট → GD → GF।',
+    tpGrp:'গ্রুপ',tpPlayed:'খেলা',tpPoints:'পয়েন্ট',tpGF:'গোল করেছে',tpGA:'গোল খেয়েছে',tpGD:'গোল পার্থক্য',
     statusCol:'মর্যাদা',qualified:'✓ উত্তীর্ণ',eliminated:'✗ বাদ',
     sqLoading:'লোড হচ্ছে...',sqNoData:'Firebase-এ squad data নেই',
     sqNoPos:'এই পজিশনে কোনো খেলোয়াড় নেই',
@@ -659,6 +659,7 @@ const STRINGS={
     noPlayedYet:'No matches played yet',allDone:'All matches completed',
     upcomingScore:'Upcoming',
     thirdDesc:'Top 8 of 12 third-place teams advance to Round of 32. Ranking: Points → GD → GF.',
+    tpGrp:'Group',tpPlayed:'Played',tpPoints:'Points',tpGF:'Goals For',tpGA:'Goals Against',tpGD:'Goal Diff',
     statusCol:'Status',qualified:'✓ Qualified',eliminated:'✗ Eliminated',
     sqLoading:'Loading...',sqNoData:'No squad data in Firebase',
     sqNoPos:'No players in this position',
@@ -1706,7 +1707,7 @@ function renderThirdPlace(grps){
     <div class="tp-card">
       <p style="font-size:.76rem;color:var(--gray);margin-bottom:1rem;">${S.thirdDesc}</p>
       <table class="tp-tbl">
-        <thead><tr><th>#</th><th>${S.team}</th><th>Grp</th><th>${S.pl}</th><th>Pts</th><th>GF</th><th>GA</th><th>GD</th><th>${S.statusCol}</th></tr></thead>
+        <thead><tr><th>#</th><th>${S.team}</th><th>${S.tpGrp}</th><th>${S.tpPlayed}</th><th>${S.tpPoints}</th><th>${S.tpGF}</th><th>${S.tpGA}</th><th>${S.tpGD}</th><th>${S.statusCol}</th></tr></thead>
         <tbody>${thirds.map((t,i)=>`
           <tr class="${i<8?'row-q':''}">
             <td>${i+1}</td>
