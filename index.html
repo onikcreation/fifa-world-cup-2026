@@ -1207,38 +1207,49 @@ function renderGroups(grps){
 }
 
 // ══ BRACKET AUTO-POPULATE ══
+function b3Sort(a,b){
+  return b.pts-a.pts||b.gd-a.gd||b.gf-a.gf||a.fp-b.fp||
+    parseInt(getRank(a.name)||999)-parseInt(getRank(b.name)||999);
+}
+
 function getBest3rd(grps){
   return Object.entries(grps)
     .map(([g,teams])=>teams[2]?{...teams[2],group:g}:null)
     .filter(t=>t&&t.pl>0)
-    .sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf||a.fp-b.fp);
+    .sort(b3Sort);
 }
 
 function buildBest3rdMap(grps){
-  // Rank all 12 third-place teams
+  // Sort all 12 third-place teams: pts→gd→gf→fp→FIFA ranking
   const allThirds=Object.entries(grps)
     .map(([g,teams])=>teams[2]?{...teams[2],group:g}:null)
     .filter(t=>t&&t.pl>0)
-    .sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf||a.fp-b.fp);
+    .sort(b3Sort);
 
-  const map={};
-  const used=new Set(); // each team assigned to exactly ONE slot
+  // Best 8 qualify
+  const best8=allThirds.slice(0,8);
+  const qualifiedGroups=new Set(best8.map(t=>t.group));
 
-  // Process slots in order — assign best available unused team per slot
+  // Collect 3rd-place slots with their eligible qualifying groups
+  const slots=[];
   for(const m of KO_ROUNDS[0].matches){
-    ['s1','s2'].forEach(side=>{
+    for(const side of['s1','s2']){
       const slot=m[side];
-      if(!slot||!slot.startsWith('3rd '))return;
-      const allowedGroups=slot.replace('3rd ','').split('');
-      // Find best unused team from allowed groups
-      const candidate=allThirds.find(t=>
-        allowedGroups.includes(t.group)&&!used.has(t.name)
-      );
-      if(candidate){
-        map[`${m.id}_${side}`]=candidate.name;
-        used.add(candidate.name);
-      }
-    });
+      if(!slot||!slot.startsWith('3rd '))continue;
+      const eligible=slot.replace('3rd ','').split('').filter(g=>qualifiedGroups.has(g));
+      slots.push({key:`${m.id}_${side}`,eligible});
+    }
+  }
+
+  // Most-constrained-first bipartite matching
+  slots.sort((a,b)=>a.eligible.length-b.eligible.length);
+  const map={};
+  const usedGroups=new Set();
+  for(const s of slots){
+    const available=s.eligible.filter(g=>!usedGroups.has(g));
+    if(!available.length)continue;
+    const bestTeam=best8.find(t=>available.includes(t.group));
+    if(bestTeam){map[s.key]=bestTeam.name;usedGroups.add(bestTeam.group);}
   }
   return map;
 }
