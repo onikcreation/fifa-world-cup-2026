@@ -327,21 +327,27 @@ body.stadium-theme .mc-hdr{background:linear-gradient(135deg,rgba(212,175,55,0.2
 body.stadium-theme .mc-grp-badge{background:#D4AF37;color:#0a1628}
 
 /* ══ STADIUM LIGHT THEME ══ */
-body.stadium-light-theme{background:linear-gradient(135deg,#b8d8ee,#daeaf5)}
+body.stadium-light-theme{background:linear-gradient(135deg,#041020,#071535)}
 body.stadium-light-theme::before{
   background-image:url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1920&q=80') !important;
   background-size:cover !important;
   background-position:center !important;
-  opacity:.10 !important;
+  opacity:.22 !important;
 }
-/* Group card colored headers */
-body.stadium-light-theme .grp-hd{background:var(--gc,var(--gradient-primary))}
-body.stadium-light-theme .grp-let{display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.5);border-radius:6px;width:2rem;height:2rem;flex-shrink:0}
-body.stadium-light-theme .grp-hd .grp-lbl{color:rgba(255,255,255,0.9)}
-body.stadium-light-theme .grp-hd>div>div:first-child{color:#fff}
-/* Match card */
-body.stadium-light-theme .mc-hdr{background:linear-gradient(135deg,rgba(26,86,219,0.18),rgba(210,230,248,0.95))}
-body.stadium-light-theme .mc-grp-badge{background:#1a56db;color:#fff}
+/* Glass group cards */
+body.stadium-light-theme .grp-card{background:rgba(8,18,45,0.50) !important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.14) !important;box-shadow:0 4px 28px rgba(0,0,0,0.45)}
+body.stadium-light-theme .grp-card::before{display:none}
+body.stadium-light-theme .grp-hd{background:var(--gc,linear-gradient(135deg,#1565c0,#1976d2));border-bottom:none;padding:.7rem 1rem}
+body.stadium-light-theme .grp-let{display:inline-flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.32);border-radius:8px;width:2.2rem;height:2.2rem;flex-shrink:0;color:#fff}
+body.stadium-light-theme .grp-hd .grp-lbl{color:rgba(255,255,255,0.8)}
+body.stadium-light-theme .grp-hd>div>div:first-child{color:rgba(255,255,255,0.9)}
+body.stadium-light-theme .gt th{background:rgba(0,0,0,0.35);color:rgba(255,255,255,0.9)}
+body.stadium-light-theme .gt-wrap{background:transparent}
+/* Glass match cards */
+body.stadium-light-theme .mc{background:rgba(8,18,45,0.50) !important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.14) !important}
+body.stadium-light-theme .mc::before{display:none}
+body.stadium-light-theme .mc-hdr{background:linear-gradient(135deg,rgba(212,175,55,0.22),rgba(5,12,35,0.92))}
+body.stadium-light-theme .mc-grp-badge{background:#D4AF37;color:#041020}
 
 /* Utility */
 #expandInfo{font-size:.68rem;color:var(--gray);margin-left:.3rem}
@@ -858,17 +864,19 @@ function applySettingsPub(s){
       r2.setProperty('--text2','#e8eaf0');r2.setProperty('--gray','rgba(255,255,255,0.5)');
       r2.setProperty('--inp','rgba(255,255,255,0.06)');r2.setProperty('--shadow','rgba(0,0,0,0.6)');
     }
-    // Stadium Light theme
+    // Stadium Light theme (glass dark)
     const isStadiumLight=s.colors.bg==='#daeaf5';
     document.body.classList.toggle('stadium-light-theme',isStadiumLight);
     if(isStadiumLight){
       const r2=document.documentElement.style;
-      r2.setProperty('--bg2','#c5dff0');r2.setProperty('--bg3','#b0d4ec');
-      r2.setProperty('--card','rgba(255,255,255,0.85)');
-      r2.setProperty('--neon-glow','rgba(26,86,219,0.2)');r2.setProperty('--neon-glow2','rgba(26,86,219,0.08)');
-      r2.setProperty('--border','rgba(26,86,219,0.28)');r2.setProperty('--border2','rgba(26,86,219,0.12)');
-      r2.setProperty('--text2','rgba(26,40,64,0.75)');r2.setProperty('--gray','rgba(26,40,64,0.5)');
-      r2.setProperty('--inp','rgba(26,86,219,0.07)');r2.setProperty('--shadow','rgba(0,0,0,0.18)');
+      r2.setProperty('--bg2','#071535');r2.setProperty('--bg3','#0a1c3e');
+      r2.setProperty('--card','rgba(8,18,45,0.5)');
+      r2.setProperty('--neon','#A1F000');
+      r2.setProperty('--neon-glow','rgba(161,240,0,0.2)');r2.setProperty('--neon-glow2','rgba(161,240,0,0.08)');
+      r2.setProperty('--border','rgba(255,255,255,0.14)');r2.setProperty('--border2','rgba(255,255,255,0.08)');
+      r2.setProperty('--text','#ffffff');r2.setProperty('--text2','rgba(255,255,255,0.75)');
+      r2.setProperty('--gray','rgba(255,255,255,0.5)');
+      r2.setProperty('--inp','rgba(255,255,255,0.07)');r2.setProperty('--shadow','rgba(0,0,0,0.6)');
     }
   }
   if(s.tz)window._siteTZ=parseFloat(s.tz)||6;

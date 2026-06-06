@@ -253,17 +253,19 @@ body.stadium-theme .ko-hd{background:linear-gradient(135deg,rgba(212,175,55,0.2)
 body.stadium-theme .ko-rname{background:#D4AF37;color:#0a1628}
 
 /* ══ STADIUM LIGHT THEME ══ */
-body.stadium-light-theme{background:linear-gradient(135deg,#b8d8ee,#daeaf5)}
+body.stadium-light-theme{background:linear-gradient(135deg,#041020,#071535)}
 body.stadium-light-theme::before{
   background-image:url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1920&q=80') !important;
   background-size:cover !important;
   background-position:center !important;
-  opacity:.10 !important;
+  opacity:.22 !important;
 }
-body.stadium-light-theme .amc-hdr{background:linear-gradient(135deg,rgba(26,86,219,0.18),rgba(210,230,248,0.95))}
-body.stadium-light-theme .amc-grp{background:#1a56db;color:#fff}
-body.stadium-light-theme .ko-hd{background:linear-gradient(135deg,rgba(26,86,219,0.18),rgba(210,230,248,0.95))}
-body.stadium-light-theme .ko-rname{background:#1a56db;color:#fff}
+body.stadium-light-theme .amc{background:rgba(8,18,45,0.50) !important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.14) !important}
+body.stadium-light-theme .amc-hdr{background:linear-gradient(135deg,rgba(212,175,55,0.22),rgba(5,12,35,0.92))}
+body.stadium-light-theme .amc-grp{background:#D4AF37;color:#041020}
+body.stadium-light-theme .ko-card{background:rgba(8,18,45,0.50) !important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.14) !important}
+body.stadium-light-theme .ko-hd{background:linear-gradient(135deg,rgba(212,175,55,0.22),rgba(5,12,35,0.92))}
+body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
 
 /* keep old classes working (used in JS) */
 .s-label{font-size:.72rem;color:var(--text2);display:block;margin-bottom:.5rem;letter-spacing:.5px}
@@ -292,7 +294,7 @@ body.stadium-light-theme .ko-rname{background:#1a56db;color:#fff}
 .psw-slate{background:linear-gradient(90deg,#1c2333 50%,#58a6ff 50%)}
 .psw-crimgold{background:linear-gradient(90deg,#0a0a0a 25%,#8B1538 50%,#D4AF37 100%)}
 .psw-stadium{background:linear-gradient(90deg,#0a1628 40%,#1a3a6e 70%,#D4AF37 100%)}
-.psw-stadium-light{background:linear-gradient(90deg,#daeaf5 35%,#c5dff0 65%,#1a56db 100%)}
+.psw-stadium-light{background:linear-gradient(90deg,#041020 30%,rgba(8,18,45,0.8) 55%,#2e7d32 75%,#A1F000 100%)}
 
 /* GOAL & CARD MODAL */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem}
@@ -1526,16 +1528,18 @@ function applySettings(s, save=false){
     r.setProperty('--text2','#e8eaf0');r.setProperty('--gray','rgba(255,255,255,0.5)');
     r.setProperty('--inp','rgba(255,255,255,0.06)');r.setProperty('--shadow','rgba(0,0,0,0.6)');
   }
-  // Stadium Light theme
+  // Stadium Light theme (glass dark)
   const isStadiumLight=bg==='#daeaf5';
   document.body.classList.toggle('stadium-light-theme',isStadiumLight);
   if(isStadiumLight){
-    r.setProperty('--bg2','#c5dff0');r.setProperty('--bg3','#b0d4ec');
-    r.setProperty('--card','rgba(255,255,255,0.85)');
-    r.setProperty('--neon-glow','rgba(26,86,219,0.2)');r.setProperty('--neon-glow2','rgba(26,86,219,0.08)');
-    r.setProperty('--border','rgba(26,86,219,0.28)');r.setProperty('--border2','rgba(26,86,219,0.12)');
-    r.setProperty('--text2','rgba(26,40,64,0.75)');r.setProperty('--gray','rgba(26,40,64,0.5)');
-    r.setProperty('--inp','rgba(26,86,219,0.07)');r.setProperty('--shadow','rgba(0,0,0,0.18)');
+    r.setProperty('--bg2','#071535');r.setProperty('--bg3','#0a1c3e');
+    r.setProperty('--card','rgba(8,18,45,0.5)');
+    r.setProperty('--neon','#A1F000');
+    r.setProperty('--neon-glow','rgba(161,240,0,0.2)');r.setProperty('--neon-glow2','rgba(161,240,0,0.08)');
+    r.setProperty('--border','rgba(255,255,255,0.14)');r.setProperty('--border2','rgba(255,255,255,0.08)');
+    r.setProperty('--text','#ffffff');r.setProperty('--text2','rgba(255,255,255,0.75)');
+    r.setProperty('--gray','rgba(255,255,255,0.5)');
+    r.setProperty('--inp','rgba(255,255,255,0.07)');r.setProperty('--shadow','rgba(0,0,0,0.6)');
   }
   // Font
   loadFont(s.font);
