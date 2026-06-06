@@ -1123,7 +1123,7 @@ function renderKO(){
         <span class="ko-mid">Match #${koNum(m)}</span>
       </div>
       <div class="ko-body">
-        <div class="ko-date"><i class='fas fa-calendar-days'></i> ${fD(m.date)} · <i class='fas fa-clock'></i> ${fT(m.time)}</div>
+        <div class="ko-date"><i class='fas fa-calendar-days'></i> ${fD(m.date)} · <i class='fas fa-clock'></i> ${fT(m.time)}${m.stadium?` · <i class='fas fa-landmark'></i> ${m.stadium}`:''}</div>
         <table class="ko-tbl">
           <thead><tr>
             <th></th>

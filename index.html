@@ -213,6 +213,7 @@ body::after{content:'';position:fixed;inset:0;
 .sym-team.win .sym-score{color:var(--neon)}
 .sym-extra{text-align:center;font-size:.58rem;color:var(--orange);padding:2px 7px;border-top:1px solid var(--border2)}
 .sym-date{text-align:center;font-size:.58rem;color:rgba(255,255,255,.5);padding:3px 7px;background:rgba(0,0,0,.25);border-top:1px solid rgba(255,255,255,.05);font-family:"Google Sans",sans-serif;letter-spacing:.5px}
+.sym-stadium{text-align:center;font-size:.55rem;color:rgba(255,255,255,.4);padding:2px 7px 4px;font-family:"Google Sans",sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px;margin:0 auto}
 /* Connector lines */
 .smr{position:relative}
 .sym-col:not(.sym-col-r) .smr::after{content:'';position:absolute;right:-5px;top:50%;width:5px;height:1px;background:rgba(212,175,55,.55)}
@@ -1423,6 +1424,7 @@ function renderBracket(grps={}){
       </div>
       ${hasPen?`<div class="sym-extra">PSO: ${sc.pen1}–${sc.pen2}</div>`:hasET?`<div class="sym-extra">ET: ${sc.et1}–${sc.et2}</div>`:''}
       <div class="sym-date">${fT(m.time)}</div>
+      ${m.stadium?`<div class="sym-stadium"><i class='fas fa-landmark'></i> ${m.stadium}</div>`:''}
     </div>`;
   }
   // Column builder — evenly distribute spacers
@@ -1778,28 +1780,28 @@ function renderThirdPlace(grps){
 // ══ VENUES PAGE ══
 const VENUES_DATA=[
   // ── USA ──
-  {key:'MetLife Stadium',   name:'MetLife Stadium',             city:'East Rutherford',state:'NJ',country:'USA',   cap:82500,opened:2010,surface:'Artificial',roof:false,special:['final'],   desc:'Largest NFL stadium, shared home of NY Giants & Jets. Host of the historic 2026 FIFA World Cup Final.'},
-  {key:'AT&T Stadium',      name:'AT&T Stadium',                city:'Arlington',      state:'TX',country:'USA',   cap:80000,opened:2009,surface:'Artificial',roof:true, special:['semi'],    desc:'Dallas Cowboys home with retractable roof and one of the world\'s largest HD video boards.'},
-  {key:'Arrowhead Stadium', name:'GEHA Field at Arrowhead',     city:'Kansas City',    state:'MO',country:'USA',   cap:76416,opened:1972,surface:'Grass',    roof:false,special:[],           desc:'Legendary home of Kansas City Chiefs — one of the loudest and most storied NFL stadiums.'},
-  {key:'NRG Stadium',       name:'NRG Stadium',                 city:'Houston',        state:'TX',country:'USA',   cap:72220,opened:2002,surface:'Artificial',roof:true, special:[],           desc:'First NFL stadium with a retractable roof; hosted multiple Super Bowls and Copa América matches.'},
-  {key:'Mercedes-Benz Stadium',name:'Mercedes-Benz Stadium',   city:'Atlanta',        state:'GA',country:'USA',   cap:71000,opened:2017,surface:'Artificial',roof:true, special:[],           desc:'Iconic pinwheel retractable roof and 360° "Halo" video board; home of Atlanta Falcons & Atlanta United.'},
-  {key:'SoFi Stadium',      name:'SoFi Stadium',                city:'Inglewood',      state:'CA',country:'USA',   cap:70240,opened:2020,surface:'Artificial',roof:true, special:[],           desc:'Most modern NFL stadium; home of LA Rams & Chargers with a translucent ETFE canopy roof.'},
-  {key:'Lumen Field',       name:'Lumen Field',                 city:'Seattle',        state:'WA',country:'USA',   cap:68740,opened:2002,surface:'Artificial',roof:false,special:[],           desc:'Home of Seattle Seahawks & Sounders FC; engineered on 2,200 pilings over tidal marsh soil.'},
-  {key:"Levi's Stadium",    name:"Levi's Stadium",              city:'Santa Clara',    state:'CA',country:'USA',   cap:68500,opened:2014,surface:'Grass',    roof:false,special:[],           desc:'First LEED Gold certified NFL stadium; home of San Francisco 49ers in Silicon Valley.'},
-  {key:'Lincoln Financial Field',name:'Lincoln Financial Field',city:'Philadelphia',   state:'PA',country:'USA',   cap:67594,opened:2003,surface:'Hybrid Grass',roof:false,special:[],        desc:'Home of the Philadelphia Eagles, known as "The Linc"; features distinctive wing-like canopies.'},
+  {key:'New York/New Jersey Stadium',name:'MetLife Stadium',     city:'East Rutherford',state:'NJ',country:'USA',   cap:82500,opened:2010,surface:'Artificial',roof:false,special:['final'],   desc:'Largest NFL stadium, shared home of NY Giants & Jets. Host of the historic 2026 FIFA World Cup Final.'},
+  {key:'Dallas Stadium',    name:'AT&T Stadium',                city:'Arlington',      state:'TX',country:'USA',   cap:80000,opened:2009,surface:'Artificial',roof:true, special:['semi'],    desc:'Dallas Cowboys home with retractable roof and one of the world\'s largest HD video boards.'},
+  {key:'Kansas City Stadium',name:'GEHA Field at Arrowhead',   city:'Kansas City',    state:'MO',country:'USA',   cap:76416,opened:1972,surface:'Grass',    roof:false,special:[],           desc:'Legendary home of Kansas City Chiefs — one of the loudest and most storied NFL stadiums.'},
+  {key:'Houston Stadium',   name:'NRG Stadium',                 city:'Houston',        state:'TX',country:'USA',   cap:72220,opened:2002,surface:'Artificial',roof:true, special:[],           desc:'First NFL stadium with a retractable roof; hosted multiple Super Bowls and Copa América matches.'},
+  {key:'Atlanta Stadium',   name:'Mercedes-Benz Stadium',       city:'Atlanta',        state:'GA',country:'USA',   cap:71000,opened:2017,surface:'Artificial',roof:true, special:[],           desc:'Iconic pinwheel retractable roof and 360° "Halo" video board; home of Atlanta Falcons & Atlanta United.'},
+  {key:'Los Angeles Stadium',name:'SoFi Stadium',               city:'Inglewood',      state:'CA',country:'USA',   cap:70240,opened:2020,surface:'Artificial',roof:true, special:[],           desc:'Most modern NFL stadium; home of LA Rams & Chargers with a translucent ETFE canopy roof.'},
+  {key:'Seattle Stadium',   name:'Lumen Field',                 city:'Seattle',        state:'WA',country:'USA',   cap:68740,opened:2002,surface:'Artificial',roof:false,special:[],           desc:'Home of Seattle Seahawks & Sounders FC; engineered on 2,200 pilings over tidal marsh soil.'},
+  {key:'San Francisco Bay Area Stadium',name:"Levi's Stadium",  city:'Santa Clara',    state:'CA',country:'USA',   cap:68500,opened:2014,surface:'Grass',    roof:false,special:[],           desc:'First LEED Gold certified NFL stadium; home of San Francisco 49ers in Silicon Valley.'},
+  {key:'Philadelphia Stadium',name:'Lincoln Financial Field',   city:'Philadelphia',   state:'PA',country:'USA',   cap:67594,opened:2003,surface:'Hybrid Grass',roof:false,special:[],        desc:'Home of the Philadelphia Eagles, known as "The Linc"; features distinctive wing-like canopies.'},
   {key:'Empower Field',     name:'Empower Field at Mile High',  city:'Denver',         state:'CO',country:'USA',   cap:76125,opened:2001,surface:'Grass',    roof:false,special:[],           desc:'At 5,280 ft altitude, home of Denver Broncos; the original "Mile High" atmosphere is legendary.'},
-  {key:'Hard Rock Stadium', name:'Hard Rock Stadium',           city:'Miami Gardens',  state:'FL',country:'USA',   cap:64767,opened:1987,surface:'Grass',    roof:false,special:['third'],    desc:'Host of six Super Bowls and the 2024 Copa América Final; home of the Miami Dolphins.'},
-  {key:'Gillette Stadium',  name:'Gillette Stadium',            city:'Foxborough',     state:'MA',country:'USA',   cap:64628,opened:2002,surface:'Artificial',roof:false,special:[],           desc:'Privately funded home of New England Patriots & Revolution, inspired by Boston\'s Longfellow Bridge.'},
+  {key:'Miami Stadium',     name:'Hard Rock Stadium',           city:'Miami Gardens',  state:'FL',country:'USA',   cap:64767,opened:1987,surface:'Grass',    roof:false,special:['third'],    desc:'Host of six Super Bowls and the 2024 Copa América Final; home of the Miami Dolphins.'},
+  {key:'Boston Stadium',    name:'Gillette Stadium',            city:'Foxborough',     state:'MA',country:'USA',   cap:64628,opened:2002,surface:'Artificial',roof:false,special:[],           desc:'Privately funded home of New England Patriots & Revolution, inspired by Boston\'s Longfellow Bridge.'},
   {key:'Allegiant Stadium', name:'Allegiant Stadium',           city:'Las Vegas',      state:'NV',country:'USA',   cap:65000,opened:2020,surface:'Grass',    roof:true, special:[],           desc:'Fully enclosed domed stadium and home of the Las Vegas Raiders; features a retractable natural turf field.'},
   {key:'Rose Bowl',         name:'Rose Bowl Stadium',           city:'Pasadena',       state:'CA',country:'USA',   cap:92542,opened:1922,surface:'Grass',    roof:false,special:[],           desc:'Historic 1922 stadium that hosted the iconic 1994 FIFA World Cup Final between Brazil and Italy.'},
   {key:'Q2 Stadium',        name:'Q2 Stadium',                  city:'Austin',         state:'TX',country:'USA',   cap:20738,opened:2021,surface:'Grass',    roof:false,special:[],           desc:'Newest purpose-built soccer stadium in the USA; home of Austin FC in MLS.'},
   // ── Canada ──
-  {key:'BC Place',          name:'BC Place',                    city:'Vancouver',      state:'BC',country:'Canada',cap:54500,opened:1983,surface:'Artificial',roof:true, special:[],           desc:'Originally had the world\'s largest air-supported roof; renovated in 2011 with cable retractable roof.'},
-  {key:'BMO Field',         name:'BMO Field',                   city:'Toronto',        state:'ON',country:'Canada',cap:45736,opened:2007,surface:'Hybrid Grass',roof:false,special:[],        desc:'Soccer-specific stadium built for 2007 FIFA U-20 WC; home of Toronto FC. Expanded to 45k for 2026.'},
+  {key:'BC Place Vancouver',name:'BC Place',                    city:'Vancouver',      state:'BC',country:'Canada',cap:54500,opened:1983,surface:'Artificial',roof:true, special:[],           desc:'Originally had the world\'s largest air-supported roof; renovated in 2011 with cable retractable roof.'},
+  {key:'Toronto Stadium',   name:'BMO Field',                   city:'Toronto',        state:'ON',country:'Canada',cap:45736,opened:2007,surface:'Hybrid Grass',roof:false,special:[],        desc:'Soccer-specific stadium built for 2007 FIFA U-20 WC; home of Toronto FC. Expanded to 45k for 2026.'},
   // ── Mexico ──
-  {key:'Estadio Azteca',    name:'Estadio Azteca',              city:'Mexico City',    state:'',  country:'Mexico',cap:87523,opened:1966,surface:'GrassMaster',roof:false,special:['opening'], desc:'Largest stadium in Latin America; only venue to host two FIFA World Cup finals (1970 & 1986).'},
-  {key:'Estadio BBVA',      name:'Estadio BBVA',                city:'Guadalupe',      state:'Nuevo León',country:'Mexico',cap:53529,opened:2015,surface:'GrassMaster',roof:false,special:[], desc:'"El Gigante de Acero" — first LEED-certified football stadium in North America, with views of Cerro de la Silla.'},
-  {key:'Estadio Akron',     name:'Estadio Akron',               city:'Zapopan',        state:'Jalisco',country:'Mexico',cap:49813,opened:2010,surface:'Grass',   roof:false,special:[],        desc:'Home of C.D. Guadalajara; hosted the 2011 Pan American Games opening & closing ceremonies.'},
+  {key:'Mexico City Stadium',name:'Estadio Azteca',             city:'Mexico City',    state:'',  country:'Mexico',cap:87523,opened:1966,surface:'GrassMaster',roof:false,special:['opening'], desc:'Largest stadium in Latin America; only venue to host two FIFA World Cup finals (1970 & 1986).'},
+  {key:'Monterrey Stadium', name:'Estadio BBVA',                city:'Guadalupe',      state:'Nuevo León',country:'Mexico',cap:53529,opened:2015,surface:'GrassMaster',roof:false,special:[], desc:'"El Gigante de Acero" — first LEED-certified football stadium in North America, with views of Cerro de la Silla.'},
+  {key:'Guadalajara Stadium',name:'Estadio Akron',              city:'Zapopan',        state:'Jalisco',country:'Mexico',cap:49813,opened:2010,surface:'Grass',   roof:false,special:[],        desc:'Home of C.D. Guadalajara; hosted the 2011 Pan American Games opening & closing ceremonies.'},
 ];
 
 const COUNTRY_FLAG={USA:'us',Canada:'ca',Mexico:'mx'};
