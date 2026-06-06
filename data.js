@@ -68,7 +68,7 @@ export const GROUPS = {
 
 export const MATCHES = [
   {id:1,date:"2026-06-12",time:"01:00",t1:"১৫. মেক্সিকো",t2:"৬০. দক্ষিণ আফ্রিকা",grp:"A",md:1,stadium:"Estadio Azteca"},
-  {id:2,date:"2026-06-11",time:"08:00",t1:"২৫. কোরিয়া প্রজাতন্ত্র",t2:"৪১. চেক প্রজাতন্ত্র",grp:"A",md:1,stadium:"Estadio Akron"},
+  {id:2,date:"2026-06-12",time:"08:00",t1:"২৫. কোরিয়া প্রজাতন্ত্র",t2:"৪১. চেক প্রজাতন্ত্র",grp:"A",md:1,stadium:"Estadio Akron"},
   {id:3,date:"2026-06-13",time:"01:00",t1:"৩০. কানাডা",t2:"৬৫. বসনিয়া ও হার্জেগোভিনা",grp:"B",md:1,stadium:"BMO Field"},
   {id:4,date:"2026-06-12",time:"07:00",t1:"১৬. যুক্তরাষ্ট্র",t2:"৪০. প্যারাগুয়ে",grp:"D",md:1,stadium:"SoFi Stadium"},
   {id:5,date:"2026-06-13",time:"07:00",t1:"৮৩. হাইতি",t2:"৪৩. স্কটল্যান্ড",grp:"C",md:1,stadium:"Gillette Stadium"},
