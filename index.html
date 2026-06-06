@@ -357,6 +357,40 @@ body.stadium-light-theme .mc-grp-badge{background:#D4AF37;color:#041020}
 .sq-pos-btn-gk{color:#ffaa00}
 .sq-pos-btn-mf{color:#00aaff}
 
+/* ══ VENUES PAGE ══ */
+.vn-summary{display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:1rem}
+.vn-sc{background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:.5rem .9rem;text-align:center;flex:1;min-width:90px}
+.vn-sc-n{font-family:"Google Sans",sans-serif;font-size:1.4rem;color:var(--neon);line-height:1.1}
+.vn-sc-l{font-size:.58rem;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-top:.15rem}
+.vn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem}
+.vn-card{background:var(--card);border:1px solid var(--border2);border-radius:12px;overflow:hidden;position:relative;transition:transform .2s,box-shadow .2s}
+.vn-card:hover{transform:scale(1.01);box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.vn-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-primary);z-index:1}
+.vn-card-hdr{display:flex;align-items:center;gap:.6rem;padding:.6rem .9rem;background:linear-gradient(135deg,rgba(139,21,56,0.4),rgba(15,15,15,0.95))}
+.vn-flag-wrap{width:36px;height:27px;border-radius:3px;overflow:hidden;flex-shrink:0}
+.vn-flag-wrap img{width:100%;height:100%;object-fit:cover}
+.vn-hdr-info{flex:1;min-width:0}
+.vn-name{font-family:"Google Sans",sans-serif;font-size:.92rem;color:#fff;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vn-location{font-size:.6rem;color:rgba(255,255,255,.6);letter-spacing:.5px;margin-top:.15rem}
+.vn-badges{display:flex;gap:.3rem;flex-shrink:0}
+.vn-badge{font-family:"Google Sans",sans-serif;font-size:.55rem;letter-spacing:.8px;padding:.18rem .5rem;border-radius:20px;font-weight:700;text-transform:uppercase}
+.vn-badge-final{background:var(--gold);color:#050f10}
+.vn-badge-opening{background:var(--neon);color:#050f10}
+.vn-badge-semi{background:rgba(161,240,0,.18);border:1px solid var(--neon);color:var(--neon)}
+.vn-badge-third{background:rgba(212,175,55,.18);border:1px solid var(--gold);color:var(--gold)}
+.vn-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;padding:.65rem .9rem;border-bottom:1px solid var(--border2)}
+.vn-stat{text-align:center}
+.vn-stat-n{font-family:"Google Sans",sans-serif;font-size:.95rem;color:var(--neon);line-height:1.1}
+.vn-stat-l{font-size:.52rem;color:var(--gray);letter-spacing:.6px;text-transform:uppercase}
+.vn-desc{font-size:.73rem;color:var(--text2);line-height:1.5;padding:.65rem .9rem}
+.vn-matches{display:flex;flex-wrap:wrap;gap:.25rem;padding:.4rem .9rem .7rem;border-top:1px solid var(--border2)}
+.vn-match-chip{font-family:"Google Sans",sans-serif;font-size:.55rem;padding:.15rem .45rem;border-radius:3px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--text2);letter-spacing:.3px}
+.vn-match-chip.ko{background:rgba(161,240,0,.08);border-color:rgba(161,240,0,.25);color:var(--neon)}
+.vn-surface{display:flex;align-items:center;gap:.3rem;font-size:.6rem;color:var(--gray);padding:.4rem .9rem 0;border-top:1px solid var(--border2)}
+.vn-surface i{font-size:.7rem}
+.vn-country-usa .vn-card-hdr{background:linear-gradient(135deg,rgba(60,59,110,0.5),rgba(15,15,15,0.95))}
+.vn-country-canada .vn-card-hdr{background:linear-gradient(135deg,rgba(180,20,20,0.45),rgba(15,15,15,0.95))}
+.vn-country-mexico .vn-card-hdr{background:linear-gradient(135deg,rgba(0,104,56,0.45),rgba(15,15,15,0.95))}
 /* Loader */
 .loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;z-index:9999;transition:opacity .4s}
 .loader.gone{opacity:0;pointer-events:none}
@@ -507,6 +541,7 @@ body.stadium-light-theme .mc-grp-badge{background:#D4AF37;color:#041020}
   <a class="nav-btn"     href="#knockout"   onclick="goTab('knockout',this)"><i class="fas fa-medal"></i> Knockout</a>
   <a class="nav-btn"     href="#stats"      onclick="goTab('stats',this)"><i class="fas fa-chart-line"></i> Stats</a>
   <a class="nav-btn"     href="#squads"     onclick="goTab('squads',this)"><i class="fas fa-shirt"></i> Squads</a>
+  <a class="nav-btn"     href="#venues"     onclick="goTab('venues',this)"><i class="fas fa-location-dot"></i> Venues</a>
 </nav>
 
 <main class="main">
@@ -575,6 +610,14 @@ body.stadium-light-theme .mc-grp-badge{background:#D4AF37;color:#041020}
     </div>
     <div class="sq-grid" id="sqGrid"></div>
   </div>
+
+  <!-- VENUES -->
+  <div id="p-venues" class="panel">
+    <div class="sec-title"><i class="fas fa-location-dot"></i> Venues</div>
+    <div class="vn-summary" id="vnSummary"></div>
+    <div class="filters" id="vnFilters"></div>
+    <div class="vn-grid" id="vnGrid"></div>
+  </div>
 </main>
 
 <script type="module">
@@ -633,6 +676,10 @@ const STRINGS={
     sqPlayers:'খেলোয়াড়',sqCaps:'মোট Caps',sqGoals:'মোট গোল',sqAge:'গড় বয়স',
     sqCoach:'কোচ',sqCaptain:'অধিনায়ক',
     sqMostCapped:'সর্বোচ্চ caps',sqTopScorer:'সর্বোচ্চ গোল',sqGoalSuffix:'গোল',
+    secVenues:"<i class='fas fa-location-dot'></i> ভেন্যু",
+    vnAll:'সব',vnUSA:'🇺🇸 USA',vnCanada:'🇨🇦 কানাডা',vnMexico:'🇲🇽 মেক্সিকো',
+    vnCapacity:'ধারণ ক্ষমতা',vnOpened:'উদ্বোধন',vnSurface:'মাঠ',vnMatches:'ম্যাচ',
+    vnGrpMatches:'গ্রুপ পর্যায় ম্যাচ',
   },
   en:{
     loading:'Loading...',hdrSub:'FIFA World Cup 2026 · Al Amin Onik',
@@ -666,6 +713,10 @@ const STRINGS={
     sqPlayers:'Players',sqCaps:'Total Caps',sqGoals:'Total Goals',sqAge:'Avg Age',
     sqCoach:'Coach',sqCaptain:'Captain',
     sqMostCapped:'Most capped',sqTopScorer:'Top scorer',sqGoalSuffix:'goals',
+    secVenues:"<i class='fas fa-location-dot'></i> Venues",
+    vnAll:'All',vnUSA:'🇺🇸 USA',vnCanada:'🇨🇦 Canada',vnMexico:'🇲🇽 Mexico',
+    vnCapacity:'Capacity',vnOpened:'Opened',vnSurface:'Surface',vnMatches:'Matches',
+    vnGrpMatches:'Group Stage',
   }
 };
 window._S=STRINGS.bn;
@@ -770,8 +821,8 @@ const FONT_URLS_PUB={
 
 // Main site nav labels
 const NAV_LABELS={
-  bn:{schedule:"<i class='fas fa-calendar-days'></i> ম্যাচ সূচি",groups:"<i class='fas fa-chart-column'></i> গ্রুপ টেবিল",thirdplace:"<i class='fas fa-award'></i> গ্রুপের ৩য় স্থান তালিকা",knockout:"<i class='fas fa-medal'></i> নকআউট",stats:"<i class='fas fa-chart-line'></i> পরিসংখ্যান",squads:"<i class='fas fa-shirt'></i> দল তালিকা"},
-  en:{schedule:"<i class='fas fa-calendar-days'></i> Schedule",groups:"<i class='fas fa-chart-column'></i> Groups",thirdplace:"<i class='fas fa-award'></i> Best 3rd Places",knockout:"<i class='fas fa-medal'></i> Knockout",stats:"<i class='fas fa-chart-line'></i> Stats",squads:"<i class='fas fa-shirt'></i> Squads"}
+  bn:{schedule:"<i class='fas fa-calendar-days'></i> ম্যাচ সূচি",groups:"<i class='fas fa-chart-column'></i> গ্রুপ টেবিল",thirdplace:"<i class='fas fa-award'></i> গ্রুপের ৩য় স্থান তালিকা",knockout:"<i class='fas fa-medal'></i> নকআউট",stats:"<i class='fas fa-chart-line'></i> পরিসংখ্যান",squads:"<i class='fas fa-shirt'></i> দল তালিকা",venues:"<i class='fas fa-location-dot'></i> ভেন্যু"},
+  en:{schedule:"<i class='fas fa-calendar-days'></i> Schedule",groups:"<i class='fas fa-chart-column'></i> Groups",thirdplace:"<i class='fas fa-award'></i> Best 3rd Places",knockout:"<i class='fas fa-medal'></i> Knockout",stats:"<i class='fas fa-chart-line'></i> Stats",squads:"<i class='fas fa-shirt'></i> Squads",venues:"<i class='fas fa-location-dot'></i> Venues"}
 };
 
 function applyStaticText(){
@@ -787,6 +838,7 @@ function applyStaticText(){
     'p-knockout':S.secKnockout,
     'p-stats':S.secStats,
     'p-squads':S.secSquads,
+    'p-venues':S.secVenues,
   };
   Object.entries(eTitles).forEach(([id,txt])=>{
     const el=document.querySelector(`#${id} .sec-title`);
@@ -890,7 +942,7 @@ function applySettingsPub(s){
     window._S=STRINGS[s.lang]||STRINGS.bn;
     const L=NAV_LABELS[s.lang]||NAV_LABELS.bn;
     const navBtns=document.querySelectorAll('.nav-btn');
-    const keys=['schedule','groups','thirdplace','knockout','stats','squads'];
+    const keys=['schedule','groups','thirdplace','knockout','stats','squads','venues'];
     navBtns.forEach((b,i)=>{if(keys[i]&&L[keys[i]])b.innerHTML=L[keys[i]];});
     applyStaticText();
     if(window._scoresLoaded)renderAll();
@@ -1723,8 +1775,95 @@ function renderThirdPlace(grps){
     </div>`;
 }
 
+// ══ VENUES PAGE ══
+const VENUES_DATA=[
+  // ── USA ──
+  {key:'MetLife Stadium',   name:'MetLife Stadium',             city:'East Rutherford',state:'NJ',country:'USA',   cap:82500,opened:2010,surface:'Artificial',roof:false,special:['final'],   desc:'Largest NFL stadium, shared home of NY Giants & Jets. Host of the historic 2026 FIFA World Cup Final.'},
+  {key:'AT&T Stadium',      name:'AT&T Stadium',                city:'Arlington',      state:'TX',country:'USA',   cap:80000,opened:2009,surface:'Artificial',roof:true, special:['semi'],    desc:'Dallas Cowboys home with retractable roof and one of the world\'s largest HD video boards.'},
+  {key:'Arrowhead Stadium', name:'GEHA Field at Arrowhead',     city:'Kansas City',    state:'MO',country:'USA',   cap:76416,opened:1972,surface:'Grass',    roof:false,special:[],           desc:'Legendary home of Kansas City Chiefs — one of the loudest and most storied NFL stadiums.'},
+  {key:'NRG Stadium',       name:'NRG Stadium',                 city:'Houston',        state:'TX',country:'USA',   cap:72220,opened:2002,surface:'Artificial',roof:true, special:[],           desc:'First NFL stadium with a retractable roof; hosted multiple Super Bowls and Copa América matches.'},
+  {key:'Mercedes-Benz Stadium',name:'Mercedes-Benz Stadium',   city:'Atlanta',        state:'GA',country:'USA',   cap:71000,opened:2017,surface:'Artificial',roof:true, special:[],           desc:'Iconic pinwheel retractable roof and 360° "Halo" video board; home of Atlanta Falcons & Atlanta United.'},
+  {key:'SoFi Stadium',      name:'SoFi Stadium',                city:'Inglewood',      state:'CA',country:'USA',   cap:70240,opened:2020,surface:'Artificial',roof:true, special:[],           desc:'Most modern NFL stadium; home of LA Rams & Chargers with a translucent ETFE canopy roof.'},
+  {key:'Lumen Field',       name:'Lumen Field',                 city:'Seattle',        state:'WA',country:'USA',   cap:68740,opened:2002,surface:'Artificial',roof:false,special:[],           desc:'Home of Seattle Seahawks & Sounders FC; engineered on 2,200 pilings over tidal marsh soil.'},
+  {key:"Levi's Stadium",    name:"Levi's Stadium",              city:'Santa Clara',    state:'CA',country:'USA',   cap:68500,opened:2014,surface:'Grass',    roof:false,special:[],           desc:'First LEED Gold certified NFL stadium; home of San Francisco 49ers in Silicon Valley.'},
+  {key:'Lincoln Financial Field',name:'Lincoln Financial Field',city:'Philadelphia',   state:'PA',country:'USA',   cap:67594,opened:2003,surface:'Hybrid Grass',roof:false,special:[],        desc:'Home of the Philadelphia Eagles, known as "The Linc"; features distinctive wing-like canopies.'},
+  {key:'Empower Field',     name:'Empower Field at Mile High',  city:'Denver',         state:'CO',country:'USA',   cap:76125,opened:2001,surface:'Grass',    roof:false,special:[],           desc:'At 5,280 ft altitude, home of Denver Broncos; the original "Mile High" atmosphere is legendary.'},
+  {key:'Hard Rock Stadium', name:'Hard Rock Stadium',           city:'Miami Gardens',  state:'FL',country:'USA',   cap:64767,opened:1987,surface:'Grass',    roof:false,special:['third'],    desc:'Host of six Super Bowls and the 2024 Copa América Final; home of the Miami Dolphins.'},
+  {key:'Gillette Stadium',  name:'Gillette Stadium',            city:'Foxborough',     state:'MA',country:'USA',   cap:64628,opened:2002,surface:'Artificial',roof:false,special:[],           desc:'Privately funded home of New England Patriots & Revolution, inspired by Boston\'s Longfellow Bridge.'},
+  {key:'Allegiant Stadium', name:'Allegiant Stadium',           city:'Las Vegas',      state:'NV',country:'USA',   cap:65000,opened:2020,surface:'Grass',    roof:true, special:[],           desc:'Fully enclosed domed stadium and home of the Las Vegas Raiders; features a retractable natural turf field.'},
+  {key:'Rose Bowl',         name:'Rose Bowl Stadium',           city:'Pasadena',       state:'CA',country:'USA',   cap:92542,opened:1922,surface:'Grass',    roof:false,special:[],           desc:'Historic 1922 stadium that hosted the iconic 1994 FIFA World Cup Final between Brazil and Italy.'},
+  {key:'Q2 Stadium',        name:'Q2 Stadium',                  city:'Austin',         state:'TX',country:'USA',   cap:20738,opened:2021,surface:'Grass',    roof:false,special:[],           desc:'Newest purpose-built soccer stadium in the USA; home of Austin FC in MLS.'},
+  // ── Canada ──
+  {key:'BC Place',          name:'BC Place',                    city:'Vancouver',      state:'BC',country:'Canada',cap:54500,opened:1983,surface:'Artificial',roof:true, special:[],           desc:'Originally had the world\'s largest air-supported roof; renovated in 2011 with cable retractable roof.'},
+  {key:'BMO Field',         name:'BMO Field',                   city:'Toronto',        state:'ON',country:'Canada',cap:45736,opened:2007,surface:'Hybrid Grass',roof:false,special:[],        desc:'Soccer-specific stadium built for 2007 FIFA U-20 WC; home of Toronto FC. Expanded to 45k for 2026.'},
+  // ── Mexico ──
+  {key:'Estadio Azteca',    name:'Estadio Azteca',              city:'Mexico City',    state:'',  country:'Mexico',cap:87523,opened:1966,surface:'GrassMaster',roof:false,special:['opening'], desc:'Largest stadium in Latin America; only venue to host two FIFA World Cup finals (1970 & 1986).'},
+  {key:'Estadio BBVA',      name:'Estadio BBVA',                city:'Guadalupe',      state:'Nuevo León',country:'Mexico',cap:53529,opened:2015,surface:'GrassMaster',roof:false,special:[], desc:'"El Gigante de Acero" — first LEED-certified football stadium in North America, with views of Cerro de la Silla.'},
+  {key:'Estadio Akron',     name:'Estadio Akron',               city:'Zapopan',        state:'Jalisco',country:'Mexico',cap:49813,opened:2010,surface:'Grass',   roof:false,special:[],        desc:'Home of C.D. Guadalajara; hosted the 2011 Pan American Games opening & closing ceremonies.'},
+];
+
+const COUNTRY_FLAG={USA:'us',Canada:'ca',Mexico:'mx'};
+let _vnFilter='ALL';
+
+function renderVenues(){
+  const S=window._S;
+  const filtered=_vnFilter==='ALL'?VENUES_DATA:VENUES_DATA.filter(v=>v.country===_vnFilter);
+
+  // Summary stats
+  const totalVenues=VENUES_DATA.length;
+  const totalCap=VENUES_DATA.reduce((a,v)=>a+v.cap,0);
+  const countries=[...new Set(VENUES_DATA.map(v=>v.country))].length;
+  const totalGrpMatches=MATCHES.filter(m=>VENUES_DATA.find(v=>v.key===m.stadium)).length;
+  document.getElementById('vnSummary').innerHTML=`
+    <div class="vn-sc"><div class="vn-sc-n">${totalVenues}</div><div class="vn-sc-l">${S.vnMatches?'Venues':'Venues'}</div></div>
+    <div class="vn-sc"><div class="vn-sc-n">${countries}</div><div class="vn-sc-l">Countries</div></div>
+    <div class="vn-sc"><div class="vn-sc-n">${(totalCap/1000).toFixed(0)}K+</div><div class="vn-sc-l">Total Seats</div></div>
+    <div class="vn-sc"><div class="vn-sc-n">104</div><div class="vn-sc-l">Matches</div></div>`;
+
+  // Filter buttons
+  document.getElementById('vnFilters').innerHTML=
+    ['ALL','USA','Canada','Mexico'].map(c=>`<button class="fb ${_vnFilter===c?'on':''}" onclick="window._vnf('${c}')">${c==='ALL'?S.vnAll:(c==='USA'?S.vnUSA:c==='Canada'?S.vnCanada:S.vnMexico)}</button>`).join('');
+
+  // Venue cards
+  document.getElementById('vnGrid').innerHTML=filtered.sort((a,b)=>b.cap-a.cap).map(v=>{
+    const grpCount=MATCHES.filter(m=>m.stadium===v.key).length;
+    const flagCode=COUNTRY_FLAG[v.country]||'un';
+    const loc=v.state?`${v.city}, ${v.state}, ${v.country}`:`${v.city}, ${v.country}`;
+    const roofIcon=v.roof?'<i class="fas fa-house" title="Roof"></i>':'' ;
+    const badges=v.special.map(s=>{
+      if(s==='final')   return`<span class="vn-badge vn-badge-final">🏆 Final</span>`;
+      if(s==='opening') return`<span class="vn-badge vn-badge-opening">⚽ Opening</span>`;
+      if(s==='semi')    return`<span class="vn-badge vn-badge-semi">SF</span>`;
+      if(s==='third')   return`<span class="vn-badge vn-badge-third">3rd Place</span>`;
+      return'';
+    }).join('');
+    const countryClass=`vn-country-${v.country.toLowerCase()}`;
+    const matchNums=MATCHES.filter(m=>m.stadium===v.key).map(m=>`<span class="vn-match-chip">#${m.id}</span>`).join('');
+    return`
+    <div class="vn-card ${countryClass}">
+      <div class="vn-card-hdr">
+        <div class="vn-flag-wrap"><img src="https://flagcdn.com/40x30/${flagCode}.png" loading="lazy" alt="${v.country}"></div>
+        <div class="vn-hdr-info">
+          <div class="vn-name">${v.name}</div>
+          <div class="vn-location">📍 ${loc}</div>
+        </div>
+        <div class="vn-badges">${badges}</div>
+      </div>
+      <div class="vn-stats">
+        <div class="vn-stat"><div class="vn-stat-n">${(v.cap/1000).toFixed(1)}K</div><div class="vn-stat-l">${S.vnCapacity||'Capacity'}</div></div>
+        <div class="vn-stat"><div class="vn-stat-n">${v.opened}</div><div class="vn-stat-l">${S.vnOpened||'Opened'}</div></div>
+        <div class="vn-stat"><div class="vn-stat-n">${grpCount}</div><div class="vn-stat-l">${S.vnGrpMatches||'Group Stage'}</div></div>
+      </div>
+      <div class="vn-surface"><i class="fas fa-seedling"></i> ${v.surface} ${roofIcon?'· <i class="fas fa-house-chimney"></i> Roof':''}</div>
+      <div class="vn-desc">${v.desc}</div>
+      ${matchNums?`<div class="vn-matches">${matchNums}</div>`:''}
+    </div>`;
+  }).join('');
+}
+window._vnf=function(c){_vnFilter=c;renderVenues();};
+
 // Tab
-const VALID_TABS=['schedule','groups','thirdplace','knockout','stats','squads'];
+const VALID_TABS=['schedule','groups','thirdplace','knockout','stats','squads','venues'];
 
 window.goTab=function(id,el){
   if(!VALID_TABS.includes(id))id='schedule';
@@ -1738,6 +1877,7 @@ window.goTab=function(id,el){
   // Update hash without scroll
   history.replaceState(null,'','#'+id);
   if(id==='squads'&&!sqLoaded)loadSquads();
+  if(id==='venues')renderVenues();
 };
 
 // On page load — read hash and activate correct tab
