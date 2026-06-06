@@ -252,6 +252,19 @@ body.stadium-theme .amc-grp{background:#D4AF37;color:#0a1628}
 body.stadium-theme .ko-hd{background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(10,20,50,0.95))}
 body.stadium-theme .ko-rname{background:#D4AF37;color:#0a1628}
 
+/* ══ STADIUM LIGHT THEME ══ */
+body.stadium-light-theme{background:linear-gradient(135deg,#b8d8ee,#daeaf5)}
+body.stadium-light-theme::before{
+  background-image:url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1920&q=80') !important;
+  background-size:cover !important;
+  background-position:center !important;
+  opacity:.10 !important;
+}
+body.stadium-light-theme .amc-hdr{background:linear-gradient(135deg,rgba(26,86,219,0.18),rgba(210,230,248,0.95))}
+body.stadium-light-theme .amc-grp{background:#1a56db;color:#fff}
+body.stadium-light-theme .ko-hd{background:linear-gradient(135deg,rgba(26,86,219,0.18),rgba(210,230,248,0.95))}
+body.stadium-light-theme .ko-rname{background:#1a56db;color:#fff}
+
 /* keep old classes working (used in JS) */
 .s-label{font-size:.72rem;color:var(--text2);display:block;margin-bottom:.5rem;letter-spacing:.5px}
 .settings-actions{display:none}
@@ -279,6 +292,7 @@ body.stadium-theme .ko-rname{background:#D4AF37;color:#0a1628}
 .psw-slate{background:linear-gradient(90deg,#1c2333 50%,#58a6ff 50%)}
 .psw-crimgold{background:linear-gradient(90deg,#0a0a0a 25%,#8B1538 50%,#D4AF37 100%)}
 .psw-stadium{background:linear-gradient(90deg,#0a1628 40%,#1a3a6e 70%,#D4AF37 100%)}
+.psw-stadium-light{background:linear-gradient(90deg,#daeaf5 35%,#c5dff0 65%,#1a56db 100%)}
 
 /* GOAL & CARD MODAL */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem}
@@ -584,6 +598,7 @@ body.stadium-theme .ko-rname{background:#D4AF37;color:#0a1628}
             <div class="st-presets-label">Preset Themes</div>
             <div class="st-preset-grid">
               <button type="button" class="st-preset-btn" onclick="applyPreset('#0a1628','#D4AF37','#ffffff')"><span class="st-preset-swatch psw-stadium"></span>🏟 Stadium Dark</button>
+              <button type="button" class="st-preset-btn" onclick="applyPreset('#daeaf5','#1a56db','#1a2840')"><span class="st-preset-swatch psw-stadium-light"></span>🌤 Stadium Light</button>
               <button type="button" class="st-preset-btn" onclick="applyPreset('#0a0a0a','#D4AF37','#ffffff')"><span class="st-preset-swatch psw-crimgold"></span>Crimson Gold</button>
               <button type="button" class="st-preset-btn" onclick="applyPreset('#050f10','#A1F000','#ffffff')"><span class="st-preset-swatch psw-neon"></span>Neon Green</button>
               <button type="button" class="st-preset-btn" onclick="applyPreset('#0a0a0f','#FFD700','#ffffff')"><span class="st-preset-swatch psw-royalgold"></span>Royal Gold</button>
@@ -1510,6 +1525,17 @@ function applySettings(s, save=false){
     r.setProperty('--border','rgba(212,175,55,0.3)');r.setProperty('--border2','rgba(212,175,55,0.12)');
     r.setProperty('--text2','#e8eaf0');r.setProperty('--gray','rgba(255,255,255,0.5)');
     r.setProperty('--inp','rgba(255,255,255,0.06)');r.setProperty('--shadow','rgba(0,0,0,0.6)');
+  }
+  // Stadium Light theme
+  const isStadiumLight=bg==='#daeaf5';
+  document.body.classList.toggle('stadium-light-theme',isStadiumLight);
+  if(isStadiumLight){
+    r.setProperty('--bg2','#c5dff0');r.setProperty('--bg3','#b0d4ec');
+    r.setProperty('--card','rgba(255,255,255,0.85)');
+    r.setProperty('--neon-glow','rgba(26,86,219,0.2)');r.setProperty('--neon-glow2','rgba(26,86,219,0.08)');
+    r.setProperty('--border','rgba(26,86,219,0.28)');r.setProperty('--border2','rgba(26,86,219,0.12)');
+    r.setProperty('--text2','rgba(26,40,64,0.75)');r.setProperty('--gray','rgba(26,40,64,0.5)');
+    r.setProperty('--inp','rgba(26,86,219,0.07)');r.setProperty('--shadow','rgba(0,0,0,0.18)');
   }
   // Font
   loadFont(s.font);
