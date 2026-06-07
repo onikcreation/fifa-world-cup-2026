@@ -145,6 +145,14 @@ body::after{content:'';position:fixed;inset:0;
 .mc-goals-side.right{text-align:right}
 .goal-item{font-family:"Google Sans",sans-serif;font-size:.78rem;color:rgba(255,255,255,.65);padding:1px 0}
 .goal-item .gmin{color:var(--neon);font-weight:700}
+/* Cards */
+.mc-cards{padding:.3rem 1rem;display:flex;gap:1.5rem;border-top:1px solid rgba(255,255,255,0.05);background:rgba(0,0,0,.15)}
+.mc-cards-side{flex:1;display:flex;gap:3px;align-items:center;flex-wrap:wrap}
+.mc-cards-side.right{justify-content:flex-end}
+.mc-card{display:inline-block;width:8px;height:12px;border-radius:1px;flex-shrink:0}
+.mc-card.yellow{background:#ffc800}
+.mc-card.red{background:#ff3232}
+.mc-card.yr{background:linear-gradient(90deg,#ffc800 50%,#ff3232 50%);border:1px solid #cc5500}
 .goal-item .gpen{color:var(--orange);font-size:.68rem}
 
 @media(max-width:900px){.match-grid{grid-template-columns:repeat(2,1fr)}}
@@ -1046,7 +1054,10 @@ function renderMatches(grp){
     const sc=scores[m.id]||{};
     const done=sc.s1!==undefined&&sc.s1!==null;
     const g1=sc.goals1||[],g2=sc.goals2||[];
+    const c1=sc.cards1||[],c2=sc.cards2||[];
     const hasGoals=g1.length>0||g2.length>0;
+    const hasCards=c1.length>0||c2.length>0;
+    const cardIcons=cards=>cards.map(c=>`<span class="mc-card ${c.type||'yellow'}"></span>`).join('');
     const [yr,mo,dy]=m.date.split('-');
     return`<div class="mc">
       <div class="mc-hdr">
@@ -1072,6 +1083,10 @@ function renderMatches(grp){
       ${hasGoals?`<div class="mc-goals">
         <div class="mc-goals-side">${g1.map(g=>`<div class="goal-item"><i class='fas fa-futbol'></i> ${esc(g.name)} <span class="gmin">${esc(g.min)}'</span>${g.pen?` <span class="gpen">(P)</span>`:''}</div>`).join('')}</div>
         <div class="mc-goals-side right">${g2.map(g=>`<div class="goal-item">${g.pen?`<span class="gpen">(P) </span>`:''}<span class="gmin">${esc(g.min)}'</span> ${esc(g.name)} <i class='fas fa-futbol'></i></div>`).join('')}</div>
+      </div>`:''}
+      ${hasCards?`<div class="mc-cards">
+        <div class="mc-cards-side">${cardIcons(c1)}</div>
+        <div class="mc-cards-side right">${cardIcons(c2)}</div>
       </div>`:''}
       <div class="mc-footer">
         <span class="mc-footer-date"><i class='fas fa-clock'></i> ${fT(m.time)}</span>
