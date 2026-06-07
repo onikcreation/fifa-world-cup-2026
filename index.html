@@ -1576,7 +1576,7 @@ function renderBracket(grps={}){
   html+=symCol(S.r32,rR32,1,2,true);
 
   document.getElementById('symDesktop').innerHTML=html;
-  requestAnimationFrame(drawBracketLines);
+  requestAnimationFrame(()=>requestAnimationFrame(drawBracketLines));
 
   // Mobile
   const mRounds=[
