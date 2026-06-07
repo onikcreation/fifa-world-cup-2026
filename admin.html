@@ -1440,8 +1440,16 @@ window.saveGoalsAndCards=async function(){
   }
   try{
     const ex=dbSc[modalMatchId]||{};
+    const scoreExtra={};
+    if(!modalIsKO){
+      const domS1=document.getElementById('s1_'+modalMatchId);
+      const domS2=document.getElementById('s2_'+modalMatchId);
+      if(domS1?.value!=='')scoreExtra.s1=Number(domS1.value);
+      if(domS2?.value!=='')scoreExtra.s2=Number(domS2.value);
+    }
     await set(ref(db,'scores/'+modalMatchId),{
       ...ex,
+      ...scoreExtra,
       goals1:collectGoals('t1'),goals2:collectGoals('t2'),
       cards1:collectCards('t1'),cards2:collectCards('t2'),
     });
