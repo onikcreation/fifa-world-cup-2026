@@ -1477,6 +1477,8 @@ function renderBracket(grps={}){
     h+=`</div>`;return h;
   }
 
+  const R32=KO_ROUNDS[0].matches;
+  const R16=KO_ROUNDS[1].matches;
   const QF=KO_ROUNDS[2].matches;
   const SF=KO_ROUNDS[3].matches;
   const THIRD=KO_ROUNDS[4].matches[0];
