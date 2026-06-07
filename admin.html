@@ -46,6 +46,7 @@ body::after{content:'';position:fixed;inset:0;
 .login-title{font-family:"Google Sans",sans-serif;font-size:1.8rem;letter-spacing:3px;color:var(--neon);margin-bottom:.3rem}
 .login-sub{font-size:.72rem;color:var(--gray);letter-spacing:1px;margin-bottom:1.5rem}
 .pw-in{width:100%;padding:.85rem;background:var(--inp);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:1rem;letter-spacing:4px;text-align:center;outline:none;transition:border .2s;margin-bottom:.8rem}
+.pw-in.email-in{letter-spacing:normal;margin-bottom:.5rem}
 .pw-in:focus{border-color:var(--neon)}
 .login-btn{width:100%;padding:.85rem;background:linear-gradient(135deg,var(--blue),#002860);border:1px solid var(--border);border-radius:8px;color:var(--neon);font-family:"Google Sans",sans-serif;font-size:1.1rem;letter-spacing:2px;cursor:pointer}
 .login-err{color:var(--red);font-size:.75rem;margin-top:.6rem;display:none}
@@ -469,9 +470,10 @@ body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
     <div class="login-ic"><i class="fas fa-lock fa-2x"></i></div>
     <div class="login-title">ADMIN LOGIN</div>
     <div class="login-sub">FIFA WORLD CUP 2026 · Al Amin Onik</div>
+    <input class="pw-in email-in" type="email" id="emailIn" placeholder="Email" onkeydown="if(event.key==='Enter')window.tryLogin()">
     <input class="pw-in" type="password" id="pwIn" placeholder="••••••••" onkeydown="if(event.key==='Enter')window.tryLogin()">
-    <button class="login-btn" onclick="window.tryLogin()">LOGIN →</button>
-    <div class="login-err" id="loginErr"><i class="fas fa-circle-xmark"></i> ভুল Password!</div>
+    <button class="login-btn" id="loginBtn" onclick="window.tryLogin()">LOGIN →</button>
+    <div class="login-err" id="loginErr"><i class="fas fa-circle-xmark"></i> ভুল Email বা Password!</div>
   </div>
 </div>
 
@@ -720,7 +722,8 @@ body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getDatabase,ref,set,update,onValue,remove}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import{FIREBASE_CONFIG,ADMIN_PASSWORD}from'./firebase-config.js';
+import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{FIREBASE_CONFIG}from'./firebase-config.js';
 import{TEAMS,GROUPS,MATCHES,KO_ROUNDS}from'./data.js';
 
 const KO_NUM_MAP={
@@ -737,6 +740,7 @@ function koNum(m){return m.num||KO_NUM_MAP[m.id]||'';}
 
 const app=initializeApp(FIREBASE_CONFIG);
 const db=getDatabase(app);
+const auth=getAuth(app);
 
 const DAYS=['রবি','সোম','মঙ্গল','বুধ','বৃহঃ','শুক্র','শনি'];
 const MON=['জানু','ফেব','মার্চ','এপ্রি','মে','জুন','জুলাই','আগ','সেপ্ট','অক্টো','নভে','ডিসে'];
@@ -784,23 +788,29 @@ const pendingChanges=new Set();
 
 // ── AUTH ──
 window.tryLogin=function(){
-  if(document.getElementById('pwIn').value===ADMIN_PASSWORD){
+  const email=document.getElementById('emailIn').value.trim();
+  const pw=document.getElementById('pwIn').value;
+  const btn=document.getElementById('loginBtn');
+  btn.disabled=true;btn.textContent='...';
+  signInWithEmailAndPassword(auth,email,pw)
+    .catch(()=>{
+      const e=document.getElementById('loginErr');e.classList.add('show');
+      document.getElementById('pwIn').value='';
+      setTimeout(()=>e.classList.remove('show'),3000);
+    })
+    .finally(()=>{btn.disabled=false;btn.textContent='LOGIN →';});
+};
+window.doLogout=function(){signOut(auth);};
+onAuthStateChanged(auth,user=>{
+  if(user){
     document.getElementById('loginWrap').style.display='none';
     document.getElementById('adminWrap').classList.add('show');
-    sessionStorage.setItem('fa','1');
     initAdmin();
   }else{
-    const e=document.getElementById('loginErr');e.classList.add('show');
-    document.getElementById('pwIn').value='';
-    setTimeout(()=>e.classList.remove('show'),3000);
+    document.getElementById('loginWrap').style.display='flex';
+    document.getElementById('adminWrap').classList.remove('show');
   }
-};
-window.doLogout=function(){sessionStorage.removeItem('fa');location.reload();};
-if(sessionStorage.getItem('fa')==='1'){
-  document.getElementById('loginWrap').style.display='none';
-  document.getElementById('adminWrap').classList.add('show');
-  initAdmin();
-}
+});
 
 function initAdmin(){
   loadSettings();
