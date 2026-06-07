@@ -1978,6 +1978,7 @@ window.goTab=function(id,el){
   history.replaceState(null,'','#'+id);
   if(id==='squads'&&!sqLoaded)loadSquads();
   if(id==='venues')renderVenues();
+  if(id==='knockout')requestAnimationFrame(()=>requestAnimationFrame(drawBracketLines));
 };
 
 // On page load — read hash and activate correct tab
