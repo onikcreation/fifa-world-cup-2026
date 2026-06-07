@@ -757,6 +757,7 @@ let activeGrp='ALL';
 window._activeGrp='ALL';
 let modalMatchId=null;
 let modalIsKO=false;
+let modalCapturedS1=undefined,modalCapturedS2=undefined;
 let adminSquads={};
 let modalP1=[]; // current modal team1 players (global for addGoal/addCard)
 let modalP2=[]; // current modal team2 players
@@ -1261,6 +1262,12 @@ window.switchModalTab=function(tab,btn){
 
 window.openGoalModal=function(id,isKO){
   modalMatchId=id;modalIsKO=isKO;
+  if(!isKO){
+    const _d1=document.getElementById('s1_'+id);
+    const _d2=document.getElementById('s2_'+id);
+    modalCapturedS1=(_d1&&_d1.value!=='')?Number(_d1.value):undefined;
+    modalCapturedS2=(_d2&&_d2.value!=='')?Number(_d2.value):undefined;
+  }else{modalCapturedS1=undefined;modalCapturedS2=undefined;}
   const sc=dbSc[id]||{};
   let t1,t2;
   if(isKO){
@@ -1442,10 +1449,8 @@ window.saveGoalsAndCards=async function(){
     const ex=dbSc[modalMatchId]||{};
     const scoreExtra={};
     if(!modalIsKO){
-      const domS1=document.getElementById('s1_'+modalMatchId);
-      const domS2=document.getElementById('s2_'+modalMatchId);
-      if(domS1&&domS1.value!=='')scoreExtra.s1=Number(domS1.value);
-      if(domS2&&domS2.value!=='')scoreExtra.s2=Number(domS2.value);
+      if(modalCapturedS1!==undefined)scoreExtra.s1=modalCapturedS1;
+      if(modalCapturedS2!==undefined)scoreExtra.s2=modalCapturedS2;
     }
     await set(ref(db,'scores/'+modalMatchId),{
       ...ex,
