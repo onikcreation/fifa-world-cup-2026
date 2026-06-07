@@ -1444,8 +1444,8 @@ window.saveGoalsAndCards=async function(){
     if(!modalIsKO){
       const domS1=document.getElementById('s1_'+modalMatchId);
       const domS2=document.getElementById('s2_'+modalMatchId);
-      if(domS1?.value!=='')scoreExtra.s1=Number(domS1.value);
-      if(domS2?.value!=='')scoreExtra.s2=Number(domS2.value);
+      if(domS1&&domS1.value!=='')scoreExtra.s1=Number(domS1.value);
+      if(domS2&&domS2.value!=='')scoreExtra.s2=Number(domS2.value);
     }
     await set(ref(db,'scores/'+modalMatchId),{
       ...ex,
