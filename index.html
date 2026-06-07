@@ -1271,6 +1271,16 @@ function normalizeWinKey(raw){
   // "R32-1"→"r32_1", "R16-2"→"r16_2", "QF-1"→"qf_1"
   return raw.trim().toLowerCase().replace(/\s+/g,'').replace(/-/g,'_');
 }
+const KO_ID_NUM=(()=>{const m={};KO_ROUNDS.forEach(r=>r.matches.forEach(mm=>m[mm.id]=mm.num));return m;})();
+function friendlySlot(slot){
+  if(!slot)return'';
+  if(TEAMS[slot])return displayName(slot);
+  const wm=slot.match(/^W\s+(.+)$/i);
+  if(wm){const id=normalizeWinKey(wm[1]);const n=KO_ID_NUM[id];return n?`W #${n}`:slot;}
+  const lm=slot.match(/^L\s+(.+)$/i);
+  if(lm){const id=normalizeWinKey(lm[1]);const n=KO_ID_NUM[id];return n?`L #${n}`:slot;}
+  return slot;
+}
 
 function buildWinnerMap(grps,b3map){
   const winners={};
@@ -1369,10 +1379,10 @@ function buildMatch(m,grps={},b3map={},winnerMap={}){
 
   return`<div class="bk-match">
     <div class="bk-team ${s1win?'bk-win':''}" style="${auto1?'opacity:.82':''}">
-      ${f1}<span class="bk-tname">${displayName(t1)}</span><span class="bk-sc">${done?sc.s1:''}</span>
+      ${f1}<span class="bk-tname">${isTBDish(t1)?friendlySlot(t1):displayName(t1)}</span><span class="bk-sc">${done?sc.s1:''}</span>
     </div>
     <div class="bk-team ${s2win?'bk-win':''}" style="${auto2?'opacity:.82':''}">
-      ${f2}<span class="bk-tname">${displayName(t2)}</span><span class="bk-sc">${done?sc.s2:''}</span>
+      ${f2}<span class="bk-tname">${isTBDish(t2)?friendlySlot(t2):displayName(t2)}</span><span class="bk-sc">${done?sc.s2:''}</span>
     </div>
     ${pen?`<div class="bk-date" style="color:var(--orange)">PSO: ${sc.pen1}–${sc.pen2}</div>`:
       et?`<div class="bk-date" style="color:var(--gold)">ET: ${sc.et1}–${sc.et2}</div>`:''}
@@ -1426,11 +1436,11 @@ function renderBracket(grps={}){
         <span style="font-size:.55rem;color:rgba(255,255,255,.45)">${!compact&&m.date?fD(m.date):''}</span>
       </div>
       <div class="sym-team ${w&&w===t1?'win':''}" style="${auto1?'opacity:.82':''}">
-        ${symFlag(t1)}<span class="sym-tname ${isTBDish(t1)?'tbd':''}">${displayName(t1)}</span>
+        ${symFlag(t1)}<span class="sym-tname ${isTBDish(t1)?'tbd':''}">${isTBDish(t1)?friendlySlot(t1):displayName(t1)}</span>
         <span class="sym-score">${s1}</span>
       </div>
       <div class="sym-team ${w&&w===t2?'win':''}" style="${auto2?'opacity:.82':''}">
-        ${symFlag(t2)}<span class="sym-tname ${isTBDish(t2)?'tbd':''}">${displayName(t2)}</span>
+        ${symFlag(t2)}<span class="sym-tname ${isTBDish(t2)?'tbd':''}">${isTBDish(t2)?friendlySlot(t2):displayName(t2)}</span>
         <span class="sym-score">${s2}</span>
       </div>
       ${hasPen?`<div class="sym-extra">PSO: ${sc.pen1}–${sc.pen2}</div>`:hasET?`<div class="sym-extra">ET: ${sc.et1}–${sc.et2}</div>`:''}
