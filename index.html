@@ -1280,12 +1280,15 @@ function friendlySlot(slot){
   if(lm){const id=normalizeWinKey(lm[1]);const n=KO_ID_NUM[id];return n?`L #${n}`:slot;}
   return slot;
 }
-function drawBracketLines(){
+function drawBracketLines(_r){
   const container=document.getElementById('symDesktop');
   if(!container)return;
-  container.querySelector('.bk-svg-el')?.remove();
   const cr=container.getBoundingClientRect();
-  if(!cr.width||!cr.height)return;
+  if(!cr.width||!cr.height){
+    if((_r||0)<12)setTimeout(()=>drawBracketLines((_r||0)+1),80);
+    return;
+  }
+  container.querySelector('.bk-svg-el')?.remove();
   const NS='http://www.w3.org/2000/svg';
   const svg=document.createElementNS(NS,'svg');
   svg.classList.add('bk-svg-el');
@@ -1978,7 +1981,7 @@ window.goTab=function(id,el){
   history.replaceState(null,'','#'+id);
   if(id==='squads'&&!sqLoaded)loadSquads();
   if(id==='venues')renderVenues();
-  if(id==='knockout')requestAnimationFrame(()=>requestAnimationFrame(drawBracketLines));
+  if(id==='knockout')setTimeout(drawBracketLines,0);
 };
 
 // On page load — read hash and activate correct tab
@@ -1994,6 +1997,7 @@ window.goTab=function(id,el){
       document.getElementById('p-'+id)?.classList.add('on');
       link.classList.add('on');
       if(id==='squads'&&!sqLoaded)loadSquads();
+      if(id==='knockout')setTimeout(drawBracketLines,0);
     },200);
   }
 })();
