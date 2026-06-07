@@ -2180,7 +2180,7 @@ function renderSquad(){
         </div>
         <div class="sq-header-right">
           ${rank?`<div class="sq-stat-box"><div class="sq-stat-n">#${rank}</div><div class="sq-stat-l">FIFA RANK</div></div>`:''}
-          ${t?.pts?`<div class="sq-stat-box"><div class="sq-stat-n" style="font-size:1.1rem">${t.pts.toFixed(0)}</div><div class="sq-stat-l">FIFA PTS</div></div>`:''}
+          ${t?.pts?`<div class="sq-stat-box"><div class="sq-stat-n" style="font-size:1.1rem">${t.pts.toFixed(2)}</div><div class="sq-stat-l">FIFA PTS</div></div>`:''}
           <div class="sq-stat-box"><div class="sq-stat-n">${players.length}</div><div class="sq-stat-l">${SQ.sqPlayers}</div></div>
           <div class="sq-stat-box"><div class="sq-stat-n">${avgAge}</div><div class="sq-stat-l">${SQ.sqAge}</div></div>
           ${data.coach?`<div class="sq-extra-box"><div class="sq-extra-label">${SQ.sqCoach||'COACH'}</div><div class="sq-extra-row"><i class='fas fa-user-tie'></i><span>${esc(data.coach)}</span></div></div>`:''}
