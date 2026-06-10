@@ -399,7 +399,10 @@ body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
 .card-type-btn.on.yellow{background:rgba(255,200,0,.2);border-color:#ffc800;box-shadow:0 0 7px rgba(255,200,0,.35)}
 .card-type-btn.on.red{background:rgba(255,50,50,.2);border-color:#ff5050;box-shadow:0 0 7px rgba(255,50,50,.35)}
 .card-type-btn.on.yr{background:rgba(255,100,0,.2);border-color:#ff8c00;box-shadow:0 0 7px rgba(255,100,0,.35)}
-.gn-in,.cn-in{flex:1;min-width:80px;background:#071517;border:1px solid var(--border2);border-radius:5px;color:var(--text);font-size:.76rem;padding:.32rem .45rem;outline:none;transition:border .2s;cursor:pointer}
+.gn-wrap{flex:0 0 100%;display:flex;flex-direction:column;gap:.2rem;min-width:0;margin-top:.2rem}
+.gn-sq{width:100%;background:var(--inp);border:1px solid var(--border2);border-radius:5px;color:var(--text);padding:.28rem .45rem;font-size:.76rem;outline:none;transition:border .2s;cursor:text}
+.gn-sq:focus{border-color:var(--neon)}
+.gn-in,.cn-in{width:100%;box-sizing:border-box;background:#071517;border:1px solid var(--border2);border-radius:5px;color:var(--text);font-size:.76rem;padding:.32rem .45rem;outline:none;transition:border .2s;cursor:text}
 .gn-in:focus,.cn-in:focus{border-color:var(--neon)}
 .gn-in option,.cn-in option{background:#071517;color:#fff}
 .cm-in{width:52px;background:var(--inp);border:1px solid var(--border2);border-radius:5px;padding:.3rem .4rem;color:var(--text);font-size:.8rem;text-align:center;outline:none}
@@ -491,9 +494,9 @@ body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
   /* Row 1: type-btns + min + × | Row 2: player selector full width */
   .card-entry{flex-wrap:wrap;row-gap:.35rem;padding:.45rem .5rem}
   .card-entry .cn-in{flex:0 0 100%!important;width:100%!important;min-width:0}
-  /* Row 1: min + P + × | Row 2: player selector full width */
+  /* Row 1: min + P + × | Row 2: gn-wrap full width */
   .goal-entry{flex-wrap:wrap;row-gap:.3rem}
-  .goal-entry .gn-in{flex:0 0 100%!important;width:100%!important;min-width:0}
+  .goal-entry .gn-wrap{margin-top:.1rem}
 }
 </style>
 </head>
@@ -1344,15 +1347,18 @@ window.openGoalModal=function(id,isKO){
     const players=side==='t1'?p1:p2;
     const hasSquad=players.length>0;
     const listId=`gnlist_${side}_${i}`;
-    const dlHTML=hasSquad
-      ?`<datalist id="${listId}">${players.map(p=>`<option value="${esc(p.name)}">${p.no}. ${p.pos} · ${esc(p.club)}</option>`).join('')}</datalist>`
+    const squadRow=hasSquad
+      ?`<input class="gn-sq" list="${listId}" placeholder="স্কোয়াড থেকে বাছাই করুন..." id="gnsel_${side}_${i}" oninput="const t=document.getElementById('gn_${side}_${i}');if(this.value)t.value=this.value">
+        <datalist id="${listId}">${players.map(p=>`<option value="${esc(p.name)}">${p.no}. ${p.pos} · ${esc(p.club)}</option>`).join('')}</datalist>`
       :'';
     return`<div class="goal-entry" id="ge_${side}_${i}">
       <input class="gm-in" type="number" min="1" max="130" placeholder="মি." value="${min}" id="gm_${side}_${i}">
       <input type="checkbox" class="pen-cb" id="gp_${side}_${i}" ${pen?'checked':''}><label class="pen-lbl" for="gp_${side}_${i}">P</label>
       <button class="rm-btn" onclick="rmGoal('${side}',${i})"><i class='fas fa-xmark'></i></button>
-      <input class="gn-in" ${hasSquad?`list="${listId}"`:''}placeholder="গোলদাতার নাম" value="${esc(name)}" id="gn_${side}_${i}">
-      ${dlHTML}
+      <div class="gn-wrap">
+        ${squadRow}
+        <input class="gn-in" placeholder="গোলদাতার নাম লিখুন" value="${esc(name)}" id="gn_${side}_${i}">
+      </div>
     </div>`;
   }
 
@@ -1389,8 +1395,11 @@ window.openGoalModal=function(id,isKO){
       <input class="cm-in" type="number" min="1" max="130" placeholder="মি." value="${min}" id="cm_${side}_${i}">
       <input type="hidden" id="ct_${side}_${i}" value="${type}">
       <button class="rm-btn" onclick="rmCard('${side}',${i})"><i class='fas fa-xmark'></i></button>
-      <input class="cn-in" ${hasSquad?`list="cnlist_${side}_${i}"`:''}placeholder="খেলোয়াড়ের নাম" value="${esc(name)}" id="cn_${side}_${i}">
-      ${hasSquad?`<datalist id="cnlist_${side}_${i}">${players.map(p=>`<option value="${esc(p.name)}">${p.no}. ${p.pos} · ${esc(p.club)}</option>`).join('')}</datalist>`:''}
+      <div class="gn-wrap">
+        ${hasSquad?`<input class="gn-sq" list="cnlist_${side}_${i}" placeholder="স্কোয়াড থেকে বাছাই করুন..." id="cnsel_${side}_${i}" oninput="const t=document.getElementById('cn_${side}_${i}');if(this.value)t.value=this.value">
+        <datalist id="cnlist_${side}_${i}">${players.map(p=>`<option value="${esc(p.name)}">${p.no}. ${p.pos} · ${esc(p.club)}</option>`).join('')}</datalist>`:''}
+        <input class="cn-in" placeholder="খেলোয়াড়ের নাম লিখুন" value="${esc(name)}" id="cn_${side}_${i}">
+      </div>
     </div>`;
   }
   function cardSection(side,teamName,cards){
@@ -1436,16 +1445,19 @@ window.addGoal=function(side){
   const players=side==='t1'?modalP1:modalP2;
   const hasSquad=players.length>0;
   const listId=`gnlist_${side}_${i}`;
-  const dlHTML=hasSquad
-    ?`<datalist id="${listId}">${players.map(p=>`<option value="${esc(p.name)}">${p.no}. ${p.pos} · ${esc(p.club)}</option>`).join('')}</datalist>`
+  const squadRow=hasSquad
+    ?`<input class="gn-sq" list="${listId}" placeholder="স্কোয়াড থেকে বাছাই করুন..." id="gnsel_${side}_${i}" oninput="const t=document.getElementById('gn_${side}_${i}');if(this.value)t.value=this.value">
+      <datalist id="${listId}">${players.map(p=>`<option value="${esc(p.name)}">${p.no}. ${p.pos} · ${esc(p.club)}</option>`).join('')}</datalist>`
     :'';
   const d=document.createElement('div');
   d.innerHTML=`<div class="goal-entry" id="ge_${side}_${i}">
     <input class="gm-in" type="number" min="1" max="130" placeholder="মি." id="gm_${side}_${i}">
     <input type="checkbox" class="pen-cb" id="gp_${side}_${i}"><label class="pen-lbl" for="gp_${side}_${i}">P</label>
     <button class="rm-btn" onclick="rmGoal('${side}',${i})"><i class='fas fa-xmark'></i></button>
-    <input class="gn-in" ${hasSquad?`list="${listId}"`:''}placeholder="গোলদাতার নাম" id="gn_${side}_${i}">
-    ${dlHTML}
+    <div class="gn-wrap">
+      ${squadRow}
+      <input class="gn-in" placeholder="গোলদাতার নাম লিখুন" id="gn_${side}_${i}">
+    </div>
   </div>`;
   c.appendChild(d.firstElementChild);
 };
@@ -1470,8 +1482,11 @@ window.addCard=function(side){
     <input class="cm-in" type="number" min="1" max="130" placeholder="মি." id="cm_${side}_${i}">
     <input type="hidden" id="ct_${side}_${i}" value="yellow">
     <button class="rm-btn" onclick="rmCard('${side}',${i})"><i class='fas fa-xmark'></i></button>
-    <input class="cn-in" ${hasSquad?`list="${listId}"`:''}placeholder="খেলোয়াড়ের নাম" id="cn_${side}_${i}">
-    ${dlHTML}
+    <div class="gn-wrap">
+      ${hasSquad?`<input class="gn-sq" list="${listId}" placeholder="স্কোয়াড থেকে বাছাই করুন..." id="cnsel_${side}_${i}" oninput="const t=document.getElementById('cn_${side}_${i}');if(this.value)t.value=this.value">
+      <datalist id="${listId}">${players.map(p=>`<option value="${esc(p.name)}">${p.no}. ${p.pos} · ${esc(p.club)}</option>`).join('')}</datalist>`:''}
+      <input class="cn-in" placeholder="খেলোয়াড়ের নাম লিখুন" id="cn_${side}_${i}">
+    </div>
   </div>`;
   c.appendChild(d.firstElementChild);
 };
