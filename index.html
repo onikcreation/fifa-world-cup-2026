@@ -575,6 +575,30 @@ body.stadium-light-theme .mc-grp-badge{background:#D4AF37;color:#041020}
 @media(max-width:500px){
   .rank-table th:nth-child(4),.rank-table td:nth-child(4){display:none}
 }
+
+/* ══ MOBILE FIXES ══ */
+/* Match history 2-col → 1-col on mobile */
+.mh-cols{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.mh-col-right{border-left:1px solid var(--border2)}
+@media(max-width:600px){
+  .mh-cols{grid-template-columns:1fr}
+  .mh-col-right{border-left:none;border-top:1px solid var(--border2)}
+}
+/* Group grid — prevent overflow on narrow screens */
+@media(max-width:420px){
+  .grp-grid{grid-template-columns:1fr}
+}
+/* Venues grid — single col on mobile */
+@media(max-width:420px){
+  .vn-grid{grid-template-columns:1fr}
+}
+/* vn-badge-third gold fix */
+.vn-badge-third{border-color:var(--neon);color:var(--neon)}
+/* mc-footer-stadium — allow wrap on very small screens */
+@media(max-width:380px){
+  .mc-footer{flex-wrap:wrap;gap:.2rem}
+  .mc-footer-stadium{max-width:100%}
+}
 </style>
 </head>
 <body>
@@ -1921,12 +1945,12 @@ function renderStats(grps){
     matchHistoryHTML=`
       <div class="stats-card" style="grid-column:1/-1">
         <div class="stats-card-title"><i class='fas fa-list'></i> ${S.matchHistory} · ${tNameRanked(statsTeam)}</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+        <div class="mh-cols">
           <div>
             <div class="mh-header"><i class='fas fa-check'></i> ${S.playedH} (${played.length})</div>
             ${played.length?played.map(r=>matchRow(r,true)).join(''):`<div class="stats-empty">${S.noPlayedYet}</div>`}
           </div>
-          <div style="border-left:1px solid var(--border2)">
+          <div class="mh-col-right">
             <div class="mh-header"><i class='fas fa-clock'></i> ${S.upcomingH} (${upcoming.length})</div>
             ${upcoming.length?upcoming.map(r=>matchRow(r,false)).join(''):`<div class="stats-empty">${S.allDone}</div>`}
           </div>
