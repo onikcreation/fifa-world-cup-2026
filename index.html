@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FIFA World Cup 2026 | Al Amin Onik</title>
+<title>FIFA World Cup 2026 | Al Amin Anik</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='14' fill='%23050f10'/><polygon points='50,4 52,10 58,10 53,14 55,20 50,16 45,20 47,14 42,10 48,10' fill='%23A1F000'/><path d='M27,24h46l-4,34a23,23 0 0,1-38,0z' stroke='%23A1F000' stroke-width='4' fill='%23A1F00018' stroke-linejoin='round'/><path d='M27,30q-13,0-13,14q0,14 13,10' stroke='%23A1F000' stroke-width='4' fill='none' stroke-linecap='round'/><path d='M73,30q13,0 13,14q0,14-13,10' stroke='%23A1F000' stroke-width='4' fill='none' stroke-linecap='round'/><line x1='50' y1='58' x2='50' y2='70' stroke='%23A1F000' stroke-width='5' stroke-linecap='round'/><rect x='34' y='70' width='32' height='8' rx='4' fill='%23A1F000'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
@@ -101,6 +101,10 @@ body::after{content:'';position:fixed;inset:0;
 .filters{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1rem}
 .fb{font-size:.72rem;letter-spacing:.5px;padding:.3rem .75rem;background:rgba(255,255,255,0.03);border:1px solid var(--border2);border-radius:20px;color:var(--gray);cursor:pointer;transition:all .2s;white-space:nowrap}
 .fb:hover,.fb.on{background:rgba(212,175,55,0.12);border-color:var(--neon);color:var(--neon);box-shadow:0 0 10px rgba(212,175,55,0.15)}
+@media(max-width:600px){
+  .filters{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:.3rem}
+  .filters::-webkit-scrollbar{display:none}
+}
 
 /* ══ MATCH CARD — CRIMSON GOLD ══ */
 .match-sections{display:flex;flex-direction:column;gap:1.2rem}
@@ -431,6 +435,10 @@ body.stadium-light-theme .mc-grp-badge{background:#D4AF37;color:#041020}
 .sq-pos-row{display:flex;align-items:center;gap:.5rem;padding:.5rem .8rem;background:rgba(139,21,56,0.04);border:1px solid var(--border2);border-radius:8px;margin-bottom:.8rem}
 .sq-pos-row::before{content:'포지션';font-family:"Google Sans",sans-serif;font-size:.68rem;letter-spacing:1px;color:var(--gray);white-space:nowrap;display:none}
 .sq-team-scroll{display:flex;gap:.35rem;flex-wrap:wrap;padding-bottom:.3rem}
+@media(max-width:600px){
+  .sq-team-scroll{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .sq-team-scroll::-webkit-scrollbar{display:none}
+}
 .sq-team-btn{display:inline-flex;align-items:center;gap:.35rem;font-family:"Google Sans",sans-serif;font-size:.78rem;letter-spacing:1px;padding:.3rem .7rem;background:var(--neon-glow2);border:1px solid var(--border2);border-radius:20px;color:var(--gray);cursor:pointer;white-space:nowrap;transition:all .2s}
 .sq-team-btn:hover{border-color:var(--border);color:var(--text)}
 .sq-team-btn.on{background:rgba(161,240,0,.15);border-color:var(--neon);color:var(--neon);box-shadow:0 0 8px var(--neon-glow)}
@@ -540,7 +548,7 @@ body.stadium-light-theme .mc-grp-badge{background:#D4AF37;color:#041020}
     <div class="hdr-logo"><i class="fas fa-trophy"></i></div>
     <div class="hdr-text">
       <div class="hdr-title">FIFA WORLD CUP 2026</div>
-      <div class="hdr-sub">২০২৬ ফিফা বিশ্বকাপ · Al Amin Onik</div>
+      <div class="hdr-sub">By: Al Amin Anik</div>
     </div>
     <div class="hdr-right">
       <button type="button" class="icon-btn icon-btn-sm" onclick="window._reload&&window._reload()" title="রিফ্রেশ"><i class="fas fa-rotate-right"></i></button>
@@ -611,6 +619,7 @@ body.stadium-light-theme .mc-grp-badge{background:#D4AF37;color:#041020}
   <div id="p-squads" class="panel">
     <div class="sec-title"><i class="fas fa-shirt"></i> Squads</div>
     <div class="sq-controls">
+      <div class="filters" id="sqGrpFilters"></div>
       <div class="sq-team-scroll" id="sqTeamBtns"></div>
     </div>
     <div id="sqHeader"></div>
@@ -660,7 +669,7 @@ const db=getDatabase(app);
 // ══ UI TEXT (bn/en) ══
 const STRINGS={
   bn:{
-    loading:'লোড হচ্ছে...',hdrSub:'২০২৬ ফিফা বিশ্বকাপ · Al Amin Onik',
+    loading:'লোড হচ্ছে...',hdrSub:'By: Al Amin Anik',
     secSchedule:'ম্যাচ সূচি',secGroups:'গ্রুপ পর্যায় টেবিল',
     secThirdplace:"<i class='fas fa-award'></i> গ্রুপের ৩য় স্থান তালিকা",
     secKnockout:"<i class='fas fa-medal'></i> নকআউট ব্র্যাকেট",
@@ -697,7 +706,7 @@ const STRINGS={
     vnGrpMatches:'গ্রুপ পর্যায় ম্যাচ',
   },
   en:{
-    loading:'Loading...',hdrSub:'FIFA World Cup 2026 · Al Amin Onik',
+    loading:'Loading...',hdrSub:'By: Al Amin Anik',
     secSchedule:'Schedule',secGroups:'Group Stage Table',
     secThirdplace:"<i class='fas fa-award'></i> Best 3rd Places",
     secKnockout:"<i class='fas fa-medal'></i> Knockout Bracket",
@@ -2035,6 +2044,7 @@ let sqData={};       // Firebase-এর raw data
 let sqLoaded=false;  // একবারই load হবে
 let sqTeam='';       // active team key
 let sqPos='ALL';     // active position filter
+let sqGrp='ALL';     // active group filter
 
 // Country code map for flagcdn (English name → code)
 function getCountryCode(countryName){
@@ -2115,6 +2125,7 @@ function loadSquads(){
     // Set first team as active BEFORE building buttons
     if(sorted.length>0)sqTeam=sorted[0];
 
+    buildSqGrpBtns();
     buildSqTeamBtns();
 
     if(sqTeam){
@@ -2128,8 +2139,31 @@ function loadSquads(){
   },{onlyOnce:true});
 }
 
+function buildSqGrpBtns(){
+  const S=window._S;
+  const gs=['ALL','A','B','C','D','E','F','G','H','I','J','K','L'];
+  const el=document.getElementById('sqGrpFilters');
+  if(!el)return;
+  el.innerHTML=gs.map(g=>
+    `<button class="fb ${sqGrp===g?'on':''}" onclick="window._sqg('${g}')">${g==='ALL'?S.allGroups:'Group '+g}</button>`
+  ).join('');
+}
+window._sqg=function(g){
+  sqGrp=g;sqTeam='';sqPos='ALL';
+  buildSqGrpBtns();
+  buildSqTeamBtns();
+  document.getElementById('sqHeader').innerHTML='';
+  document.getElementById('sqGrid').innerHTML='';
+  const posRow=document.getElementById('sqPosRow');
+  if(posRow)posRow.style.display='none';
+};
+
 function buildSqTeamBtns(){
-  const sorted=Object.keys(sqData).sort((a,b)=>{
+  const pool=sqGrp==='ALL'?Object.keys(sqData):Object.keys(sqData).filter(fbKey=>{
+    const teamKey=fbKeyToTeamKey(fbKey);
+    return(GROUPS[sqGrp]||[]).includes(teamKey);
+  });
+  const sorted=pool.sort((a,b)=>{
     const ra=parseInt(getRank(fbKeyToTeamKey(a)))||999;
     const rb=parseInt(getRank(fbKeyToTeamKey(b)))||999;
     return ra-rb;
