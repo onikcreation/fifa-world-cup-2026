@@ -2607,45 +2607,33 @@ const FIFA_RANKING=[
   {r:211,n:"San Marino",c:"sm",p:721.2,conf:"UEFA"},
 ];
 
-// WC 2026 teams set (English names)
-const WC_TEAMS_EN=new Set(Object.values(TEAMS).map(t=>t.en));
-
-let _rankFiltered=FIFA_RANKING;
-
 function renderRanking(){
   const el=document.getElementById('rankTotal');
   const el2=document.getElementById('rankTop');
   if(el)el.textContent=FIFA_RANKING.length;
-  if(el2)el2.innerHTML=`<img src="https://flagcdn.com/20x15/${FIFA_RANKING[0].c}.png" style="width:18px;height:13px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:3px">${FIFA_RANKING[0].n}`;
-  _rankFiltered=FIFA_RANKING;
-  doFilterRanking();
+  if(el2&&FIFA_RANKING[0])el2.innerHTML=`<img src="https://flagcdn.com/20x15/${FIFA_RANKING[0].c}.png" style="width:18px;height:13px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:3px">${FIFA_RANKING[0].n}`;
+  window.filterRanking();
 }
 
-function doFilterRanking(){
-  const q=(document.getElementById('rankSearch')?.value||'').toLowerCase();
-  const conf=document.getElementById('rankConfFilter')?.value||'';
-  _rankFiltered=FIFA_RANKING.filter(d=>{
-    const matchQ=!q||d.n.toLowerCase().includes(q);
-    const matchC=!conf||d.conf===conf;
-    return matchQ&&matchC;
-  });
+window.filterRanking=function(){
   const tbody=document.getElementById('rankBody');
   if(!tbody)return;
-  if(_rankFiltered.length===0){tbody.innerHTML=`<tr><td colspan="5" class="rank-empty">কোনো ফলাফল নেই</td></tr>`;return;}
-  tbody.innerHTML=_rankFiltered.map(d=>{
-    const isWC=WC_TEAMS_EN.has(d.n);
-    const topCls=d.r<=3?' top3':'';
-    const wcBadge=isWC?`<span class="rank-wc-badge">⚽ WC 2026</span>`:'';
-    return`<tr class="${isWC?'wc-team':''}">
-      <td><span class="rank-num${topCls}">${d.r}</span></td>
-      <td><img class="rank-flag" src="https://flagcdn.com/28x21/${d.c}.png" loading="lazy" onerror="this.style.opacity='.3'" alt="${d.n}"></td>
-      <td class="rank-name">${d.n}</td>
-      <td class="rank-pts">${d.p.toFixed(2)}</td>
-      <td>${wcBadge}</td>
-    </tr>`;
-  }).join('');
-}
-window.filterRanking=doFilterRanking;
+  try{
+    const q=(document.getElementById('rankSearch')?.value||'').toLowerCase();
+    const conf=document.getElementById('rankConfFilter')?.value||'';
+    const wcEn=new Set(Object.values(TEAMS).map(t=>t.en));
+    const list=FIFA_RANKING.filter(d=>(!q||d.n.toLowerCase().includes(q))&&(!conf||d.conf===conf));
+    if(list.length===0){tbody.innerHTML='<tr><td colspan="5" class="rank-empty">কোনো ফলাফল নেই</td></tr>';return;}
+    tbody.innerHTML=list.map(d=>{
+      const isWC=wcEn.has(d.n);
+      const topCls=d.r<=3?' top3':'';
+      const wcBadge=isWC?'<span class="rank-wc-badge">⚽ WC 2026</span>':'';
+      return`<tr class="${isWC?'wc-team':''}"><td><span class="rank-num${topCls}">${d.r}</span></td><td><img class="rank-flag" src="https://flagcdn.com/28x21/${d.c}.png" loading="lazy" onerror="this.style.opacity='.3'" alt="${d.n}"></td><td class="rank-name">${d.n}</td><td class="rank-pts">${d.p.toFixed(2)}</td><td>${wcBadge}</td></tr>`;
+    }).join('');
+  }catch(e){
+    tbody.innerHTML=`<tr><td colspan="5" style="color:#f66;padding:1rem;text-align:center">Error: ${e.message}</td></tr>`;
+  }
+};
 </script>
 </body>
 </html>
