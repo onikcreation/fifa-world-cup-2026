@@ -1305,6 +1305,15 @@ window.switchModalTab=function(tab,btn){
 };
 
 window.openGoalModal=function(id,isKO){
+  // Group match: score must be entered before goal/card entry
+  if(!isKO){
+    const s1v=document.getElementById('s1_'+id)?.value;
+    const s2v=document.getElementById('s2_'+id)?.value;
+    if(s1v===''||s1v===undefined||s2v===''||s2v===undefined){
+      toast('আগে কার্ডে স্কোর (গোল সংখ্যা) এন্ট্রি করুন!','err');
+      return;
+    }
+  }
   modalMatchId=id;modalIsKO=isKO;
   const sc=dbSc[id]||{};
   let t1,t2;
