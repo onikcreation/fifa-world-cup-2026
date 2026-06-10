@@ -80,6 +80,12 @@ body::after{content:'';position:fixed;inset:0;
 .nav-btn{font-family:"Google Sans",sans-serif;font-size:.88rem;letter-spacing:2px;color:var(--gray);background:none;border:none;border-bottom:3px solid transparent;padding:.85rem 1.1rem;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;flex-shrink:0;text-decoration:none;display:inline-block}
 .nav-btn:hover{color:var(--text)}
 .nav-btn.on{color:var(--neon);border-bottom:3px solid;border-image:var(--gradient-primary) 1}
+@media(max-width:600px){
+  .nav{flex-wrap:wrap;overflow-x:visible;padding:.5rem;gap:.35rem}
+  .nav-btn{flex:1 1 calc(33.33% - .35rem);min-width:0;text-align:center;padding:.6rem .3rem;font-size:.7rem;letter-spacing:.8px;border:1px solid var(--border2);border-bottom:1px solid var(--border2)!important;border-radius:8px;margin-bottom:0;white-space:normal;line-height:1.3}
+  .nav-btn:hover{background:rgba(255,255,255,.04);border-color:rgba(212,175,55,.3)}
+  .nav-btn.on{background:rgba(212,175,55,.1);border-color:var(--neon)!important;color:var(--neon);border-image:none!important}
+}
 
 /* MAIN */
 .main{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:1.2rem 1rem}
@@ -97,22 +103,18 @@ body::after{content:'';position:fixed;inset:0;
 .sc-n{font-family:"Google Sans",sans-serif;font-size:2.1rem;color:var(--neon);line-height:1;text-shadow:0 0 16px rgba(212,175,55,0.3)}
 .sc-l{font-size:.6rem;letter-spacing:1px;color:var(--gray);margin-top:2px}
 
-/* FILTERS */
-.filters{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1rem}
+/* FILTERS — hidden, replaced by select dropdowns */
+.filters{display:none!important}
 .fb{font-size:.72rem;letter-spacing:.5px;padding:.3rem .75rem;background:rgba(255,255,255,0.03);border:1px solid var(--border2);border-radius:20px;color:var(--gray);cursor:pointer;transition:all .2s;white-space:nowrap}
 .fb:hover,.fb.on{background:rgba(212,175,55,0.12);border-color:var(--neon);color:var(--neon);box-shadow:0 0 10px rgba(212,175,55,0.15)}
-/* Mobile dropdown select */
-.mob-select{display:none;width:100%;padding:.5rem .9rem;margin-bottom:.6rem;
+/* Dropdown select — all screen sizes */
+.mob-select{display:block;width:100%;padding:.5rem .9rem;margin-bottom:.6rem;
   background:rgba(20,20,20,0.95);border:1px solid rgba(212,175,55,0.3);border-radius:8px;
   color:var(--neon);font-family:"Google Sans",sans-serif;font-size:.82rem;letter-spacing:.5px;
   cursor:pointer;-webkit-appearance:none;appearance:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23D4AF37' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right .9rem center}
 .mob-select option{background:#141414;color:#fff}
-@media(max-width:600px){
-  .filters{display:none!important}
-  .mob-select{display:block!important}
-}
 
 /* ══ MATCH CARD — CRIMSON GOLD ══ */
 .match-sections{display:flex;flex-direction:column;gap:1.2rem}
@@ -282,6 +284,10 @@ body::after{content:'';position:fixed;inset:0;
 .bk-rtab{font-family:"Google Sans",sans-serif;font-size:.75rem;letter-spacing:1px;padding:.35rem .8rem;background:var(--card);border:1px solid var(--border2);border-radius:20px;color:var(--gray);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s}
 .bk-rtab.on{background:rgba(139,21,56,0.25);border-color:var(--neon);color:#fff}
 .bk-round-panel{display:none}.bk-round-panel.on{display:flex;flex-direction:column;gap:.4rem}
+@media(max-width:859px){
+  .bk-round-tabs{display:none!important}
+  #bkRoundSelect{display:block!important}
+}
 
 /* Stats */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
@@ -442,8 +448,7 @@ body.stadium-light-theme .mc-grp-badge{background:#D4AF37;color:#041020}
 .sq-controls{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1rem}
 .sq-pos-row{display:flex;align-items:center;gap:.5rem;padding:.5rem .8rem;background:rgba(139,21,56,0.04);border:1px solid var(--border2);border-radius:8px;margin-bottom:.8rem}
 .sq-pos-row::before{content:'포지션';font-family:"Google Sans",sans-serif;font-size:.68rem;letter-spacing:1px;color:var(--gray);white-space:nowrap;display:none}
-.sq-team-scroll{display:flex;gap:.35rem;flex-wrap:wrap;padding-bottom:.3rem}
-@media(max-width:600px){.sq-team-scroll{display:none!important}}
+.sq-team-scroll{display:none!important}
 .sq-team-btn{display:inline-flex;align-items:center;gap:.35rem;font-family:"Google Sans",sans-serif;font-size:.78rem;letter-spacing:1px;padding:.3rem .7rem;background:var(--neon-glow2);border:1px solid var(--border2);border-radius:20px;color:var(--gray);cursor:pointer;white-space:nowrap;transition:all .2s}
 .sq-team-btn:hover{border-color:var(--border);color:var(--text)}
 .sq-team-btn.on{background:rgba(161,240,0,.15);border-color:var(--neon);color:var(--neon);box-shadow:0 0 8px var(--neon-glow)}
@@ -608,6 +613,7 @@ body.stadium-light-theme .mc-grp-badge{background:#D4AF37;color:#041020}
     </div>
     <div class="bracket-mobile">
       <div class="bk-round-tabs" id="bkTabs"></div>
+      <select class="mob-select" id="bkRoundSelect" onchange="window._bktab(+this.value)"></select>
       <div id="bkMobile"></div>
     </div>
   </div>
@@ -1632,9 +1638,12 @@ function renderBracket(grps={}){
     {name:S.sfShort,matches:SF},
     {name:`<i class='fas fa-trophy'></i> ${S.final}`,matches:[FINAL,THIRD]},
   ];
+  const tabNames=mRounds.map(r=>r.name.replace(/<[^>]*>/g,''));
   document.getElementById('bkTabs').innerHTML=mRounds.map((r,i)=>
     `<button class="bk-rtab ${i===activeBkTab?'on':''}" onclick="window._bktab(${i})">${r.name}</button>`
   ).join('');
+  const bkSel=document.getElementById('bkRoundSelect');
+  if(bkSel)bkSel.innerHTML=tabNames.map((n,i)=>`<option value="${i}" ${i===activeBkTab?'selected':''}>${n}</option>`).join('');
   document.getElementById('bkMobile').innerHTML=mRounds.map((round,i)=>
     `<div class="bk-round-panel ${i===activeBkTab?'on':''}">
       ${round.matches.map(m=>symMatch(m)).join('')}
@@ -1645,6 +1654,8 @@ window._bktab=function(i){
   activeBkTab=i;
   document.querySelectorAll('.bk-rtab').forEach((b,idx)=>b.classList.toggle('on',idx===i));
   document.querySelectorAll('.bk-round-panel').forEach((p,idx)=>p.classList.toggle('on',idx===i));
+  const bkSel=document.getElementById('bkRoundSelect');
+  if(bkSel)bkSel.value=i;
 };
 
 // ══ STATS ══
