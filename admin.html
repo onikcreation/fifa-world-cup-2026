@@ -124,41 +124,50 @@ body::after{content:'';position:fixed;inset:0;
   padding:.4rem .75rem;background:rgba(139,21,56,.07);
   border-left:3px solid var(--maroon);border-radius:0 5px 5px 0;
 }
-.adm-match-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}
+.adm-match-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
 @media(max-width:900px){.adm-match-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:580px){.adm-match-grid{grid-template-columns:1fr}}
-.amc{background:#141414;border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden;transition:border .15s;position:relative}
-.amc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gradient-primary)}
-.amc:hover{border-color:rgba(212,175,55,.3)}
-.amc.changed-card{border-color:rgba(243,156,18,.5)!important}
-/* Header — maroon gradient */
-.amc-hdr{display:flex;justify-content:space-between;align-items:center;padding:.45rem .8rem;background:linear-gradient(135deg,rgba(139,21,56,.35) 0%,rgba(20,20,20,.98) 100%);border-bottom:1px solid rgba(255,255,255,.06)}
-.amc-grp{font-family:"Google Sans",sans-serif;font-size:.72rem;letter-spacing:1px;padding:.18rem .55rem;border-radius:20px;background:var(--maroon);color:#ffffff;font-weight:700}
-.amc-meta{font-family:"Google Sans",sans-serif;font-size:.72rem;color:rgba(255,255,255,.75);letter-spacing:.3px}
-.amc-body{padding:.65rem .8rem}
-.amc-teams{display:flex;align-items:center;gap:.4rem;margin-bottom:.55rem}
-.amc-team{flex:1;display:flex;align-items:center;gap:.35rem;min-width:0}
-.amc-team.right{flex-direction:row-reverse;text-align:right}
-.amc-flag{width:22px;height:16px;object-fit:cover;border-radius:2px;flex-shrink:0}
-.amc-tname{font-family:"Google Sans",sans-serif;font-size:.82rem;letter-spacing:.3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
-.amc-scores{display:flex;align-items:center;justify-content:center;gap:.3rem;flex-shrink:0}
+/* V2-D card — identical to public site */
+.mc{background:#141414;border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;transition:all .3s;display:flex;flex-direction:column;box-shadow:0 4px 20px rgba(0,0,0,.5);position:relative}
+.mc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-primary);z-index:1}
+.mc:hover{border-color:rgba(212,175,55,.3);box-shadow:0 0 35px rgba(139,21,56,.35),0 20px 40px rgba(0,0,0,.6);transform:scale(1.01)}
+.mc-hdr{display:flex;align-items:center;justify-content:space-between;padding:.65rem 1rem;background:linear-gradient(135deg,rgba(139,21,56,.45) 0%,rgba(20,20,20,.98) 65%,rgba(26,26,26,.98) 100%);border-bottom:1px solid rgba(255,255,255,.06)}
+.mc-grp-badge{font-family:"Google Sans",sans-serif;font-size:.78rem;letter-spacing:1px;padding:.22rem .7rem;border-radius:20px;background:var(--maroon);color:#fff;font-weight:700}
+.mc-matchday{font-family:"Google Sans",sans-serif;font-size:.78rem;letter-spacing:.5px;color:rgba(255,255,255,.7)}
+.mc-body{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:1.1rem .8rem .8rem;gap:.5rem}
+.mc-team{display:flex;flex-direction:column;align-items:center;gap:.5rem;min-width:0}
+.mc-flag-big{width:72px;height:54px;object-fit:cover;display:block;border-radius:4px}
+.mc-tname{font-family:"Google Sans",sans-serif;font-size:1rem;letter-spacing:.5px;color:var(--text);text-align:center;line-height:1.2;max-width:110px}
+.mc-score-center{display:flex;align-items:center;justify-content:center;padding:0 .5rem}
+.mc-vs{font-family:"Google Sans",sans-serif;font-size:1.1rem;color:rgba(212,175,55,.35);letter-spacing:3px}
+.mc-sc{font-family:"Google Sans",sans-serif;font-size:2.7rem;line-height:1;background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.mc-sc-sep{font-family:"Google Sans",sans-serif;font-size:2rem;color:rgba(212,175,55,.5);margin:0 .1rem}
+.mc-footer{display:flex;align-items:center;justify-content:space-between;padding:.55rem 1rem;background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.06);margin-top:auto;gap:.4rem}
+.mc-footer-date{font-family:"Google Sans",sans-serif;font-size:.82rem;letter-spacing:.3px;color:var(--neon);flex-shrink:0}
+.mc-footer-stadium{font-family:"Google Sans",sans-serif;font-size:.75rem;letter-spacing:.2px;color:rgba(255,255,255,.7);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+/* Entry button */
+.entry-btn{font-family:"Google Sans",sans-serif;font-size:.72rem;letter-spacing:.8px;padding:.28rem .75rem;background:rgba(161,240,0,.08);border:1px solid rgba(161,240,0,.25);border-radius:6px;color:var(--neon);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.entry-btn:hover{background:rgba(161,240,0,.2);border-color:rgba(161,240,0,.55)}
+.entry-btn.has-data{background:rgba(161,240,0,.14);border-color:rgba(161,240,0,.5)}
+/* Modal score inputs */
 .asc{width:36px;height:30px;background:var(--inp);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-family:"Google Sans",sans-serif;font-size:1.05rem;text-align:center;outline:none;transition:border .15s}
 .asc:focus{border-color:var(--neon)}
-.asc.filled{border-color:rgba(161,240,0,.5);background:rgba(161,240,0,.05)}
-.asc.changed{border-color:rgba(243,156,18,.6);background:rgba(243,156,18,.07)}
-.asc-sep{font-size:.7rem;color:var(--gray);font-weight:700}
-/* Footer — V2-D: stadium=white */
-.amc-footer{display:flex;align-items:center;gap:.4rem;padding:.42rem .8rem;border-top:1px solid rgba(161,240,0,.08);background:rgba(0,0,0,.2)}
-.amc-stadium{font-family:"Google Sans",sans-serif;font-size:.72rem;color:rgba(255,255,255,.75);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.2px}
-.amc-actions{display:flex;gap:.3rem;flex-shrink:0}
-.sv-btn{font-family:"Google Sans",sans-serif;font-size:.7rem;letter-spacing:.5px;padding:.25rem .6rem;background:rgba(161,240,0,.15);border:1px solid rgba(161,240,0,.3);border-radius:5px;color:var(--neon);cursor:pointer;transition:all .2s}
-.sv-btn:hover{background:rgba(161,240,0,.25)}
-.sv-btn.saving{background:rgba(243,156,18,.2);border-color:var(--orange);color:var(--orange);pointer-events:none}
-.sv-btn.saved{background:rgba(161,240,0,.1);border-color:var(--neon);color:var(--neon);pointer-events:none}
-.cl-btn{font-size:.62rem;padding:.25rem .42rem;background:rgba(231,76,60,.07);border:1px solid rgba(231,76,60,.22);border-radius:4px;color:var(--red);cursor:pointer}
-.goal-btn{font-family:"Google Sans",sans-serif;font-size:.68rem;padding:.25rem .55rem;background:rgba(161,240,0,.08);border:1px solid rgba(161,240,0,.2);border-radius:4px;color:var(--neon);cursor:pointer;letter-spacing:.5px}
-.goal-btn:hover{background:rgba(161,240,0,.18)}
+/* Modal score section */
+.mss-wrap{display:none;margin:.5rem 0 .75rem;padding:.6rem .9rem;background:rgba(161,240,0,.04);border:1px solid rgba(161,240,0,.15);border-radius:8px}
+.mss-lbl{font-size:.6rem;letter-spacing:1.5px;color:var(--gray);margin-bottom:.5rem;text-transform:uppercase}
+.mss-row{display:flex;align-items:center;justify-content:center;gap:.75rem}
+.mss-team{font-size:.8rem;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right}
+.mss-team.right{text-align:left}
+.mss-inputs{display:flex;align-items:center;gap:.35rem;flex-shrink:0}
+.mss-in{width:46px;height:34px;font-size:1.15rem}
+.mss-sep{color:var(--gray);font-size:1.2rem;font-weight:700}
 .changed-dot{display:inline-block;width:5px;height:5px;background:var(--orange);border-radius:50%;margin-left:3px;vertical-align:middle}
+@media(max-width:580px){
+  .mc-flag-big{width:56px;height:42px}
+  .mc-tname{font-size:.88rem;max-width:90px}
+  .mc-sc{font-size:2rem}
+  .mc-footer{flex-wrap:wrap;gap:.3rem}
+}
 
 /* ══ SETTINGS (redesigned) ══ */
 .st-page-hd{display:flex;align-items:center;gap:1.1rem;margin-bottom:1.4rem;padding:1.2rem 1.4rem;background:linear-gradient(135deg,rgba(139,21,56,.1) 0%,rgba(212,175,55,.03) 70%);border:1px solid rgba(212,175,55,.2);border-radius:14px;position:relative;overflow:hidden}
@@ -287,11 +296,11 @@ body::after{content:'';position:fixed;inset:0;
 .st-save-st{font-size:.7rem;color:var(--gray)}
 .st-firebase-note code{background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;font-size:.57rem}
 /* Card gradient on/off */
-body.flat-cards .amc::before,
+body.flat-cards .mc::before,
 body.flat-cards .ko-card::before{display:none}
-body.flat-cards .amc-hdr{background:#1e1e1e}
+body.flat-cards .mc-hdr{background:#1e1e1e}
 body.flat-cards .ko-hd{background:#1e1e1e}
-body.flat-cards .amc{border-color:rgba(255,255,255,0.1)}
+body.flat-cards .mc{border-color:rgba(255,255,255,0.1)}
 body.flat-cards .ko-card{border-color:rgba(255,255,255,0.1)}
 
 /* ══ STADIUM DARK THEME ══ */
@@ -302,8 +311,8 @@ body.stadium-theme::before{
   background-position:center !important;
   opacity:.15 !important;
 }
-body.stadium-theme .amc-hdr{background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(10,20,50,0.95))}
-body.stadium-theme .amc-grp{background:#D4AF37;color:#0a1628}
+body.stadium-theme .mc-hdr{background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(10,20,50,0.95))}
+body.stadium-theme .mc-grp-badge{background:#D4AF37;color:#0a1628}
 body.stadium-theme .ko-hd{background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(10,20,50,0.95))}
 body.stadium-theme .ko-rname{background:#D4AF37;color:#0a1628}
 
@@ -315,9 +324,9 @@ body.stadium-light-theme::before{
   background-position:center !important;
   opacity:.22 !important;
 }
-body.stadium-light-theme .amc{background:rgba(8,18,45,0.50) !important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.14) !important}
-body.stadium-light-theme .amc-hdr{background:linear-gradient(135deg,rgba(212,175,55,0.22),rgba(5,12,35,0.92))}
-body.stadium-light-theme .amc-grp{background:#D4AF37;color:#041020}
+body.stadium-light-theme .mc{background:rgba(8,18,45,0.50) !important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.14) !important}
+body.stadium-light-theme .mc-hdr{background:linear-gradient(135deg,rgba(212,175,55,0.22),rgba(5,12,35,0.92))}
+body.stadium-light-theme .mc-grp-badge{background:#D4AF37;color:#041020}
 body.stadium-light-theme .ko-card{background:rgba(8,18,45,0.50) !important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.14) !important}
 body.stadium-light-theme .ko-hd{background:linear-gradient(135deg,rgba(212,175,55,0.22),rgba(5,12,35,0.92))}
 body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
@@ -710,6 +719,19 @@ body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
       <span id="modalTitle"><i class="fas fa-futbol"></i> ম্যাচ বিস্তারিত</span>
       <button class="modal-close" onclick="closeModal()"><i class="fas fa-xmark"></i></button>
     </div>
+    <!-- Score section (group matches only) -->
+    <div class="mss-wrap" id="modalScoreSection">
+      <div class="mss-lbl">ম্যাচ স্কোর</div>
+      <div class="mss-row">
+        <span class="mss-team" id="mScoreName1"></span>
+        <div class="mss-inputs">
+          <input class="asc mss-in" type="number" id="modalS1" min="0" max="30" placeholder="-">
+          <span class="mss-sep">:</span>
+          <input class="asc mss-in" type="number" id="modalS2" min="0" max="30" placeholder="-">
+        </div>
+        <span class="mss-team right" id="mScoreName2"></span>
+      </div>
+    </div>
     <!-- Tabs -->
     <div class="modal-tabs">
       <button class="modal-tab on" onclick="switchModalTab('goals',this)"><i class="fas fa-futbol"></i> গোল</button>
@@ -767,7 +789,6 @@ let activeGrp='ALL';
 window._activeGrp='ALL';
 let modalMatchId=null;
 let modalIsKO=false;
-let modalCapturedS1=undefined,modalCapturedS2=undefined;
 let adminSquads={};
 let modalP1=[]; // current modal team1 players (global for addGoal/addCard)
 let modalP2=[]; // current modal team2 players
@@ -909,45 +930,36 @@ function renderTable(grp){
 
   function cardHTML(m){
     const sc=dbSc[m.id]||{};
-    const domS1=document.getElementById('s1_'+m.id);
-    const domS2=document.getElementById('s2_'+m.id);
-    const s1=(pendingChanges.has(m.id)&&domS1)?domS1.value:(sc.s1!==undefined?sc.s1:'');
-    const s2=(pendingChanges.has(m.id)&&domS2)?domS2.value:(sc.s2!==undefined?sc.s2:'');
+    const s1=sc.s1!==undefined?sc.s1:'';
+    const s2=sc.s2!==undefined?sc.s2:'';
     const hg=(sc.goals1?.length||0)+(sc.goals2?.length||0);
-    const isPending=pendingChanges.has(m.id);
-    return`<div class="amc ${isPending?'changed-card':''}" id="tr-${m.id}">
-      <div class="amc-hdr">
-        <span class="amc-grp">Group ${m.grp}${isPending?'<span class="changed-dot"></span>':''}</span>
-        <span class="amc-meta">Match #${m.id} · <i class='fas fa-clock'></i> ${fT(m.time)}</span>
+    const hc=(sc.cards1?.length||0)+(sc.cards2?.length||0);
+    const hasData=s1!==''||hg>0||hc>0;
+    const scoreHTML=s1!==''
+      ?`<span class="mc-sc">${s1}</span><span class="mc-sc-sep">:</span><span class="mc-sc">${s2}</span>`
+      :`<span class="mc-vs">VS</span>`;
+    return`<div class="mc" id="tr-${m.id}">
+      <div class="mc-hdr">
+        <span class="mc-grp-badge">Group ${m.grp}</span>
+        <span class="mc-matchday">Match #${m.id} · <i class='fas fa-clock'></i> ${fT(m.time)}</span>
       </div>
-      <div class="amc-body">
-        <div class="amc-teams">
-          <div class="amc-team">
-            <img class="amc-flag" src="https://flagcdn.com/24x18/${TEAMS[m.t1]?.code||'un'}.png" loading="lazy" onerror="this.style.display='none'">
-            <span class="amc-tname">${tNameRankedA(m.t1)}</span>
-          </div>
-          <div class="amc-scores">
-            <input class="asc ${s1!==''?'filled':''} ${isPending?'changed':''}" type="number" min="0" max="30"
-              id="s1_${m.id}" value="${s1}" placeholder="-"
-              oninput="markChanged(${m.id});this.classList.toggle('filled',this.value!=='')">
-            <span class="asc-sep">-</span>
-            <input class="asc ${s2!==''?'filled':''} ${isPending?'changed':''}" type="number" min="0" max="30"
-              id="s2_${m.id}" value="${s2}" placeholder="-"
-              oninput="markChanged(${m.id});this.classList.toggle('filled',this.value!=='')">
-          </div>
-          <div class="amc-team right">
-            <img class="amc-flag" src="https://flagcdn.com/24x18/${TEAMS[m.t2]?.code||'un'}.png" loading="lazy" onerror="this.style.display='none'">
-            <span class="amc-tname">${tNameRankedA(m.t2)}</span>
-          </div>
+      <div class="mc-body">
+        <div class="mc-team">
+          <img class="mc-flag-big" src="https://flagcdn.com/72x54/${TEAMS[m.t1]?.code||'un'}.png" loading="lazy" onerror="this.style.display='none'">
+          <span class="mc-tname">${tNameRankedA(m.t1)}</span>
+        </div>
+        <div class="mc-score-center">${scoreHTML}</div>
+        <div class="mc-team">
+          <img class="mc-flag-big" src="https://flagcdn.com/72x54/${TEAMS[m.t2]?.code||'un'}.png" loading="lazy" onerror="this.style.display='none'">
+          <span class="mc-tname">${tNameRankedA(m.t2)}</span>
         </div>
       </div>
-      <div class="amc-footer">
-        <span class="amc-stadium"><i class='fas fa-landmark'></i> ${m.stadium||''}</span>
-        <div class="amc-actions">
-          <button class="goal-btn" onclick="openGoalModal(${m.id},false)">${hg?`<i class='fas fa-futbol'></i>${hg} <svg width="9" height="13" viewBox="0 0 9 13" style="vertical-align:middle"><rect x="0" y="0" width="4" height="13" rx="1" fill="#ffc800"/><rect x="4.5" y="0" width="4.5" height="13" rx="1" fill="#ff3232"/></svg>${hc||''}`:"<i class='fas fa-futbol'></i>"}</button>
-          <button class="sv-btn" id="sb_${m.id}" onclick="window.saveOne(${m.id})">Save</button>
-          <button class="cl-btn" onclick="window.clearOne(${m.id})"><i class='fas fa-xmark'></i></button>
-        </div>
+      <div class="mc-footer">
+        <span class="mc-footer-date"><i class='fas fa-clock'></i> ${fT(m.time)}</span>
+        <span class="mc-footer-stadium"><i class='fas fa-landmark'></i> ${m.stadium||''}</span>
+        <button class="entry-btn ${hasData?'has-data':''}" onclick="openGoalModal(${m.id},false)">
+          ${hasData?`<i class='fas fa-pen'></i> Edit`:`<i class='fas fa-plus'></i> Entry`}
+        </button>
       </div>
     </div>`;
   }
@@ -1272,12 +1284,6 @@ window.switchModalTab=function(tab,btn){
 
 window.openGoalModal=function(id,isKO){
   modalMatchId=id;modalIsKO=isKO;
-  if(!isKO){
-    const _d1=document.getElementById('s1_'+id);
-    const _d2=document.getElementById('s2_'+id);
-    modalCapturedS1=(_d1&&_d1.value!=='')?Number(_d1.value):undefined;
-    modalCapturedS2=(_d2&&_d2.value!=='')?Number(_d2.value):undefined;
-  }else{modalCapturedS1=undefined;modalCapturedS2=undefined;}
   const sc=dbSc[id]||{};
   let t1,t2;
   if(isKO){
@@ -1292,6 +1298,19 @@ window.openGoalModal=function(id,isKO){
   const en2=tNameRankedA(t2);
   const matchNum=koNum({id,num:undefined});
   document.getElementById('modalTitle').innerHTML=`<i class='fas fa-futbol'></i> ${en1} vs ${en2} — Match #${matchNum||id}`;
+  // Populate score section
+  const scoreSection=document.getElementById('modalScoreSection');
+  const ms1=document.getElementById('modalS1');
+  const ms2=document.getElementById('modalS2');
+  if(!isKO&&scoreSection&&ms1&&ms2){
+    ms1.value=sc.s1!==undefined?sc.s1:'';
+    ms2.value=sc.s2!==undefined?sc.s2:'';
+    document.getElementById('mScoreName1').textContent=en1;
+    document.getElementById('mScoreName2').textContent=en2;
+    scoreSection.style.display='';
+  }else if(scoreSection){
+    scoreSection.style.display='none';
+  }
 
   // Reset tab to goals
   document.querySelectorAll('.modal-tab').forEach((b,i)=>b.classList.toggle('on',i===0));
@@ -1459,8 +1478,10 @@ window.saveGoalsAndCards=async function(){
     const ex=dbSc[modalMatchId]||{};
     const scoreExtra={};
     if(!modalIsKO){
-      if(modalCapturedS1!==undefined)scoreExtra.s1=modalCapturedS1;
-      if(modalCapturedS2!==undefined)scoreExtra.s2=modalCapturedS2;
+      const ms1=document.getElementById('modalS1')?.value;
+      const ms2=document.getElementById('modalS2')?.value;
+      if(ms1!==undefined&&ms1!=='')scoreExtra.s1=Number(ms1);
+      if(ms2!==undefined&&ms2!=='')scoreExtra.s2=Number(ms2);
     }
     await set(ref(db,'scores/'+modalMatchId),{
       ...ex,
