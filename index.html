@@ -777,7 +777,7 @@ const STRINGS={
     secSquads:"<i class='fas fa-shirt'></i> দল তালিকা",
     expandAll:'▼ সব খুলুন',collapseAll:'▲ সব বন্ধ করুন',sqAll:'সকল',
     played:'খেলা হয়েছে',remaining:'বাকি ম্যাচ',totalMatches:'মোট ম্যাচ',
-    totalGoals:'মোট গোল',avgGoals:'গড় গোল',teams:'দেশ',
+    totalGoals:'মোট গোল',avgGoals:'গড় গোল',teams:'দেশ',yellowCards:'হলুদ কার্ড',redCards:'লাল কার্ড',
     allMatches:'সকল ম্যাচ',allTeams:'সকল দল',allGroups:'সকল',
     days:['রবি','সোম','মঙ্গল','বুধ','বৃহঃ','শুক্র','শনি'],
     months:['জানু','ফেব','মার্চ','এপ্রি','মে','জুন','জুলাই','আগ','সেপ্ট','অক্টো','নভে','ডিসে'],
@@ -814,7 +814,7 @@ const STRINGS={
     secSquads:"<i class='fas fa-shirt'></i> Squads",
     expandAll:'▼ Expand All',collapseAll:'▲ Collapse All',sqAll:'All',
     played:'Played',remaining:'Remaining',totalMatches:'Total',
-    totalGoals:'Goals',avgGoals:'Avg Goals',teams:'Teams',
+    totalGoals:'Goals',avgGoals:'Avg Goals',teams:'Teams',yellowCards:'Yellow Cards',redCards:'Red Cards',
     allMatches:'All Matches',allTeams:'All Teams',allGroups:'All',
     days:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
     months:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
@@ -1140,6 +1140,16 @@ function renderStrip(){
   const total=MATCHES.length+koMatches.length; // 72+32=104
   const gl=MATCHES.reduce((s,m)=>s+(scores[m.id]?Number(scores[m.id].s1||0)+Number(scores[m.id].s2||0):0),0)
           +koMatches.reduce((s,m)=>s+(scores[m.id]?Number(scores[m.id].s1||0)+Number(scores[m.id].s2||0):0),0);
+  // Card totals (yr = 1 yellow + 1 red)
+  let yc=0,rc=0;
+  for(const m of [...MATCHES,...koMatches]){
+    const sc=scores[m.id];if(!sc)continue;
+    for(const c of [...(sc.cards1||[]),...(sc.cards2||[])]){
+      if(c.type==='yellow')yc++;
+      else if(c.type==='red')rc++;
+      else if(c.type==='yr'){yc++;rc++;}
+    }
+  }
   const S=window._S;
   document.getElementById('statStrip').innerHTML=
     `<div class="sc"><div class="sc-n">${pl}</div><div class="sc-l">${S.played}</div></div>
@@ -1147,7 +1157,9 @@ function renderStrip(){
      <div class="sc"><div class="sc-n">${total}</div><div class="sc-l">${S.totalMatches}</div></div>
      <div class="sc"><div class="sc-n">${gl}</div><div class="sc-l">${S.totalGoals}</div></div>
      <div class="sc"><div class="sc-n">${pl?(gl/pl).toFixed(1):'0.0'}</div><div class="sc-l">${S.avgGoals}</div></div>
-     <div class="sc"><div class="sc-n">48</div><div class="sc-l">${S.teams}</div></div>`;
+     <div class="sc"><div class="sc-n">48</div><div class="sc-l">${S.teams}</div></div>
+     <div class="sc" title="${S.yellowCards}"><div class="sc-n" style="color:#ffc800">${yc}</div><div class="sc-l">${S.yellowCards}</div></div>
+     <div class="sc" title="${S.redCards}"><div class="sc-n" style="color:#ff4444">${rc}</div><div class="sc-l">${S.redCards}</div></div>`;
 }
 
 // Schedule
