@@ -2122,6 +2122,7 @@ window.goTab=function(id,el){
       link.classList.add('on');
       if(id==='squads'&&!sqLoaded)loadSquads();
       if(id==='knockout')setTimeout(drawBracketLines,0);
+      if(id==='ranking')renderRanking();
     },200);
   }
 })();
