@@ -407,7 +407,7 @@ body.stadium-light-theme .mc-grp-badge{background:#D4AF37;color:#041020}
 .vn-location{font-size:.6rem;color:rgba(255,255,255,.6);letter-spacing:.5px;margin-top:.15rem}
 .vn-badges{display:flex;gap:.3rem;flex-shrink:0}
 .vn-badge{font-family:"Google Sans",sans-serif;font-size:.55rem;letter-spacing:.8px;padding:.18rem .5rem;border-radius:20px;font-weight:700;text-transform:uppercase}
-.vn-badge-final{background:var(--gold);color:#050f10}
+.vn-badge-final{background:var(--gold);color:#050f10;font-size:.65rem;padding:.25rem .7rem;font-weight:700}
 .vn-badge-opening{background:var(--neon);color:#050f10}
 .vn-badge-semi{background:rgba(161,240,0,.18);border:1px solid var(--neon);color:var(--neon)}
 .vn-badge-third{background:rgba(212,175,55,.18);border:1px solid var(--gold);color:var(--gold)}
@@ -1636,7 +1636,8 @@ function renderBracket(grps={}){
     {name:S.r16,matches:R16},
     {name:S.qf,matches:QF},
     {name:S.sfShort,matches:SF},
-    {name:`<i class='fas fa-trophy'></i> ${S.final}`,matches:[FINAL,THIRD]},
+    {name:`<i class='fas fa-award'></i> ${S.third}`,matches:[THIRD]},
+    {name:`<i class='fas fa-trophy'></i> ${S.final}`,matches:[FINAL]},
   ];
   const tabNames=mRounds.map(r=>r.name.replace(/<[^>]*>/g,''));
   document.getElementById('bkTabs').innerHTML=mRounds.map((r,i)=>
@@ -1995,7 +1996,7 @@ function renderVenues(){
     const loc=v.state?`${v.city}, ${v.state}, ${v.country}`:`${v.city}, ${v.country}`;
     const roofIcon=v.roof?'<i class="fas fa-house" title="Roof"></i>':'' ;
     const badges=v.special.map(s=>{
-      if(s==='final')   return`<span class="vn-badge vn-badge-final">🏆 Final</span>`;
+      if(s==='final')   return`<span class="vn-badge vn-badge-final">🏆 Final Match</span>`;
       if(s==='opening') return`<span class="vn-badge vn-badge-opening">⚽ Opening</span>`;
       if(s==='semi')    return`<span class="vn-badge vn-badge-semi">SF</span>`;
       if(s==='third')   return`<span class="vn-badge vn-badge-third">3rd Place</span>`;
