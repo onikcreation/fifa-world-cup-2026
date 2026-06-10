@@ -407,7 +407,7 @@ body.stadium-light-theme .mc-grp-badge{background:#D4AF37;color:#041020}
 .vn-location{font-size:.6rem;color:rgba(255,255,255,.6);letter-spacing:.5px;margin-top:.15rem}
 .vn-badges{display:flex;gap:.3rem;flex-shrink:0}
 .vn-badge{font-family:"Google Sans",sans-serif;font-size:.55rem;letter-spacing:.8px;padding:.18rem .5rem;border-radius:20px;font-weight:700;text-transform:uppercase}
-.vn-badge-final{background:var(--gold);color:#050f10;font-size:.65rem;padding:.25rem .7rem;font-weight:700}
+.vn-badge-final{background:var(--neon);color:#050f10}
 .vn-badge-opening{background:var(--neon);color:#050f10}
 .vn-badge-semi{background:rgba(161,240,0,.18);border:1px solid var(--neon);color:var(--neon)}
 .vn-badge-third{background:rgba(212,175,55,.18);border:1px solid var(--gold);color:var(--gold)}
@@ -2618,10 +2618,10 @@ function renderRanking(){
   if(el)el.textContent=FIFA_RANKING.length;
   if(el2)el2.innerHTML=`<img src="https://flagcdn.com/20x15/${FIFA_RANKING[0].c}.png" style="width:18px;height:13px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:3px">${FIFA_RANKING[0].n}`;
   _rankFiltered=FIFA_RANKING;
-  filterRanking();
+  doFilterRanking();
 }
 
-window.filterRanking=function(){
+function doFilterRanking(){
   const q=(document.getElementById('rankSearch')?.value||'').toLowerCase();
   const conf=document.getElementById('rankConfFilter')?.value||'';
   _rankFiltered=FIFA_RANKING.filter(d=>{
@@ -2644,7 +2644,8 @@ window.filterRanking=function(){
       <td>${wcBadge}</td>
     </tr>`;
   }).join('');
-};
+}
+window.filterRanking=doFilterRanking;
 </script>
 </body>
 </html>
