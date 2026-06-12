@@ -159,6 +159,13 @@ body::after{content:'';position:fixed;inset:0;
 /* Clear button on card */
 .cl-btn{font-size:.7rem;padding:.28rem .45rem;background:rgba(231,76,60,.07);border:1px solid rgba(231,76,60,.2);border-radius:6px;color:var(--red);cursor:pointer;transition:all .2s;flex-shrink:0}
 .cl-btn:hover{background:rgba(231,76,60,.2);border-color:rgba(231,76,60,.45)}
+/* Highlights row */
+.mc-hl-row{display:flex;align-items:center;gap:.4rem;padding:.42rem .9rem;background:rgba(255,68,68,.04);border-top:1px solid rgba(255,68,68,.12)}
+.hl-input{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,68,68,.2);border-radius:5px;color:var(--text);font-size:.7rem;padding:.28rem .5rem;outline:none;font-family:"Google Sans",sans-serif;min-width:0}
+.hl-input:focus{border-color:rgba(255,68,68,.5)}
+.hl-input.hl-filled{border-color:rgba(255,68,68,.4);background:rgba(255,68,68,.06)}
+.hl-save-btn{font-size:.7rem;padding:.28rem .6rem;background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.3);border-radius:5px;color:#ff7777;cursor:pointer;transition:all .2s;flex-shrink:0;white-space:nowrap}
+.hl-save-btn:hover{background:rgba(255,68,68,.22);border-color:rgba(255,68,68,.55)}
 /* Modal score inputs */
 .asc{width:36px;height:30px;background:var(--inp);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-family:"Google Sans",sans-serif;font-size:1.05rem;text-align:center;outline:none;transition:border .15s}
 .asc:focus{border-color:var(--neon)}
@@ -990,6 +997,11 @@ function renderTable(grp){
         </button>
         <button class="cl-btn" onclick="window.clearOne(${m.id})" title="সব ডেটা মুছুন"><i class='fas fa-trash'></i></button>
       </div>
+      <div class="mc-hl-row">
+        <i class='fab fa-youtube' style="color:#ff4444;font-size:.85rem;flex-shrink:0"></i>
+        <input class="hl-input${sc.highlights?' hl-filled':''}" type="url" id="hl_${m.id}" placeholder="Highlights YouTube URL" value="${sc.highlights||''}">
+        <button class="hl-save-btn" onclick="saveHighlights(${m.id})"><i class='fas fa-floppy-disk'></i> Save</button>
+      </div>
     </div>`;
   }
 
@@ -1074,6 +1086,16 @@ window.saveOne=async function(id){
     toast(`Match #${id} → ${s1}–${s2} সেভ ✓`,'ok');
     setTimeout(()=>{btn.textContent='Save';btn.className='sv-btn';},2000);
   }catch(e){btn.textContent='Save';btn.className='sv-btn';toast('সেভ ব্যর্থ!','err');}
+};
+
+window.saveHighlights=async function(id){
+  const url=(document.getElementById('hl_'+id)?.value||'').trim();
+  const inp=document.getElementById('hl_'+id);
+  try{
+    await update(ref(db,'scores/'+id),{highlights:url||null});
+    inp.classList.toggle('hl-filled',!!url);
+    toast(`Match #${id} highlights ${url?'saved':'cleared'} ✓`,'ok');
+  }catch(e){toast('Save ব্যর্থ!','err');}
 };
 
 window.clearOne=async function(id){
