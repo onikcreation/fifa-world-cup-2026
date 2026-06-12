@@ -997,10 +997,9 @@ function renderTable(grp){
   const byDate={};
   for(const m of list){if(!byDate[m.date])byDate[m.date]=[];byDate[m.date].push(m);}
   for(const d of Object.keys(byDate)){byDate[d].sort((a,b)=>a.time.localeCompare(b.time));}
-  const sortedDates=Object.keys(byDate).sort();
-
   function isDateAllDone(date){return byDate[date].every(m=>dbSc[m.id]?.s1!==undefined&&dbSc[m.id]?.s1!==null);}
   function getDoneCount(date){return byDate[date].filter(m=>dbSc[m.id]?.s1!==undefined&&dbSc[m.id]?.s1!==null).length;}
+  const sortedDates=Object.keys(byDate).sort();
 
   document.getElementById('mTbody').innerHTML=sortedDates.map(date=>{
     const allDone=isDateAllDone(date);
