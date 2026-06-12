@@ -1269,7 +1269,12 @@ function renderMatches(grp){
   const allSortedDates=Object.keys(byDate).sort();
   const now=new Date();
   const todayStr=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-  const sortedDates=allSortedDates.filter(d=>schedView==='past'?d<todayStr:schedView==='upcoming'?d>=todayStr:true);
+  const sortedDates=allSortedDates.filter(d=>{
+    const allDone=byDate[d].every(m=>scores[m.id]?.s1!==undefined&&scores[m.id]?.s1!==null);
+    if(schedView==='past')return allDone;
+    if(schedView==='upcoming')return!allDone;
+    return true;
+  });
   const S=window._S;
 
   function dateTitle(d){
