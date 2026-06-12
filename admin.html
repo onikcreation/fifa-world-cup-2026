@@ -124,7 +124,13 @@ body::after{content:'';position:fixed;inset:0;
   display:flex;align-items:center;gap:.5rem;
   padding:.4rem .75rem;background:rgba(139,21,56,.07);
   border-left:3px solid var(--maroon);border-radius:0 5px 5px 0;
+  cursor:pointer;-webkit-user-select:none;user-select:none;transition:background .2s;
 }
+.adm-date-title:hover{background:rgba(139,21,56,.14)}
+.adm-date-title .adm-ds-arrow{margin-left:auto;font-size:.75rem;transition:transform .25s;display:inline-block}
+.adm-date-title .adm-ds-done{font-size:.6rem;padding:.1rem .45rem;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.25);border-radius:10px;color:var(--neon)}
+.adm-date-body{overflow:hidden;transition:max-height .35s ease,opacity .25s ease;max-height:3000px;opacity:1}
+.adm-date-body.collapsed{max-height:0;opacity:0}
 .adm-match-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
 @media(max-width:900px){.adm-match-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:580px){.adm-match-grid{grid-template-columns:1fr}}
@@ -993,12 +999,27 @@ function renderTable(grp){
   for(const d of Object.keys(byDate)){byDate[d].sort((a,b)=>a.time.localeCompare(b.time));}
   const sortedDates=Object.keys(byDate).sort();
 
-  document.getElementById('mTbody').innerHTML=sortedDates.map(date=>`
-    <div>
-      <div class="adm-date-title"><i class='fas fa-calendar-days'></i> ${dtitle(date)}</div>
-      <div class="adm-match-grid">${byDate[date].map(m=>cardHTML(m)).join('')}</div>
-    </div>
-  `).join('');
+  function isDateAllDone(date){return byDate[date].every(m=>dbSc[m.id]?.s1!==undefined&&dbSc[m.id]?.s1!==null);}
+  function getDoneCount(date){return byDate[date].filter(m=>dbSc[m.id]?.s1!==undefined&&dbSc[m.id]?.s1!==null).length;}
+
+  document.getElementById('mTbody').innerHTML=sortedDates.map(date=>{
+    const allDone=isDateAllDone(date);
+    const doneCount=getDoneCount(date);
+    const total=byDate[date].length;
+    const collapsed=allDone;
+    const doneBadge=allDone
+      ?`<span class="adm-ds-done">✓ ${doneCount}/${total}</span>`
+      :doneCount>0?`<span class="adm-ds-done">${doneCount}/${total}</span>`:'';
+    return`<div>
+      <div class="adm-date-title" onclick="this.nextElementSibling.classList.toggle('collapsed');this.querySelector('.adm-ds-arrow').style.transform=this.nextElementSibling.classList.contains('collapsed')?'rotate(-90deg)':''">
+        <i class='fas fa-calendar-days'></i> ${dtitle(date)} ${doneBadge}
+        <span class="adm-ds-arrow" style="${collapsed?'transform:rotate(-90deg)':''}">▼</span>
+      </div>
+      <div class="adm-date-body ${collapsed?'collapsed':''}">
+        <div class="adm-match-grid">${byDate[date].map(m=>cardHTML(m)).join('')}</div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ── BATCH SAVE (fixes the main bug) ──
