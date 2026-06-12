@@ -1297,7 +1297,7 @@ function renderMatches(grp){
     const doneCount=getDoneCount(date);
     const total=byDate[date].length;
     // Auto-collapse past dates where all matches done
-    const collapsed=allDone;
+    const collapsed=false;
     const isToday=date===todayStr;
 
     const statusBadge=allDone

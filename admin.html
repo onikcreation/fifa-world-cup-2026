@@ -1006,7 +1006,7 @@ function renderTable(grp){
     const allDone=isDateAllDone(date);
     const doneCount=getDoneCount(date);
     const total=byDate[date].length;
-    const collapsed=allDone;
+    const collapsed=false;
     const doneBadge=allDone
       ?`<span class="adm-ds-done">✓ ${doneCount}/${total}</span>`
       :doneCount>0?`<span class="adm-ds-done">${doneCount}/${total}</span>`:'';
