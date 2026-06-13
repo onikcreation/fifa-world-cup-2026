@@ -1277,18 +1277,20 @@ function renderMatches(grp){
     if(!byDate[m.date])byDate[m.date]=[];
     byDate[m.date].push(m);
   }
+  const isPast=d=>byDate[d].every(m=>scores[m.id]?.past===true);
   for(const d of Object.keys(byDate)){
-    byDate[d].sort((a,b)=>a.time.localeCompare(b.time));
+    if(schedView==='past') byDate[d].sort((a,b)=>b.time.localeCompare(a.time));
+    else byDate[d].sort((a,b)=>a.time.localeCompare(b.time));
   }
-  const allSortedDates=Object.keys(byDate).sort();
+  const allDates=Object.keys(byDate).sort();
   const now=new Date();
   const todayStr=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-  const sortedDates=allSortedDates.filter(d=>{
-    const allDone=byDate[d].every(m=>scores[m.id]?.s1!==undefined&&scores[m.id]?.s1!==null);
-    if(schedView==='past')return allDone;
-    if(schedView==='upcoming')return!allDone;
-    return true;
-  });
+  const sortedDates=(schedView==='past'
+    ?allDates.filter(isPast).reverse()
+    :schedView==='upcoming'
+      ?allDates.filter(d=>!isPast(d))
+      :allDates
+  );
   const S=window._S;
 
   function dateTitle(d){
@@ -1296,13 +1298,10 @@ function renderMatches(grp){
     return`${S.days[dt.getDay()]}, ${dt.getDate()} ${S.months[dt.getMonth()]} ${dt.getFullYear()}`;
   }
 
-  // Check if all matches in a date are finished
   function isDatePast(date){return date<todayStr;}
-  function isDateAllDone(date){
-    return byDate[date].every(m=>scores[m.id]?.s1!==undefined);
-  }
+  function isDateAllDone(date){return isPast(date);}
   function getDoneCount(date){
-    return byDate[date].filter(m=>scores[m.id]?.s1!==undefined).length;
+    return byDate[date].filter(m=>scores[m.id]?.past===true).length;
   }
 
   document.getElementById('matchList').innerHTML=sortedDates.map(date=>{

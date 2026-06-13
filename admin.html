@@ -116,6 +116,17 @@ body::after{content:'';position:fixed;inset:0;
 .fb{font-size:.72rem;letter-spacing:.5px;padding:.3rem .75rem;background:rgba(255,255,255,.03);border:1px solid var(--border2);border-radius:20px;color:var(--gray);cursor:pointer;transition:all .2s;white-space:nowrap}
 .fb:hover,.fb.on{background:rgba(212,175,55,.12);border-color:var(--neon);color:var(--neon)}
 
+/* Past / Upcoming capsule toggle — admin */
+.pg-toggle-wrap{display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+.pg-toggle{display:flex;background:rgba(15,15,15,.9);border:1px solid rgba(212,175,55,.2);border-radius:30px;overflow:hidden;padding:3px;gap:3px;box-shadow:0 2px 16px rgba(0,0,0,.4)}
+.pg-tab{font-family:"Google Sans",sans-serif;font-size:.82rem;letter-spacing:1.2px;padding:.42rem 1.3rem;border-radius:24px;cursor:pointer;transition:all .28s;color:rgba(255,255,255,.45);background:transparent;border:none;white-space:nowrap}
+.pg-tab.on{background:linear-gradient(135deg,#8B1538 0%,#D4AF37 100%);color:#fff;box-shadow:0 2px 14px rgba(139,21,56,.45);font-weight:600}
+.pg-tab:not(.on):hover{color:rgba(255,255,255,.75);background:rgba(255,255,255,.05)}
+/* Make Past button */
+.mk-past-btn{font-family:"Google Sans",sans-serif;font-size:.68rem;letter-spacing:.5px;padding:.25rem .6rem;background:rgba(255,170,0,.1);border:1px solid rgba(255,170,0,.3);border-radius:5px;color:#ffaa00;cursor:pointer;transition:all .2s;flex-shrink:0;white-space:nowrap}
+.mk-past-btn:hover{background:rgba(255,170,0,.22);border-color:rgba(255,170,0,.55)}
+.mk-past-btn.is-past{background:rgba(212,175,55,.1);border-color:rgba(212,175,55,.3);color:var(--neon)}
+
 /* ══ ADMIN MATCH CARDS ══ */
 .adm-match-sections{display:flex;flex-direction:column;gap:1.5rem;margin-bottom:1.2rem}
 .adm-date-title{
@@ -561,6 +572,12 @@ body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
       </div>
       <div class="sec-title">গ্রুপ পর্যায় স্কোর</div>
       <div class="filters" id="gFilters"></div>
+      <div class="pg-toggle-wrap">
+        <div class="pg-toggle">
+          <button type="button" class="pg-tab" id="admPgPast" onclick="setAdmPGTab('past')"><i class="fas fa-clock-rotate-left"></i> Past Games</button>
+          <button type="button" class="pg-tab on" id="admPgUpcoming" onclick="setAdmPGTab('upcoming')">Upcoming Games <i class="fas fa-calendar-check"></i></button>
+        </div>
+      </div>
       <div class="adm-match-sections" id="mTbody"></div>
     </div>
 
@@ -819,6 +836,7 @@ function tNameRankedA(name){const rank=getRank(name);const n=tNameA(name);return
 let dbSc={};
 let activeGrp='ALL';
 window._activeGrp='ALL';
+let admSchedView='upcoming';
 let modalMatchId=null;
 let modalIsKO=false;
 let adminSquads={};
@@ -937,6 +955,19 @@ function renderGFilters(){
   ).join('');
 }
 window._afg=function(g){activeGrp=g;window._activeGrp=g;renderGFilters();renderTable(g);};
+window.setAdmPGTab=function(v){
+  admSchedView=v;
+  document.getElementById('admPgPast').classList.toggle('on',v==='past');
+  document.getElementById('admPgUpcoming').classList.toggle('on',v==='upcoming');
+  renderTable(activeGrp);
+};
+window.makePast=async function(id){
+  const isPastNow=dbSc[id]?.past===true;
+  try{
+    await update(ref(db,'scores/'+id),{past:isPastNow?null:true});
+    toast(`Match #${id} → ${isPastNow?'Upcoming':'Past'} ✓`,'ok');
+  }catch(e){toast('Save ব্যর্থ!','err');}
+};
 
 function updateChangedCount(){
   const n=pendingChanges.size;
@@ -995,6 +1026,9 @@ function renderTable(grp){
         <button class="entry-btn ${hasDetail?'has-data':''}" onclick="openGoalModal(${m.id},false)">
           ${hasDetail?`<i class='fas fa-pen'></i> Edit`:`<i class='fas fa-futbol'></i> Entry`}
         </button>
+        <button class="mk-past-btn${sc.past?' is-past':''}" onclick="window.makePast(${m.id})">
+          ${sc.past?`<i class='fas fa-rotate-left'></i> Undo Past`:`<i class='fas fa-check'></i> Make Past`}
+        </button>
         <button class="cl-btn" onclick="window.clearOne(${m.id})" title="সব ডেটা মুছুন"><i class='fas fa-trash'></i></button>
       </div>
       <div class="mc-hl-row">
@@ -1009,9 +1043,19 @@ function renderTable(grp){
   const byDate={};
   for(const m of list){if(!byDate[m.date])byDate[m.date]=[];byDate[m.date].push(m);}
   for(const d of Object.keys(byDate)){byDate[d].sort((a,b)=>a.time.localeCompare(b.time));}
-  function isDateAllDone(date){return byDate[date].every(m=>dbSc[m.id]?.s1!==undefined&&dbSc[m.id]?.s1!==null);}
-  function getDoneCount(date){return byDate[date].filter(m=>dbSc[m.id]?.s1!==undefined&&dbSc[m.id]?.s1!==null).length;}
-  const sortedDates=Object.keys(byDate).sort();
+  const isAdmPast=d=>byDate[d].every(m=>dbSc[m.id]?.past===true);
+  function isDateAllDone(date){return isAdmPast(date);}
+  function getDoneCount(date){return byDate[date].filter(m=>dbSc[m.id]?.past===true).length;}
+  for(const d of Object.keys(byDate)){
+    if(admSchedView==='past') byDate[d].sort((a,b)=>b.time.localeCompare(a.time));
+    else byDate[d].sort((a,b)=>a.time.localeCompare(b.time));
+  }
+  const allAdmDates=Object.keys(byDate).sort();
+  const sortedDates=admSchedView==='past'
+    ?allAdmDates.filter(isAdmPast).reverse()
+    :admSchedView==='upcoming'
+      ?allAdmDates.filter(d=>!isAdmPast(d))
+      :allAdmDates;
 
   document.getElementById('mTbody').innerHTML=sortedDates.map(date=>{
     const allDone=isDateAllDone(date);
