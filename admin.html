@@ -302,7 +302,7 @@ body::after{content:'';position:fixed;inset:0;
 .st-firebase-note{flex:1 1 100%;font-size:.6rem;color:rgba(255,170,0,.65);line-height:1.6;padding-top:.5rem;border-top:1px solid rgba(255,255,255,.06)}
 .st-firebase-note strong{color:rgba(255,170,0,.85)}
 /* ── SETTINGS LAYOUT v2 (no-scroll) ── */
-#ap-settings{flex-direction:column;height:calc(100vh - 126px);overflow:hidden}
+#ap-settings{display:none;flex-direction:column;height:calc(100vh - 126px);overflow:hidden}
 #ap-settings.on{display:flex}
 .st-page-hd{padding:.5rem .9rem;margin-bottom:.5rem}
 .st-page-hd-icon{width:34px;height:34px;font-size:1rem}
@@ -1444,7 +1444,7 @@ window.openGoalModal=function(id,isKO){
     const hasSquad=players.length>0;
     const listId=`gnlist_${side}_${i}`;
     const squadRow=hasSquad
-      ?`<input class="gn-sq" list="${listId}" placeholder="স্কোয়াড থেকে বাছাই করুন..." id="gnsel_${side}_${i}" oninput="const t=document.getElementById('gn_${side}_${i}');if(this.value)t.value=this.value">
+      ?`<input class="gn-sq" list="${listId}" placeholder="স্কোয়াড থেকে বাছাই করুন..." id="gnsel_${side}_${i}" oninput="const t=document.getElementById('gn_${side}_${i}');t.value=this.value">
         <datalist id="${listId}">${players.map(p=>`<option value="${esc(p.name)}">${p.no}. ${p.pos} · ${esc(p.club)}</option>`).join('')}</datalist>`
       :'';
     return`<div class="goal-entry" id="ge_${side}_${i}">
@@ -1542,7 +1542,7 @@ window.addGoal=function(side){
   const hasSquad=players.length>0;
   const listId=`gnlist_${side}_${i}`;
   const squadRow=hasSquad
-    ?`<input class="gn-sq" list="${listId}" placeholder="স্কোয়াড থেকে বাছাই করুন..." id="gnsel_${side}_${i}" oninput="const t=document.getElementById('gn_${side}_${i}');if(this.value)t.value=this.value">
+    ?`<input class="gn-sq" list="${listId}" placeholder="স্কোয়াড থেকে বাছাই করুন..." id="gnsel_${side}_${i}" oninput="const t=document.getElementById('gn_${side}_${i}');t.value=this.value">
       <datalist id="${listId}">${players.map(p=>`<option value="${esc(p.name)}">${p.no}. ${p.pos} · ${esc(p.club)}</option>`).join('')}</datalist>`
     :'';
   const d=document.createElement('div');
@@ -1595,10 +1595,16 @@ window.saveGoalsAndCards=async function(){
     const c=document.getElementById('glist_'+side);if(!c)return[];
     return Array.from(c.children).map(row=>{
       const parts=row.id.split('_');const i=parts[parts.length-1];const s=parts[1];
-      const name=document.getElementById(`gn_${s}_${i}`)?.value?.trim()||'';
+      const gnEl=document.getElementById(`gn_${s}_${i}`);
+      const gnselEl=document.getElementById(`gnsel_${s}_${i}`);
+      const nameFromGnsel=gnselEl?.value?.trim()||'';
+      const nameFromGn=gnEl?.value?.trim()||'';
+      const name=nameFromGn||nameFromGnsel||'';
+      // custom=true when squad exists but squad selector wasn't used
+      const custom=!!gnselEl&&!nameFromGnsel;
       const min=Number(document.getElementById(`gm_${s}_${i}`)?.value||0);
       const pen=document.getElementById(`gp_${s}_${i}`)?.checked||false;
-      return name?{name,min,pen}:null;
+      return name?{name,min,pen,custom}:null;
     }).filter(Boolean);
   }
   function collectCards(side){
