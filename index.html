@@ -2061,17 +2061,6 @@ function renderStats(grps){
           </div>`).join('')}
     </div>
     <div class="stats-card">
-      <div class="stats-card-title"><i class='fas fa-circle-dot'></i> ${S.penGoals} ${titleSuffix}</div>
-      ${penList.length===0?`<div class="stats-empty">${S.noPenData}</div>`
-        :penList.map(([name,v])=>`
-          <div class="team-row">
-            ${fImg(name,28,21)}
-            <div class="tr-name">${tNameRanked(name)}</div>
-            <div class="tr-bar-wrap"><div class="tr-bar" style="width:${Math.round(v.pens/maxP*100)}%;background:linear-gradient(90deg,#8B1538,#D4AF37)"></div></div>
-            <div class="tr-goals">${v.pens}</div>
-          </div>`).join('')}
-    </div>
-    <div class="stats-card">
       <div class="stats-card-title"><svg width="12" height="16" viewBox="0 0 12 16" style="vertical-align:middle"><rect x="0" y="0" width="5" height="16" rx="1" fill="#ffc800"/><rect x="6" y="0" width="6" height="16" rx="1" fill="#ff3232"/></svg> ${S.playerWiseCard} ${titleSuffix}</div>
       ${cardList.length===0?`<div class="stats-empty">${S.noCardData}</div>`
         :cardList.map(c=>`
@@ -2097,6 +2086,17 @@ function renderStats(grps){
               ${v.yr>0?`<span class="st-card-badge yr"><span class="st-card-rect"></span> ${v.yr}</span>`:''}
               ${v.red>0?`<span class="st-card-badge red"><span class="st-card-rect"></span> ${v.red}</span>`:''}
             </div>
+          </div>`).join('')}
+    </div>
+    <div class="stats-card">
+      <div class="stats-card-title"><i class='fas fa-circle-dot'></i> ${S.penGoals} ${titleSuffix}</div>
+      ${penList.length===0?`<div class="stats-empty">${S.noPenData}</div>`
+        :penList.map(([name,v])=>`
+          <div class="team-row">
+            ${fImg(name,28,21)}
+            <div class="tr-name">${tNameRanked(name)}</div>
+            <div class="tr-bar-wrap"><div class="tr-bar" style="width:${Math.round(v.pens/maxP*100)}%;background:linear-gradient(90deg,#8B1538,#D4AF37)"></div></div>
+            <div class="tr-goals">${v.pens}</div>
           </div>`).join('')}
     </div>`;
 }
