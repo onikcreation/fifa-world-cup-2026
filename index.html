@@ -1148,18 +1148,47 @@ function calcGroups(){
     if(s1>s2){tbl[m.t1].w++;tbl[m.t1].pts+=3;tbl[m.t2].l++;}
     else if(s1<s2){tbl[m.t2].w++;tbl[m.t2].pts+=3;tbl[m.t1].l++;}
     else{tbl[m.t1].d++;tbl[m.t1].pts++;tbl[m.t2].d++;tbl[m.t2].pts++;}
-    // Fair play: yellow=-1, yr=-3, red=-4, yellow+red=-5
     for(const[cards,team]of[[sc.cards1||[],m.t1],[sc.cards2||[],m.t2]]){
       if(!tbl[team])continue;
       let y=0,yr=0,r=0;
       for(const c of cards){if(c.type==='yellow')y++;else if(c.type==='yr')yr++;else if(c.type==='red')r++;}
-      // yellow+red in same match = -5 (yr already covers double booking)
       tbl[team].fp+=y*(-1)+yr*(-3)+r*(-4);
     }
   }
   const s={};
-  for(const[g,tbl]of Object.entries(t)){s[g]=Object.entries(tbl).map(([n,v])=>({name:n,...v,gd:v.gf-v.ga})).sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf||b.fp-a.fp);}
+  for(const[g,tbl]of Object.entries(t)){
+    const entries=Object.entries(tbl).map(([n,v])=>({name:n,...v,gd:v.gf-v.ga}));
+    s[g]=sortTied(entries,g);
+  }
   return s;
+}
+
+function sortTied(entries,grp){
+  const buckets={};
+  for(const e of entries)(buckets[e.pts]=buckets[e.pts]||[]).push(e);
+  const result=[];
+  for(const pts of Object.keys(buckets).map(Number).sort((a,b)=>b-a)){
+    const bucket=buckets[pts];
+    if(bucket.length===1){result.push(bucket[0]);continue;}
+    // H2H stats among tied teams only
+    const names=new Set(bucket.map(e=>e.name));
+    const h={};
+    for(const n of names)h[n]={pts:0,gd:0,gf:0};
+    for(const m of MATCHES){
+      if(m.grp!==grp||!names.has(m.t1)||!names.has(m.t2))continue;
+      const sc=scores[m.id];if(!sc||sc.s1===undefined||sc.s1===null)continue;
+      const s1=Number(sc.s1),s2=Number(sc.s2);
+      h[m.t1].gf+=s1;h[m.t1].gd+=s1-s2;h[m.t2].gf+=s2;h[m.t2].gd+=s2-s1;
+      if(s1>s2)h[m.t1].pts+=3;else if(s2>s1)h[m.t2].pts+=3;else{h[m.t1].pts++;h[m.t2].pts++;}
+    }
+    // FIFA tiebreaker: H2H pts → H2H GD → H2H GF → overall GD → overall GF → fair play → alphabetical (lots)
+    bucket.sort((a,b)=>{
+      const ha=h[a.name],hb=h[b.name];
+      return hb.pts-ha.pts||hb.gd-ha.gd||hb.gf-ha.gf||b.gd-a.gd||b.gf-a.gf||b.fp-a.fp||a.name.localeCompare(b.name);
+    });
+    result.push(...bucket);
+  }
+  return result;
 }
 
 function renderAll(){
