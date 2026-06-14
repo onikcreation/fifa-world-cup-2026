@@ -828,8 +828,8 @@ const STRINGS={
     team:'দল',pl:'খে',won:'জ',draw:'ড্র',lost:'হা',grpLabel:g=>`গ্রুপ ${g}`,
     r32:'শেষ বত্রিশ',r16:'শেষ ষোলো',qf:'কোয়ার্টার',sf:'সেমি ফাইনাল',
     sfShort:'সেমি',final:'ফাইনাল',third:'তৃতীয় স্থান',
-    topScorers:'সর্বোচ্চ গোলদাতা',teamGoals:'দলীয় গোল',penGoals:'পেনাল্টি গোল',playerWiseCard:'খেলোয়াড়ভিত্তিক কার্ড',teamWiseCard:'দলভিত্তিক কার্ড',
-    noGoalData:'এখনো গোলের তথ্য নেই',noCardData:'এখনো কার্ডের তথ্য নেই',noPenData:'এখনো পেনাল্টি গোলের তথ্য নেই',
+    topScorers:'সর্বোচ্চ গোলদাতা',topAssists:'সর্বোচ্চ অ্যাসিস্ট',teamGoals:'দলীয় গোল',penGoals:'পেনাল্টি গোল',playerWiseCard:'খেলোয়াড়ভিত্তিক কার্ড',teamWiseCard:'দলভিত্তিক কার্ড',
+    noGoalData:'এখনো গোলের তথ্য নেই',noAssistData:'এখনো অ্যাসিস্টের তথ্য নেই',noCardData:'এখনো কার্ডের তথ্য নেই',noPenData:'এখনো পেনাল্টি গোলের তথ্য নেই',
     matchHistory:'ম্যাচ ইতিহাস',playedH:'খেলা হয়েছে',upcomingH:'বাকি আছে',
     noPlayedYet:'এখনো কোনো ম্যাচ খেলা হয়নি',allDone:'সব ম্যাচ খেলা হয়ে গেছে',
     upcomingScore:'বাকি',
@@ -865,8 +865,8 @@ const STRINGS={
     team:'Team',pl:'P',won:'W',draw:'D',lost:'L',grpLabel:g=>`Group ${g}`,
     r32:'Round of 32',r16:'Round of 16',qf:'Quarter',sf:'Semi Final',
     sfShort:'Semi',final:'Final',third:'3rd Place',
-    topScorers:'Top Scorers',teamGoals:'Team Goals',penGoals:'Penalty Goals',playerWiseCard:'PlayerWise Card',teamWiseCard:'TeamWise Card',
-    noGoalData:'No goal data yet',noCardData:'No card data yet',noPenData:'No penalty goal data yet',
+    topScorers:'Top Scorers',topAssists:'Top Assists',teamGoals:'Team Goals',penGoals:'Penalty Goals',playerWiseCard:'PlayerWise Card',teamWiseCard:'TeamWise Card',
+    noGoalData:'No goal data yet',noAssistData:'No assist data yet',noCardData:'No card data yet',noPenData:'No penalty goal data yet',
     matchHistory:'Match History',playedH:'Played',upcomingH:'Upcoming',
     noPlayedYet:'No matches played yet',allDone:'All matches completed',
     upcomingScore:'Upcoming',
@@ -1872,6 +1872,20 @@ function renderStats(grps){
   }}
   let scorers=Object.values(scorerMap).sort((a,b)=>b.goals-a.goals);
 
+  // ── Top assists ──
+  const assistMap={};
+  for(const m of MATCHES){
+    const sc=scores[m.id]||{};
+    for(const g of(sc.goals1||[])){if(g.og||!g.assist)continue;const k=`${g.assist}||${m.t1}`;if(!assistMap[k])assistMap[k]={name:g.assist,team:m.t1,assists:0};assistMap[k].assists++;}
+    for(const g of(sc.goals2||[])){if(g.og||!g.assist)continue;const k=`${g.assist}||${m.t2}`;if(!assistMap[k])assistMap[k]={name:g.assist,team:m.t2,assists:0};assistMap[k].assists++;}
+  }
+  for(const round of KO_ROUNDS){for(const m of round.matches){
+    const sc=scores[m.id]||{};const t1=sc.t1||'',t2=sc.t2||'';
+    for(const g of(sc.goals1||[])){if(g.og||!g.assist)continue;if(t1){const k=`${g.assist}||${t1}`;if(!assistMap[k])assistMap[k]={name:g.assist,team:t1,assists:0};assistMap[k].assists++;}}
+    for(const g of(sc.goals2||[])){if(g.og||!g.assist)continue;if(t2){const k=`${g.assist}||${t2}`;if(!assistMap[k])assistMap[k]={name:g.assist,team:t2,assists:0};assistMap[k].assists++;}}
+  }}
+  let assisters=Object.values(assistMap).sort((a,b)=>b.assists-a.assists);
+
   // ── Team goals ──
   const teamGoals={};
   for(const m of MATCHES){
@@ -1887,8 +1901,10 @@ function renderStats(grps){
   // ── Filter by team/group ──
   if(statsTeam!=='ALL'){
     scorers=scorers.filter(s=>s.team===statsTeam);
+    assisters=assisters.filter(a=>a.team===statsTeam);
   } else if(statsGrp!=='ALL'){
     scorers=scorers.filter(s=>GROUPS[statsGrp]?.includes(s.team));
+    assisters=assisters.filter(a=>GROUPS[statsGrp]?.includes(a.team));
   }
   let teamList=Object.entries(teamGoals).sort((a,b)=>b[1].goals-a[1].goals);
   if(statsTeam!=='ALL') teamList=teamList.filter(([n])=>n===statsTeam);
@@ -2051,6 +2067,17 @@ function renderStats(grps){
             ${fImg(s.team,26,19)}
             <div class="sr-info"><div class="sr-name">${esc(s.name)}</div><div class="sr-team">${tNameRanked(s.team)}</div></div>
             <div class="sr-goals">${s.goals}${s.pens>0?`<span style="font-size:.75rem;color:var(--orange);margin-left:3px">(${s.pens})</span>`:''}</div>
+          </div>`).join('')}</div>
+    </div>
+    <div class="stats-card">
+      <div class="stats-card-title" onclick="window._tsc(this)"><span><i class='fas fa-shoe-prints'></i> ${S.topAssists} ${titleSuffix}</span><i class="fas fa-chevron-down sc-chev"></i></div>
+      <div class="stats-card-body">${assisters.length===0?`<div class="stats-empty">${S.noAssistData}</div>`
+        :assisters.slice(0,20).map((a,i)=>`
+          <div class="scorer-row">
+            <div class="sr-rank ${i===0?'g1':i===1?'g2':i===2?'g3':''}">${i+1}</div>
+            ${fImg(a.team,26,19)}
+            <div class="sr-info"><div class="sr-name">${esc(a.name)}</div><div class="sr-team">${tNameRanked(a.team)}</div></div>
+            <div class="sr-goals">${a.assists}</div>
           </div>`).join('')}</div>
     </div>
     <div class="stats-card">

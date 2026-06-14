@@ -447,6 +447,8 @@ body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
 .pen-lbl{font-size:.65rem;color:var(--orange)}
 .og-cb{width:13px;height:13px;cursor:pointer;accent-color:#00bcd4}
 .og-lbl{font-size:.65rem;color:#00bcd4}
+.assist-row{display:flex;align-items:center;gap:.35rem;margin-top:.3rem;padding-top:.3rem;border-top:1px solid rgba(255,255,255,.06)}
+.assist-lbl{font-size:.58rem;color:rgba(212,175,55,.7);white-space:nowrap;flex-shrink:0}
 .add-goal-btn{font-size:.68rem;padding:.28rem .55rem;background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.3);border-radius:5px;color:var(--neon);cursor:pointer;margin-top:.25rem}
 .rm-btn{background:none;border:none;color:var(--red);cursor:pointer;font-size:.9rem;padding:0 .15rem;line-height:1}
 .modal-save{width:100%;margin-top:1rem;font-family:"Google Sans",sans-serif;font-size:1rem;letter-spacing:2px;padding:.55rem;background:rgba(161,240,0,.2);color:var(--neon);border:1px solid var(--border);border-radius:8px;color:#fff;cursor:pointer}
@@ -1441,13 +1443,18 @@ window.openGoalModal=function(id,isKO){
     return`<option value="">— খেলোয়াড় বেছে নাও —</option>${opts}`;
   }
 
-  function goalEntry(side,i,name='',min='',pen=false,og=false){
+  function goalEntry(side,i,name='',min='',pen=false,og=false,assist=''){
     const players=side==='t1'?p1:p2;
     const hasSquad=players.length>0;
     const listId=`gnlist_${side}_${i}`;
+    const aListId=`gnalist_${side}_${i}`;
     const squadRow=hasSquad
       ?`<input class="gn-sq" list="${listId}" placeholder="স্কোয়াড থেকে বাছাই করুন..." id="gnsel_${side}_${i}" oninput="const t=document.getElementById('gn_${side}_${i}');t.value=this.value">
         <datalist id="${listId}">${players.map(p=>`<option value="${esc(p.name)}">${p.no}. ${p.pos} · ${esc(p.club)}</option>`).join('')}</datalist>`
+      :'';
+    const assistRow=hasSquad
+      ?`<input class="gn-sq" list="${aListId}" placeholder="স্কোয়াড থেকে..." id="gasel_${side}_${i}" oninput="const t=document.getElementById('ga_${side}_${i}');t.value=this.value">
+        <datalist id="${aListId}">${players.map(p=>`<option value="${esc(p.name)}">${p.no}. ${p.pos} · ${esc(p.club)}</option>`).join('')}</datalist>`
       :'';
     return`<div class="goal-entry" id="ge_${side}_${i}">
       <input class="gm-in" type="number" min="1" max="130" placeholder="মি." value="${min}" id="gm_${side}_${i}">
@@ -1457,6 +1464,11 @@ window.openGoalModal=function(id,isKO){
       <div class="gn-wrap">
         ${squadRow}
         <input class="gn-in" placeholder="গোলদাতার নাম লিখুন" value="${esc(name)}" id="gn_${side}_${i}">
+        <div class="assist-row">
+          <span class="assist-lbl"><i class='fas fa-shoe-prints'></i> Assist</span>
+          ${assistRow}
+          <input class="gn-in" placeholder="অ্যাসিস্ট (ঐচ্ছিক)" value="${esc(assist)}" id="ga_${side}_${i}">
+        </div>
       </div>
     </div>`;
   }
@@ -1473,7 +1485,7 @@ window.openGoalModal=function(id,isKO){
           ${pc?`· ${pc} জন স্কোয়াড`:'· স্কোয়াড নেই'}
         </span>
       </div>
-      <div id="glist_${side}">${goals.map((g,i)=>goalEntry(side,i,g.name,g.min,g.pen,g.og)).join('')}</div>
+      <div id="glist_${side}">${goals.map((g,i)=>goalEntry(side,i,g.name,g.min,g.pen,g.og,g.assist||'')).join('')}</div>
       <button class="add-goal-btn" onclick="addGoal('${side}')">+ গোল যোগ</button>
     </div>`;
   }
@@ -1548,6 +1560,11 @@ window.addGoal=function(side){
     ?`<input class="gn-sq" list="${listId}" placeholder="স্কোয়াড থেকে বাছাই করুন..." id="gnsel_${side}_${i}" oninput="const t=document.getElementById('gn_${side}_${i}');t.value=this.value">
       <datalist id="${listId}">${players.map(p=>`<option value="${esc(p.name)}">${p.no}. ${p.pos} · ${esc(p.club)}</option>`).join('')}</datalist>`
     :'';
+  const aListId=`gnalist_${side}_${i}`;
+  const assistRow=hasSquad
+    ?`<input class="gn-sq" list="${aListId}" placeholder="স্কোয়াড থেকে..." id="gasel_${side}_${i}" oninput="const t=document.getElementById('ga_${side}_${i}');t.value=this.value">
+      <datalist id="${aListId}">${players.map(p=>`<option value="${esc(p.name)}">${p.no}. ${p.pos} · ${esc(p.club)}</option>`).join('')}</datalist>`
+    :'';
   const d=document.createElement('div');
   d.innerHTML=`<div class="goal-entry" id="ge_${side}_${i}">
     <input class="gm-in" type="number" min="1" max="130" placeholder="মি." id="gm_${side}_${i}">
@@ -1557,6 +1574,11 @@ window.addGoal=function(side){
     <div class="gn-wrap">
       ${squadRow}
       <input class="gn-in" placeholder="গোলদাতার নাম লিখুন" id="gn_${side}_${i}">
+      <div class="assist-row">
+        <span class="assist-lbl"><i class='fas fa-shoe-prints'></i> Assist</span>
+        ${assistRow}
+        <input class="gn-in" placeholder="অ্যাসিস্ট (ঐচ্ছিক)" id="ga_${side}_${i}">
+      </div>
     </div>
   </div>`;
   c.appendChild(d.firstElementChild);
@@ -1605,7 +1627,8 @@ window.saveGoalsAndCards=async function(){
       const min=Number(document.getElementById(`gm_${s}_${i}`)?.value||0);
       const pen=document.getElementById(`gp_${s}_${i}`)?.checked||false;
       const og=document.getElementById(`go_${s}_${i}`)?.checked||false;
-      return name?{name,min,pen,og}:null;
+      const assist=document.getElementById(`ga_${s}_${i}`)?.value?.trim()||'';
+      return name?{name,min,pen,og,...(assist&&{assist})}:null;
     }).filter(Boolean);
   }
   function collectCards(side){
