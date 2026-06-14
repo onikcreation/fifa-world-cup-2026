@@ -1269,7 +1269,7 @@ function renderMatches(grp){
       </div>`:''}
       <div class="mc-footer">
         <span class="mc-footer-date"><i class='fas fa-clock'></i> ${fT(m.time)}</span>
-        <span class="mc-footer-stadium"><i class='fas fa-landmark'></i> ${m.stadium||''}</span>
+        <span class="mc-footer-stadium"><i class='fas fa-landmark'></i> ${STADIUM_NAME[m.stadium]||m.stadium||''}</span>
       </div>
       ${done&&sc.highlights?`<div class="mc-hl-wrap"><button type="button" class="mc-hl-btn" onclick="openHighlights(${m.id})"><i class='fab fa-youtube'></i> Highlights</button></div>`:''}
     </div>`;
@@ -1717,7 +1717,7 @@ function renderBracket(grps={}){
       </div>
       ${hasPen?`<div class="sym-extra">PSO: ${sc.pen1}–${sc.pen2}</div>`:hasET?`<div class="sym-extra">ET: ${sc.et1}–${sc.et2}</div>`:''}
       <div class="sym-date">${fT(m.time)}</div>
-      ${m.stadium?`<div class="sym-stadium"><i class='fas fa-landmark'></i> ${m.stadium}</div>`:''}
+      ${m.stadium?`<div class="sym-stadium"><i class='fas fa-landmark'></i> ${STADIUM_NAME[m.stadium]||m.stadium}</div>`:''}
     </div>`;
   }
   // Column builder — evenly distribute spacers
@@ -2160,6 +2160,7 @@ const VENUES_DATA=[
   {key:'Guadalajara Stadium',name:'Estadio Akron',              city:'Zapopan',        state:'Jalisco',country:'Mexico',cap:49813,opened:2010,surface:'Grass',   roof:false,special:[],        desc:'Home of C.D. Guadalajara; hosted the 2011 Pan American Games opening & closing ceremonies.'},
 ];
 
+const STADIUM_NAME=Object.fromEntries(VENUES_DATA.map(v=>[v.key,v.name]));
 const COUNTRY_FLAG={USA:'us',Canada:'ca',Mexico:'mx'};
 let _vnFilter='ALL';
 
