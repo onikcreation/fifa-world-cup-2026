@@ -439,7 +439,8 @@ body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
 .modal-close:hover{color:var(--red)}
 .modal-teams{display:flex;flex-direction:column;gap:.8rem}
 .modal-team-title{font-family:"Google Sans",sans-serif;font-size:.85rem;letter-spacing:1px;color:var(--neon);margin-bottom:.45rem;display:flex;align-items:center;gap:.4rem;padding:.4rem .6rem;background:rgba(161,240,0,.06);border-radius:5px}
-.goal-entry{display:flex;gap:.35rem;align-items:center;margin-bottom:.3rem}
+.goal-entry{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;padding:.55rem .6rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:8px;margin-bottom:.5rem}
+.goal-entry:last-child{margin-bottom:0}
 .gn-in:focus{border-color:var(--neon)}
 .gm-in{width:46px;background:var(--inp);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-size:.76rem;padding:.32rem .35rem;text-align:center;outline:none}
 .gm-in:focus{border-color:var(--neon)}
@@ -525,7 +526,6 @@ body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
   .card-entry{flex-wrap:wrap;row-gap:.35rem;padding:.45rem .5rem}
   .card-entry .cn-in{flex:0 0 100%!important;width:100%!important;min-width:0}
   /* Row 1: min + P + × | Row 2: gn-wrap full width */
-  .goal-entry{flex-wrap:wrap;row-gap:.3rem}
   .goal-entry .gn-wrap{margin-top:.1rem}
 }
 </style>
