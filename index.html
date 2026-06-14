@@ -1260,8 +1260,8 @@ function renderMatches(grp){
         </div>
       </div>
       ${hasGoals?`<div class="mc-goals">
-        <div class="mc-goals-side">${g1.map(g=>`<div class="goal-item"><i class='fas fa-futbol'></i> ${esc(g.name)} <span class="gmin">${esc(g.min)}'</span>${g.pen?` <span class="gpen">(P)</span>`:''}</div>`).join('')}</div>
-        <div class="mc-goals-side right">${g2.map(g=>`<div class="goal-item">${g.pen?`<span class="gpen">(P) </span>`:''}<span class="gmin">${esc(g.min)}'</span> ${esc(g.name)} <i class='fas fa-futbol'></i></div>`).join('')}</div>
+        <div class="mc-goals-side">${g1.map(g=>`<div class="goal-item"><i class='fas fa-futbol'></i> ${esc(g.name)} <span class="gmin">${esc(g.min)}'</span>${g.pen?` <span class="gpen">(P)</span>`:''}${g.og?` <span class="gpen" style="color:#00bcd4">(OG)</span>`:''}</div>`).join('')}</div>
+        <div class="mc-goals-side right">${g2.map(g=>`<div class="goal-item">${g.pen?`<span class="gpen">(P) </span>`:''}${g.og?`<span class="gpen" style="color:#00bcd4">(OG) </span>`:''}<span class="gmin">${esc(g.min)}'</span> ${esc(g.name)} <i class='fas fa-futbol'></i></div>`).join('')}</div>
       </div>`:''}
       ${hasCards?`<div class="mc-cards">
         <div class="mc-cards-side">${cardIcons(c1)}</div>
@@ -1861,14 +1861,14 @@ function renderStats(grps){
   const scorerMap={};
   for(const m of MATCHES){
     const sc=scores[m.id]||{};
-    for(const g of(sc.goals1||[])){if(g.custom)continue;const k=`${g.name}||${m.t1}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:m.t1,goals:0,pens:0};scorerMap[k].goals++;if(g.pen)scorerMap[k].pens++;}
-    for(const g of(sc.goals2||[])){if(g.custom)continue;const k=`${g.name}||${m.t2}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:m.t2,goals:0,pens:0};scorerMap[k].goals++;if(g.pen)scorerMap[k].pens++;}
+    for(const g of(sc.goals1||[])){if(g.custom||g.og)continue;const k=`${g.name}||${m.t1}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:m.t1,goals:0,pens:0};scorerMap[k].goals++;if(g.pen)scorerMap[k].pens++;}
+    for(const g of(sc.goals2||[])){if(g.custom||g.og)continue;const k=`${g.name}||${m.t2}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:m.t2,goals:0,pens:0};scorerMap[k].goals++;if(g.pen)scorerMap[k].pens++;}
   }
   for(const round of KO_ROUNDS){for(const m of round.matches){
     const sc=scores[m.id]||{};
     const t1=sc.t1||'',t2=sc.t2||'';
-    for(const g of(sc.goals1||[])){if(g.custom)continue;if(t1){const k=`${g.name}||${t1}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:t1,goals:0,pens:0};scorerMap[k].goals++;if(g.pen)scorerMap[k].pens++;}}
-    for(const g of(sc.goals2||[])){if(g.custom)continue;if(t2){const k=`${g.name}||${t2}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:t2,goals:0,pens:0};scorerMap[k].goals++;if(g.pen)scorerMap[k].pens++;}}
+    for(const g of(sc.goals1||[])){if(g.custom||g.og)continue;if(t1){const k=`${g.name}||${t1}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:t1,goals:0,pens:0};scorerMap[k].goals++;if(g.pen)scorerMap[k].pens++;}}
+    for(const g of(sc.goals2||[])){if(g.custom||g.og)continue;if(t2){const k=`${g.name}||${t2}`;if(!scorerMap[k])scorerMap[k]={name:g.name,team:t2,goals:0,pens:0};scorerMap[k].goals++;if(g.pen)scorerMap[k].pens++;}}
   }}
   let scorers=Object.values(scorerMap).sort((a,b)=>b.goals-a.goals);
 
@@ -1880,8 +1880,8 @@ function renderStats(grps){
     if(!teamGoals[m.t2])teamGoals[m.t2]={goals:0,pens:0};
     teamGoals[m.t1].goals+=Number(sc.s1||0);
     teamGoals[m.t2].goals+=Number(sc.s2||0);
-    for(const g of(sc.goals1||[])){if(!g.custom&&g.pen)teamGoals[m.t1].pens++;}
-    for(const g of(sc.goals2||[])){if(!g.custom&&g.pen)teamGoals[m.t2].pens++;}
+    for(const g of(sc.goals1||[])){if(!g.custom&&!g.og&&g.pen)teamGoals[m.t1].pens++;}
+    for(const g of(sc.goals2||[])){if(!g.custom&&!g.og&&g.pen)teamGoals[m.t2].pens++;}
   }
 
   // ── Filter by team/group ──
