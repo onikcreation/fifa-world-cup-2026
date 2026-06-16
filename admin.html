@@ -589,6 +589,13 @@ body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
     <!-- KNOCKOUT PANEL -->
     <div id="ap-knockout" class="admin-panel">
       <div class="sec-title">Knockout Round স্কোর</div>
+      <div id="koLockMsg"></div>
+      <div class="pg-toggle-wrap" id="koPGToggle" style="display:none">
+        <div class="pg-toggle">
+          <button type="button" class="pg-tab" id="koPgPast" onclick="setKOPGTab('past')"><i class="fas fa-clock-rotate-left"></i> Past Games</button>
+          <button type="button" class="pg-tab on" id="koPgUpcoming" onclick="setKOPGTab('upcoming')">Upcoming Games <i class="fas fa-calendar-check"></i></button>
+        </div>
+      </div>
       <div class="ko-grid" id="koGrid"></div>
     </div>
 
@@ -842,6 +849,7 @@ let dbSc={};
 let activeGrp='ALL';
 window._activeGrp='ALL';
 let admSchedView='upcoming';
+let admKOView='upcoming';
 let modalMatchId=null;
 let modalIsKO=false;
 let adminSquads={};
@@ -965,6 +973,12 @@ window.setAdmPGTab=function(v){
   document.getElementById('admPgPast').classList.toggle('on',v==='past');
   document.getElementById('admPgUpcoming').classList.toggle('on',v==='upcoming');
   renderTable(activeGrp);
+};
+window.setKOPGTab=function(v){
+  admKOView=v;
+  document.getElementById('koPgPast').classList.toggle('on',v==='past');
+  document.getElementById('koPgUpcoming').classList.toggle('on',v==='upcoming');
+  renderKO();
 };
 window.makePast=async function(id){
   const isPastNow=dbSc[id]?.past===true;
@@ -1265,6 +1279,21 @@ function resolveWinSlot(slot,wmap){
 }
 
 function renderKO(){
+  // Lock check: all 72 group matches must be marked past
+  const totalGrp=MATCHES.length;
+  const doneGrp=MATCHES.filter(m=>dbSc[m.id]?.past===true).length;
+  const allGrpDone=doneGrp===totalGrp;
+  const lockEl=document.getElementById('koLockMsg');
+  const toggleEl=document.getElementById('koPGToggle');
+  if(!allGrpDone){
+    if(lockEl)lockEl.innerHTML=`<div style="background:rgba(139,21,56,.2);border:1px solid rgba(139,21,56,.5);border-radius:10px;padding:1.2rem;margin-bottom:1rem;text-align:center"><i class="fas fa-lock" style="color:#D4AF37;font-size:1.6rem;display:block;margin-bottom:.5rem"></i><div style="font-size:.9rem;color:#D4AF37;font-family:'Google Sans',sans-serif;margin-bottom:.3rem">গ্রুপ পর্ব শেষ হয়নি</div><div style="font-size:.75rem;color:rgba(255,255,255,.6);margin-bottom:.7rem">${doneGrp}/${totalGrp} ম্যাচ সম্পন্ন হয়েছে</div><div style="height:5px;background:rgba(255,255,255,.1);border-radius:3px;max-width:220px;margin:0 auto"><div style="height:100%;width:${Math.round(doneGrp/totalGrp*100)}%;background:linear-gradient(90deg,#8B1538,#D4AF37);border-radius:3px"></div></div></div>`;
+    if(toggleEl)toggleEl.style.display='none';
+    document.getElementById('koGrid').innerHTML='';
+    return;
+  }
+  if(lockEl)lockEl.innerHTML='';
+  if(toggleEl)toggleEl.style.display='';
+
   const grps=calcGroupsAdmin();
   const b3map=buildB3MapAdmin(grps);
   const winnerMap=buildWinnerMapAdmin(grps,b3map);
@@ -1334,7 +1363,13 @@ function renderKO(){
     {icon:'<i class="fas fa-trophy"></i>',         name:L.final, matches:KO_ROUNDS[5].matches},
   ];
   const cs=L.countSuffix;
-  document.getElementById('koGrid').innerHTML=sections.map(sec=>`
+  const filteredSections=sections.map(sec=>({
+    ...sec,
+    matches:sec.matches.filter(m=>admKOView==='past'?dbSc[m.id]?.past===true:!dbSc[m.id]?.past)
+  })).filter(sec=>sec.matches.length>0);
+  document.getElementById('koGrid').innerHTML=filteredSections.length===0
+    ?`<div style="text-align:center;padding:2rem;color:rgba(255,255,255,.4);font-size:.85rem">${admKOView==='past'?'কোনো সম্পন্ন ম্যাচ নেই':'কোনো আসন্ন ম্যাচ নেই'}</div>`
+    :filteredSections.map(sec=>`
     <div class="ko-section-title">${sec.icon} ${sec.name} <span style="font-size:.65rem;opacity:.5">(${sec.matches.length}${cs})</span></div>
     ${sec.matches.map(m=>cardHTML({...m,roundName:sec.name})).join('')}
   `).join('');

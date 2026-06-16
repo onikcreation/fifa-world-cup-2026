@@ -1240,10 +1240,10 @@ function renderStrip(){
 
 // Schedule
 function renderSchedFilters(){
-  const gs=['ALL','A','B','C','D','E','F','G','H','I','J','K','L'];
+  const gs=['ALL','KO','A','B','C','D','E','F','G','H','I','J','K','L'];
   const S=window._S;
   document.getElementById('schedFilters').innerHTML=gs.map(g=>
-    `<button class="fb ${schedGrp===g?'on':''}" onclick="window._sfg('${g}')">${g==='ALL'?S.allMatches:'Group '+g}</button>`
+    `<button class="fb ${schedGrp===g?'on':''}" onclick="window._sfg('${g}')">${g==='ALL'?S.allMatches:g==='KO'?'Knockout':'Group '+g}</button>`
   ).join('');
 }
 window._sfg=function(g){schedGrp=g;renderSchedFilters();renderMatches(g);};
@@ -1255,7 +1255,10 @@ window.setPGTab=function(v){
 };
 
 function renderMatches(grp){
-  const list=grp==='ALL'?MATCHES:MATCHES.filter(m=>m.grp===grp);
+  const grpList=grp==='KO'?[]:grp==='ALL'?MATCHES:MATCHES.filter(m=>m.grp===grp);
+  const koAll=KO_ROUNDS.flatMap(r=>r.matches.map(m=>({...m,_ko:true,_rs:r.short,_rn:r.name})));
+  const koList=(grp==='ALL'||grp==='KO')?koAll:[];
+  const list=[...grpList,...koList];
 
   function bigFlag(name){
     const t=TEAMS[name];
@@ -1306,6 +1309,49 @@ function renderMatches(grp){
         <span class="mc-footer-stadium"><i class='fas fa-landmark'></i> ${STADIUM_NAME[m.stadium]||m.stadium||''}</span>
       </div>
       ${done&&sc.highlights?`<div class="mc-hl-wrap"><button type="button" class="mc-hl-btn" onclick="openHighlights(${m.id})"><i class='fab fa-youtube'></i> Highlights</button></div>`:''}
+    </div>`;
+  }
+
+  function koCardHTML(m){
+    const sc=scores[m.id]||{};
+    const done=sc.s1!==undefined&&sc.s1!==null;
+    const t1=sc.t1||m.s1||'';
+    const t2=sc.t2||m.s2||'';
+    const g1=sc.goals1||[],g2=sc.goals2||[];
+    const c1=sc.cards1||[],c2=sc.cards2||[];
+    const hasGoals=g1.length>0||g2.length>0;
+    const hasCards=c1.length>0||c2.length>0;
+    const cardIcons=cards=>cards.map(c=>`<span class="mc-card ${c.type||'yellow'}"></span>`).join('');
+    const hasET=sc.et1!==undefined,hasPen=sc.pen1!==undefined;
+    function koFlag(name){
+      const t=TEAMS[name];
+      if(t)return`<img class="mc-flag-big" src="https://flagcdn.com/80x60/${t.code}.png" loading="lazy" onerror="this.style.display='none'" alt="${t.en}">`;
+      return`<div class="mc-flag-ph" style="font-size:.52rem;padding:.25rem .1rem;word-break:break-word;line-height:1.2">${esc(name)}</div>`;
+    }
+    const scoreHTML=done
+      ?`<div><span class="mc-sc">${sc.s1}</span><span class="mc-sc-sep">-</span><span class="mc-sc">${sc.s2}</span></div>${hasET?`<div style="font-size:.58rem;color:var(--gray);text-align:center;margin-top:2px">ET ${sc.et1}-${sc.et2}${hasPen?` · P ${sc.pen1}-${sc.pen2}`:''}</div>`:''}`
+      :`<span class="mc-vs">VS</span>`;
+    const [yr,mo,dy]=m.date.split('-');
+    return`<div class="mc">
+      <div class="mc-hdr">
+        <span class="mc-grp-badge">${m._rs}</span>
+        <span class="mc-matchday">Match #${m.num}</span>
+      </div>
+      <div class="mc-body">
+        <div class="mc-team">${koFlag(t1)}<div class="mc-tname">${TEAMS[t1]?tNameRanked(t1):esc(t1)}</div></div>
+        <div class="mc-score-center">${scoreHTML}</div>
+        <div class="mc-team">${koFlag(t2)}<div class="mc-tname">${TEAMS[t2]?tNameRanked(t2):esc(t2)}</div></div>
+      </div>
+      ${hasGoals?`<div class="mc-goals">
+        <div class="mc-goals-side">${g1.map(g=>`<div class="goal-item"><i class='fas fa-futbol'></i> ${esc(g.name)} <span class="gmin">${esc(g.min)}'</span>${g.pen?` <span class="gpen">(P)</span>`:''}${g.og?` <span class="gpen" style="color:#00bcd4">(OG)</span>`:''}</div>`).join('')}</div>
+        <div class="mc-goals-side right">${g2.map(g=>`<div class="goal-item">${g.pen?`<span class="gpen">(P) </span>`:''}${g.og?`<span class="gpen" style="color:#00bcd4">(OG) </span>`:''}<span class="gmin">${esc(g.min)}'</span> ${esc(g.name)} <i class='fas fa-futbol'></i></div>`).join('')}</div>
+      </div>`:''}
+      ${hasCards?`<div class="mc-cards"><div class="mc-cards-side">${cardIcons(c1)}</div><div class="mc-cards-side right">${cardIcons(c2)}</div></div>`:''}
+      <div class="mc-footer">
+        <span class="mc-footer-date"><i class='fas fa-clock'></i> ${fT(m.time)}</span>
+        <span class="mc-footer-stadium"><i class='fas fa-landmark'></i> ${STADIUM_NAME[m.stadium]||m.stadium||''}</span>
+      </div>
+      ${done&&sc.highlights?`<div class="mc-hl-wrap"><button type="button" class="mc-hl-btn" onclick="openHighlights('${m.id}')"><i class='fab fa-youtube'></i> Highlights</button></div>`:''}
     </div>`;
   }
 
@@ -1366,7 +1412,7 @@ function renderMatches(grp){
         <span class="ds-arrow" style="${collapsed?'transform:rotate(-90deg)':''}">▼</span>
       </div>
       <div class="date-section-body ${collapsed?'collapsed':''}">
-        <div class="match-grid">${byDate[date].map(m=>cardHTML(m)).join('')}</div>
+        <div class="match-grid">${byDate[date].map(m=>m._ko?koCardHTML(m):cardHTML(m)).join('')}</div>
       </div>
     </div>`;
   }).join('');
