@@ -1147,7 +1147,7 @@ window._reload=function(){location.reload();};
 
 function calcGroups(){
   const t={};
-  for(const[g,teams]of Object.entries(GROUPS)){t[g]={};for(const tm of teams)t[g][tm]={pl:0,w:0,d:0,l:0,gf:0,ga:0,pts:0,fp:0};}
+  for(const[g,teams]of Object.entries(GROUPS)){t[g]={};for(const tm of teams)t[g][tm]={pl:0,w:0,d:0,l:0,gf:0,ga:0,pts:0,fp:0,yc:0,rc:0};}
   for(const m of MATCHES){
     const sc=scores[m.id];if(!sc||sc.s1===undefined||sc.s1===null)continue;
     const tbl=t[m.grp];if(!tbl||!tbl[m.t1]||!tbl[m.t2])continue;
@@ -1160,6 +1160,7 @@ function calcGroups(){
       if(!tbl[team])continue;
       let y=0,yr=0,r=0;
       for(const c of cards){if(c.type==='yellow')y++;else if(c.type==='yr')yr++;else if(c.type==='red')r++;}
+      tbl[team].yc+=y+yr;tbl[team].rc+=yr+r;
       tbl[team].fp+=y*(-1)+yr*(-3)+r*(-4);
     }
   }
@@ -2216,7 +2217,7 @@ function renderThirdPlace(grps){
     <div class="tp-card">
       <p style="font-size:.76rem;color:var(--gray);margin-bottom:1rem;">${S.thirdDesc}</p>
       <table class="tp-tbl">
-        <thead><tr><th>#</th><th>${S.team}</th><th>${S.tpGrp}</th><th>${S.tpPlayed}</th><th>${S.won}</th><th>${S.draw}</th><th>${S.lost}</th><th>${S.tpPoints}</th><th>${S.tpGF}</th><th>${S.tpGA}</th><th>${S.tpGD}</th><th>${S.statusCol}</th></tr></thead>
+        <thead><tr><th>#</th><th>${S.team}</th><th>${S.tpGrp}</th><th>${S.tpPlayed}</th><th>${S.won}</th><th>${S.draw}</th><th>${S.lost}</th><th>${S.tpPoints}</th><th>${S.tpGF}</th><th>${S.tpGA}</th><th>${S.tpGD}</th><th style="color:#ffc800">🟨</th><th style="color:#ff4444">🟥</th><th>${S.statusCol}</th></tr></thead>
         <tbody>${thirds.map((t,i)=>`
           <tr class="${i<8?'row-q':''}">
             <td>${i+1}</td>
@@ -2225,6 +2226,8 @@ function renderThirdPlace(grps){
             <td>${t.pl}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td><td class="pts-c">${t.pts}</td>
             <td>${t.gf}</td><td>${t.ga}</td>
             <td class="${t.gd>0?'gdp':t.gd<0?'gdn':'gdz'}">${t.gd>0?'+'+t.gd:t.gd}</td>
+            <td style="color:#ffc800;font-weight:600">${t.yc||0}</td>
+            <td style="color:#ff4444;font-weight:600">${t.rc||0}</td>
             <td style="font-size:.7rem;color:${i<8?'var(--green)':'var(--gray)'}">${i<8?S.qualified:S.eliminated}</td>
           </tr>`).join('')}
         </tbody>
