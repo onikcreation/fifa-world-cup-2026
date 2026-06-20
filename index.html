@@ -367,11 +367,14 @@ body::after{content:'';position:fixed;inset:0;
 
 /* Third place */
 .tp-card{background:var(--card);border:1px solid var(--border2);border-radius:10px;overflow:hidden;padding:1rem}
-.tp-tbl{width:100%;border-collapse:collapse;font-size:.78rem}
-.tp-tbl th{padding:.4rem .5rem;text-align:center;font-size:.58rem;letter-spacing:1px;color:var(--gray);background:rgba(0,0,0,.3);border-bottom:1px solid var(--border2)}
-.tp-tbl th:nth-child(2){text-align:left}
-.tp-tbl td{padding:.42rem .5rem;text-align:center;border-bottom:1px solid var(--border2)}
+.tp-tbl{width:100%;border-collapse:collapse;font-size:.78rem;table-layout:fixed}
+.tp-tbl th{padding:.4rem .3rem;text-align:center;font-size:.58rem;letter-spacing:1px;color:var(--gray);background:rgba(0,0,0,.3);border-bottom:1px solid var(--border2);width:52px;white-space:nowrap;overflow:hidden}
+.tp-tbl th:nth-child(1){width:32px}
+.tp-tbl th:nth-child(2){text-align:left;width:160px}
+.tp-tbl th:nth-child(14){width:80px}
+.tp-tbl td{padding:.42rem .3rem;text-align:center;border-bottom:1px solid var(--border2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tp-tbl td:nth-child(2){text-align:left}
+.tp-card-rect{display:inline-block;width:7px;height:11px;border-radius:1px;vertical-align:middle;margin-right:3px}
 .tp-tbl tbody tr:hover{background:rgba(255,255,255,.03)}
 
 /* Card gradient on/off */
@@ -2217,7 +2220,7 @@ function renderThirdPlace(grps){
     <div class="tp-card">
       <p style="font-size:.76rem;color:var(--gray);margin-bottom:1rem;">${S.thirdDesc}</p>
       <table class="tp-tbl">
-        <thead><tr><th>#</th><th>${S.team}</th><th>${S.tpGrp}</th><th>${S.tpPlayed}</th><th>${S.won}</th><th>${S.draw}</th><th>${S.lost}</th><th>${S.tpPoints}</th><th>${S.tpGF}</th><th>${S.tpGA}</th><th>${S.tpGD}</th><th style="color:#ffc800">🟨</th><th style="color:#ff4444">🟥</th><th>${S.statusCol}</th></tr></thead>
+        <thead><tr><th>#</th><th>${S.team}</th><th>${S.tpGrp}</th><th>${S.tpPlayed}</th><th>${S.won}</th><th>${S.draw}</th><th>${S.lost}</th><th>${S.tpPoints}</th><th>${S.tpGF}</th><th>${S.tpGA}</th><th>${S.tpGD}</th><th><span class="tp-card-rect" style="background:#ffc800;border:1px solid #a88000"></span>YC</th><th><span class="tp-card-rect" style="background:#ff3232;border:1px solid #aa1010"></span>RC</th><th>${S.statusCol}</th></tr></thead>
         <tbody>${thirds.map((t,i)=>`
           <tr class="${i<8?'row-q':''}">
             <td>${i+1}</td>
