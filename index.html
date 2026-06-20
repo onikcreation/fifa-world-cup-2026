@@ -160,6 +160,12 @@ body::after{content:'';position:fixed;inset:0;
 .mc-hdr{display:flex;align-items:center;justify-content:space-between;padding:.65rem 1rem;background:linear-gradient(135deg,rgba(139,21,56,0.45) 0%,rgba(20,20,20,0.98) 65%,rgba(26,26,26,0.98) 100%);border-bottom:1px solid rgba(255,255,255,0.06)}
 .mc-grp-badge{font-family:"Google Sans",sans-serif;font-size:.78rem;letter-spacing:1px;padding:.22rem .7rem;border-radius:20px;background:var(--maroon);color:#ffffff;font-weight:700}
 .mc-matchday{font-family:"Google Sans",sans-serif;font-size:.78rem;letter-spacing:.5px;color:rgba(255,255,255,.7)}
+.mc-day-label{font-family:"Google Sans",sans-serif;font-size:.62rem;letter-spacing:.5px;padding:.15rem .5rem;border-radius:20px;font-weight:600;white-space:nowrap}
+.mc-day-today{background:rgba(212,175,55,0.2);border:1px solid rgba(212,175,55,0.5);color:var(--neon)}
+.mc-day-yesterday{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,.5)}
+.mc-day-tomorrow{background:rgba(100,200,100,0.12);border:1px solid rgba(100,200,100,0.3);color:#7dda7d}
+.mc-day-past{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,.38)}
+.mc-day-future{background:rgba(100,160,255,0.1);border:1px solid rgba(100,160,255,0.25);color:rgba(120,180,255,.8)}
 /* Body — 3 column grid */
 .mc-body{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:1.1rem .8rem .8rem;gap:.5rem}
 .mc-team{display:flex;flex-direction:column;align-items:center;gap:.5rem;min-width:0}
@@ -919,6 +925,17 @@ function fT(t){
 }
 // XSS escape
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function dayLabel(dateStr){
+  const now=new Date();now.setHours(0,0,0,0);
+  const[yr,mo,dy]=dateStr.split('-');
+  const d=new Date(Number(yr),Number(mo)-1,Number(dy));
+  const diff=Math.round((d-now)/(864e5));
+  if(diff===0)return['Today','mc-day-today'];
+  if(diff===-1)return['Yesterday','mc-day-yesterday'];
+  if(diff===1)return['Tomorrow','mc-day-tomorrow'];
+  if(diff<0)return[`${Math.abs(diff)} Days Ago`,'mc-day-past'];
+  return[`After ${diff} Days`,'mc-day-future'];
+}
 // flagcdn.com valid sizes: 20x15,24x18,28x21,32x24,40x30,48x36,64x48,80x60
 function nearestFlag(w){
   const sizes=[20,24,28,32,40,48,64,80];
@@ -1292,9 +1309,11 @@ function renderMatches(grp,grps=null){
     const hasCards=c1.length>0||c2.length>0;
     const cardIcons=cards=>cards.map(c=>`<span class="mc-card ${c.type||'yellow'}"></span>`).join('');
     const [yr,mo,dy]=m.date.split('-');
+    const[dlText,dlCls]=dayLabel(m.date);
     return`<div class="mc">
       <div class="mc-hdr">
         <span class="mc-grp-badge">Group ${m.grp}</span>
+        <span class="mc-day-label ${dlCls}">${dlText}</span>
         <span class="mc-matchday">Match #${m.id}</span>
       </div>
       <div class="mc-body">
@@ -1350,9 +1369,11 @@ function renderMatches(grp,grps=null){
       ?`<div><span class="mc-sc">${sc.s1}</span><span class="mc-sc-sep">-</span><span class="mc-sc">${sc.s2}</span></div>${hasET?`<div style="font-size:.58rem;color:var(--gray);text-align:center;margin-top:2px">ET ${sc.et1}-${sc.et2}${hasPen?` · P ${sc.pen1}-${sc.pen2}`:''}</div>`:''}`
       :`<span class="mc-vs">VS</span>`;
     const [yr,mo,dy]=m.date.split('-');
+    const[dlText2,dlCls2]=dayLabel(m.date);
     return`<div class="mc">
       <div class="mc-hdr">
         <span class="mc-grp-badge">${m._rs}</span>
+        <span class="mc-day-label ${dlCls2}">${dlText2}</span>
         <span class="mc-matchday">Match #${m.num}</span>
       </div>
       <div class="mc-body">
