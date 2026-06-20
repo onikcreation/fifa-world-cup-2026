@@ -2216,13 +2216,13 @@ function renderThirdPlace(grps){
     <div class="tp-card">
       <p style="font-size:.76rem;color:var(--gray);margin-bottom:1rem;">${S.thirdDesc}</p>
       <table class="tp-tbl">
-        <thead><tr><th>#</th><th>${S.team}</th><th>${S.tpGrp}</th><th>${S.tpPlayed}</th><th>${S.tpPoints}</th><th>${S.tpGF}</th><th>${S.tpGA}</th><th>${S.tpGD}</th><th>${S.statusCol}</th></tr></thead>
+        <thead><tr><th>#</th><th>${S.team}</th><th>${S.tpGrp}</th><th>${S.tpPlayed}</th><th>${S.won}</th><th>${S.draw}</th><th>${S.lost}</th><th>${S.tpPoints}</th><th>${S.tpGF}</th><th>${S.tpGA}</th><th>${S.tpGD}</th><th>${S.statusCol}</th></tr></thead>
         <tbody>${thirds.map((t,i)=>`
           <tr class="${i<8?'row-q':''}">
             <td>${i+1}</td>
             <td><div class="gt-team">${fImg(t.name,20,15)}<span>${tNameRanked(t.name)}</span></div></td>
             <td>${t.group}</td>
-            <td>${t.pl}</td><td class="pts-c">${t.pts}</td>
+            <td>${t.pl}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td><td class="pts-c">${t.pts}</td>
             <td>${t.gf}</td><td>${t.ga}</td>
             <td class="${t.gd>0?'gdp':t.gd<0?'gdn':'gdz'}">${t.gd>0?'+'+t.gd:t.gd}</td>
             <td style="font-size:.7rem;color:${i<8?'var(--green)':'var(--gray)'}">${i<8?S.qualified:S.eliminated}</td>
