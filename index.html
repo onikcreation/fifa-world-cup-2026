@@ -378,7 +378,8 @@ body::after{content:'';position:fixed;inset:0;
 
 /* Third place */
 .tp-card{background:var(--card);border:1px solid var(--border2);border-radius:10px;overflow:hidden;padding:1rem}
-.tp-tbl{width:100%;border-collapse:collapse;font-size:.78rem;table-layout:fixed}
+.tp-tbl-wrap{overflow-x:auto}
+.tp-tbl{width:100%;border-collapse:collapse;font-size:.78rem;table-layout:fixed;min-width:700px}
 .tp-tbl th{padding:.4rem .3rem;text-align:center;font-size:.58rem;letter-spacing:1px;color:var(--gray);background:rgba(0,0,0,.3);border-bottom:1px solid var(--border2);width:52px;white-space:nowrap;overflow:hidden}
 .tp-tbl th:nth-child(1){width:32px}
 .tp-tbl th:nth-child(2){text-align:left;width:160px}
@@ -2255,7 +2256,7 @@ function renderThirdPlace(grps){
   document.getElementById('thirdPlace').innerHTML=`
     <div class="tp-card">
       <p style="font-size:.76rem;color:var(--gray);margin-bottom:1rem;">${S.thirdDesc}</p>
-      <table class="tp-tbl">
+      <div class="tp-tbl-wrap"><table class="tp-tbl">
         <thead><tr><th>#</th><th>${S.team}</th><th>${S.tpGrp}</th><th>${S.tpPlayed}</th><th>${S.won}</th><th>${S.draw}</th><th>${S.lost}</th><th>${S.tpPoints}</th><th>${S.tpGD}</th><th><span class="tp-card-rect" style="background:#ffc800;border:1px solid #a88000"></span>YC</th><th><span class="tp-card-rect" style="background:#ff3232;border:1px solid #aa1010"></span>RC</th><th>FIFA</th><th>${S.tpGF}</th><th>${S.tpGA}</th><th>${S.statusCol}</th></tr></thead>
         <tbody>${thirds.map((t,i)=>`
           <tr class="${i<8?'row-q':''}">
@@ -2271,7 +2272,7 @@ function renderThirdPlace(grps){
             <td style="font-size:.7rem;color:${i<8?'var(--green)':'var(--gray)'}">${i<8?S.qualified:S.eliminated}</td>
           </tr>`).join('')}
         </tbody>
-      </table>
+      </table></div>
     </div>`;
 }
 
