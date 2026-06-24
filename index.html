@@ -2036,9 +2036,9 @@ function renderStats(grps){
     teamCardMap[v.team].red+=v.red;
     teamCardMap[v.team].yr+=v.yr;
   }
-  let teamCardList=Object.entries(teamCardMap).sort((a,b)=>(b[1].red+b[1].yr)-(a[1].red+a[1].yr)||(b[1].yellow+b[1].yr)-(a[1].yellow+a[1].yr));
-  if(statsTeam!=='ALL') teamCardList=teamCardList.filter(([n])=>n===statsTeam);
-  else if(statsGrp!=='ALL') teamCardList=teamCardList.filter(([n])=>GROUPS[statsGrp]?.includes(n));
+  const _allTeams=statsTeam!=='ALL'?[statsTeam]:statsGrp!=='ALL'?(GROUPS[statsGrp]||[]):Object.keys(TEAMS);
+  let teamCardList=_allTeams.map(name=>[name,teamCardMap[name]||{yellow:0,red:0,yr:0}])
+    .sort((a,b)=>(b[1].red+b[1].yr)-(a[1].red+a[1].yr)||(b[1].yellow+b[1].yr)-(a[1].yellow+a[1].yr));
 
   const titleSuffix=statsTeam!=='ALL'?`· ${tNameRanked(statsTeam)}`:statsGrp!=='ALL'?`· Group ${statsGrp}`:'';
 
@@ -2223,9 +2223,9 @@ function renderStats(grps){
             ${fImg(name,26,19)}
             <div class="sr-info" style="flex:1"><div class="sr-name">${tNameRanked(name)}</div></div>
             <div class="st-cards-wrap">
-              ${v.yellow>0?`<span class="st-card-badge yellow"><span class="st-card-rect"></span> ${v.yellow}</span>`:''}
+              <span class="st-card-badge yellow"><span class="st-card-rect"></span> ${v.yellow}</span>
               ${v.yr>0?`<span class="st-card-badge yr"><span class="st-card-rect"></span> ${v.yr}</span>`:''}
-              ${v.red>0?`<span class="st-card-badge red"><span class="st-card-rect"></span> ${v.red}</span>`:''}
+              <span class="st-card-badge red"><span class="st-card-rect"></span> ${v.red}</span>
             </div>
           </div>`).join('')}</div>
     </div>
