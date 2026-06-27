@@ -1357,6 +1357,7 @@ function renderKO(){
       </div>
       <div class="ko-actions">
         <button class="ko-sv" ${locked?'disabled title="গ্রুপ পর্ব শেষ হয়নি"':''} onclick="window.saveKO('${m.id}')"><i class='fas fa-floppy-disk'></i> Save</button>
+        <button class="mk-past-btn${sc.past?' is-past':''}" onclick="window.makePast('${m.id}')">${sc.past?`<i class='fas fa-rotate-left'></i> Undo Past`:`<i class='fas fa-check'></i> Make Past`}</button>
         <button class="ko-goal-btn" ${locked?'disabled':''} onclick="openGoalModal('${m.id}',true)"><i class='fas fa-futbol'></i>${hg?' '+hg:' '+(window._L||LABELS.bn).koGoals}</button>
         <button class="ko-goal-btn" ${locked?'disabled':''} onclick="openGoalModal('${m.id}',true);setTimeout(()=>switchModalTab('cards',document.querySelector('.modal-tab:nth-child(2)')),50)"><svg width="11" height="15" viewBox="0 0 11 15" style="vertical-align:middle;margin-right:3px"><rect x="0" y="0" width="5" height="15" rx="1" fill="#ffc800"/><rect x="5.5" y="0" width="5.5" height="15" rx="1" fill="#ff3232"/></svg>${hc?' '+hc:' '+(window._L||LABELS.bn).koCards}</button>
         ${hasData?`<button class="ko-clr-btn" onclick="window.clearKO('${m.id}')"><i class='fas fa-trash-can'></i></button>`:''}
@@ -1374,15 +1375,21 @@ function renderKO(){
     {icon:'<i class="fas fa-trophy"></i>',         name:L.final, matches:KO_ROUNDS[5].matches},
   ];
   const cs=L.countSuffix;
-  const filteredSections=sections.map(sec=>({
-    ...sec,
-    matches:sec.matches.filter(m=>admKOView==='past'?dbSc[m.id]?.past===true:!dbSc[m.id]?.past)
-  })).filter(sec=>sec.matches.length>0);
-  document.getElementById('koGrid').innerHTML=filteredSections.length===0
+  function dtitleKO(d){const dt=new Date(d+'T00:00:00');return`${L.days[dt.getDay()]}, ${dt.getDate()} ${L.months[dt.getMonth()]}`;}
+  const allKOMatches=sections.flatMap(sec=>
+    sec.matches
+      .filter(m=>admKOView==='past'?dbSc[m.id]?.past===true:!dbSc[m.id]?.past)
+      .map(m=>({...m,roundName:sec.name}))
+  );
+  allKOMatches.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+  const byDate={};
+  allKOMatches.forEach(m=>{if(!byDate[m.date])byDate[m.date]=[];byDate[m.date].push(m);});
+  const dateKeys=Object.keys(byDate).sort();
+  document.getElementById('koGrid').innerHTML=dateKeys.length===0
     ?`<div style="text-align:center;padding:2rem;color:rgba(255,255,255,.4);font-size:.85rem">${admKOView==='past'?'কোনো সম্পন্ন ম্যাচ নেই':'কোনো আসন্ন ম্যাচ নেই'}</div>`
-    :filteredSections.map(sec=>`
-    <div class="ko-section-title">${sec.icon} ${sec.name} <span style="font-size:.65rem;opacity:.5">(${sec.matches.length}${cs})</span></div>
-    ${sec.matches.map(m=>cardHTML({...m,roundName:sec.name},!allGrpDone)).join('')}
+    :dateKeys.map(d=>`
+    <div class="ko-section-title"><i class="fas fa-calendar-day"></i> ${dtitleKO(d)} <span style="font-size:.65rem;opacity:.5">(${byDate[d].length}${cs})</span></div>
+    ${byDate[d].map(m=>cardHTML(m,!allGrpDone)).join('')}
   `).join('');
 }
 
