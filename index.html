@@ -1391,6 +1391,12 @@ function renderMatches(grp,grps=null){
     </div>`;
   }
 
+  // Auto-switch to Past if no upcoming matches
+  if(schedView==='upcoming'&&!list.some(m=>!scores[m.id]?.past)){
+    schedView='past';
+    document.getElementById('pgPast')?.classList.add('on');
+    document.getElementById('pgUpcoming')?.classList.remove('on');
+  }
   function filterByView(m){return schedView==='past'?scores[m.id]?.past===true:schedView==='upcoming'?!scores[m.id]?.past:true;}
   const filteredGrp=grpList.filter(filterByView);
   const filteredKO=koList.filter(filterByView);

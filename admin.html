@@ -1062,6 +1062,12 @@ function renderTable(grp){
     </div>`;
   }
 
+  // Auto-switch to Past if no upcoming matches
+  if(admSchedView==='upcoming'&&!list.some(m=>!dbSc[m.id]?.past)){
+    admSchedView='past';
+    document.getElementById('admPgPast')?.classList.add('on');
+    document.getElementById('admPgUpcoming')?.classList.remove('on');
+  }
   // Filter matches individually by past flag
   const filteredList=admSchedView==='past'
     ?list.filter(m=>dbSc[m.id]?.past===true)
@@ -1376,6 +1382,12 @@ function renderKO(){
   ];
   const cs=L.countSuffix;
   function dtitleKO(d){const dt=new Date(d+'T00:00:00');return`${L.days[dt.getDay()]}, ${dt.getDate()} ${L.months[dt.getMonth()]}`;}
+  // Auto-switch to Past if no upcoming KO matches
+  if(admKOView==='upcoming'&&!sections.some(sec=>sec.matches.some(m=>!dbSc[m.id]?.past))){
+    admKOView='past';
+    document.getElementById('koPgPast')?.classList.add('on');
+    document.getElementById('koPgUpcoming')?.classList.remove('on');
+  }
   const allKOMatches=sections.flatMap(sec=>
     sec.matches
       .filter(m=>admKOView==='past'?dbSc[m.id]?.past===true:!dbSc[m.id]?.past)
