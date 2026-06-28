@@ -1798,8 +1798,8 @@ function buildMatch(m,grps={},b3map={},winnerMap={}){
     <div class="bk-team ${s2win?'bk-win':''}" style="${auto2?'opacity:.82':''}">
       ${f2}<span class="bk-tname">${isTBDish(t2)?friendlySlot(t2):displayName(t2)}</span><span class="bk-sc">${done?sc.s2:''}</span>
     </div>
-    ${pen?`<div class="bk-date" style="color:var(--orange)">PSO: ${sc.pen1}–${sc.pen2}</div>`:
-      et?`<div class="bk-date" style="color:var(--gold)">ET: ${sc.et1}–${sc.et2}</div>`:''}
+    ${et?`<div class="bk-date" style="color:var(--gold)">ET: ${Number(sc.s1)+Number(sc.et1)}–${Number(sc.s2)+Number(sc.et2)}</div>`:''}
+    ${pen?`<div class="bk-date" style="color:var(--orange)">PSO: ${sc.pen1}–${sc.pen2}</div>`:''}
     <div class="bk-date">${fD(m.date)} · ${fT(m.time)}</div>
   </div>`;
 }
@@ -1857,7 +1857,8 @@ function renderBracket(grps={}){
         ${symFlag(t2)}<span class="sym-tname ${isTBDish(t2)?'tbd':''}">${isTBDish(t2)?friendlySlot(t2):displayName(t2)}</span>
         <span class="sym-score">${s2}</span>
       </div>
-      ${hasPen?`<div class="sym-extra">PSO: ${sc.pen1}–${sc.pen2}</div>`:hasET?`<div class="sym-extra">ET: ${sc.et1}–${sc.et2}</div>`:''}
+      ${hasET?`<div class="sym-extra" style="color:var(--gold)">ET: ${Number(sc.s1)+Number(sc.et1)}–${Number(sc.s2)+Number(sc.et2)}</div>`:''}
+      ${hasPen?`<div class="sym-extra">PSO: ${sc.pen1}–${sc.pen2}</div>`:''}
       <div class="sym-date">${fT(m.time)}</div>
       ${m.stadium?`<div class="sym-stadium"><i class='fas fa-landmark'></i> ${STADIUM_NAME[m.stadium]||m.stadium}</div>`:''}
     </div>`;
