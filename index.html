@@ -2203,7 +2203,10 @@ function renderStats(grps){
           ${row.round?`<span style="font-size:.6rem;opacity:.5;margin-left:3px">(${row.round})</span>`:''}
         </div>
         ${isDone
-          ?`<div class="mh-score" style="color:${resultColor[row.result]||'#fff'}">${row.result} ${row.myScore}–${row.opScore}${row.etDisp?` <span style="font-size:.62em;opacity:.7">&rsaquo; ${row.etDisp} <span style="opacity:.75">(e)</span></span>`:''} ${row.penDisp?`<span style="font-size:.62em;opacity:.7">&rsaquo; ${row.penDisp} <span style="opacity:.75">(p)</span></span>`:''}</div>`
+          ?`<div class="mh-score" style="color:${resultColor[row.result]||'#fff'};display:flex;flex-direction:column;align-items:flex-end;gap:1px">
+              <span>${row.result} ${row.myScore}–${row.opScore}</span>
+              ${(row.etDisp||row.penDisp)?`<span style="font-size:.72rem;color:rgba(255,255,255,.55);font-weight:400">${row.etDisp?`› ${row.etDisp}(e)`:''} ${row.penDisp?`› ${row.penDisp}(p)`:''}</span>`:''}
+            </div>`
           :`<div class="mh-score" style="color:var(--gray)">${S.upcomingScore}</div>`
         }
       </div>`;
