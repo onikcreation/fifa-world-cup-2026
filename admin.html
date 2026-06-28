@@ -450,6 +450,17 @@ body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
 .pen-lbl{font-size:.65rem;color:var(--orange)}
 .og-cb{width:13px;height:13px;cursor:pointer;accent-color:#00bcd4}
 .og-lbl{font-size:.65rem;color:#00bcd4}
+.et-cb{width:13px;height:13px;cursor:pointer;accent-color:var(--gold);margin-left:3px}
+.et-lbl{font-size:.6rem;color:var(--gold);font-weight:700;cursor:pointer}
+.pso-section{background:rgba(0,0,0,.2);border:1px solid rgba(212,175,55,.12);border-radius:8px;padding:.6rem .7rem;margin-bottom:.5rem}
+.pso-team-hd{font-size:.78rem;color:var(--neon);font-family:"Google Sans",sans-serif;margin-bottom:.35rem;display:flex;align-items:center;gap:.35rem}
+.pso-entry{display:flex;align-items:center;gap:.4rem;padding:.3rem 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.pso-res-btn{width:26px;height:26px;border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.72rem;flex-shrink:0;transition:background .15s}
+.pso-res-btn.goal{background:rgba(161,240,0,.18);color:var(--neon)}
+.pso-res-btn.miss{background:rgba(255,60,60,.18);color:#ff5555}
+.pso-name-in{flex:1;background:rgba(255,255,255,.06);border:1px solid var(--border2);border-radius:5px;color:#fff;padding:.3rem .5rem;font-size:.78rem;outline:none}
+.add-pso-btn{font-size:.72rem;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.2);color:var(--neon);padding:.25rem .65rem;border-radius:5px;cursor:pointer;margin-top:.4rem;transition:background .15s}
+.add-pso-btn:hover{background:rgba(212,175,55,.16)}
 .assist-row{display:flex;align-items:center;gap:.35rem;margin-top:.3rem;padding:.3rem .45rem;background:rgba(212,175,55,.07);border:1px solid rgba(212,175,55,.2);border-radius:5px}
 .assist-lbl{font-size:.62rem;color:#D4AF37;white-space:nowrap;flex-shrink:0;font-family:"Google Sans",sans-serif;letter-spacing:.5px}
 .add-goal-btn{font-size:.68rem;padding:.28rem .55rem;background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.3);border-radius:5px;color:var(--neon);cursor:pointer;margin-top:.25rem}
@@ -802,6 +813,7 @@ body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
     <div class="modal-tabs">
       <button class="modal-tab on" onclick="switchModalTab('goals',this)"><i class="fas fa-futbol"></i> গোল</button>
       <button class="modal-tab" onclick="switchModalTab('cards',this)"><svg class="tab-svg" width="12" height="16" viewBox="0 0 12 16"><rect x="0" y="0" width="5" height="16" rx="1" fill="#ffc800"/><rect x="6" y="0" width="6" height="16" rx="1" fill="#ff3232"/></svg>কার্ড</button>
+      <button class="modal-tab" id="psoTab" onclick="switchModalTab('pso',this)" style="display:none"><i class="fas fa-circle-dot"></i> PSO</button>
     </div>
     <!-- Goals tab -->
     <div id="modal-goals-panel" class="modal-tab-panel">
@@ -810,6 +822,10 @@ body.stadium-light-theme .ko-rname{background:#D4AF37;color:#041020}
     <!-- Cards tab -->
     <div id="modal-cards-panel" class="modal-tab-panel">
       <div class="modal-teams" id="modalCardsBody"></div>
+    </div>
+    <!-- PSO tab (KO only) -->
+    <div id="modal-pso-panel" class="modal-tab-panel" style="display:none">
+      <div id="modalPSOBody"></div>
     </div>
     <button class="modal-save" onclick="saveGoalsAndCards()"><i class="fas fa-floppy-disk"></i> সেভ করো</button>
   </div>
@@ -1457,6 +1473,7 @@ window.switchModalTab=function(tab,btn){
   btn.classList.add('on');
   document.getElementById('modal-goals-panel').style.display=tab==='goals'?'block':'none';
   document.getElementById('modal-cards-panel').style.display=tab==='cards'?'block':'none';
+  document.getElementById('modal-pso-panel').style.display=tab==='pso'?'block':'none';
 };
 
 window.openGoalModal=function(id,isKO){
@@ -1492,6 +1509,9 @@ window.openGoalModal=function(id,isKO){
   document.querySelectorAll('.modal-tab').forEach((b,i)=>b.classList.toggle('on',i===0));
   document.getElementById('modal-goals-panel').style.display='';
   document.getElementById('modal-cards-panel').style.display='none';
+  document.getElementById('modal-pso-panel').style.display='none';
+  const psoTab=document.getElementById('psoTab');
+  if(psoTab)psoTab.style.display=isKO?'':'none';
 
   // Squad players for autocomplete
   // Squad players — global store করো addGoal/addCard-এর জন্য
@@ -1507,7 +1527,7 @@ window.openGoalModal=function(id,isKO){
     return`<option value="">— খেলোয়াড় বেছে নাও —</option>${opts}`;
   }
 
-  function goalEntry(side,i,name='',min='',pen=false,og=false,assist=''){
+  function goalEntry(side,i,name='',min='',pen=false,og=false,assist='',et=false){
     const players=side==='t1'?p1:p2;
     const hasSquad=players.length>0;
     const listId=`gnlist_${side}_${i}`;
@@ -1520,6 +1540,7 @@ window.openGoalModal=function(id,isKO){
       <input class="gm-in" type="number" min="1" max="130" placeholder="মি." value="${min}" id="gm_${side}_${i}">
       <input type="checkbox" class="pen-cb" id="gp_${side}_${i}" ${pen?'checked':''}><label class="pen-lbl" for="gp_${side}_${i}">P</label>
       <input type="checkbox" class="og-cb" id="go_${side}_${i}" ${og?'checked':''}><label class="og-lbl" for="go_${side}_${i}" title="Own Goal">OG</label>
+      <input type="checkbox" class="et-cb" id="get_${side}_${i}" ${et?'checked':''}><label class="et-lbl" for="get_${side}_${i}" title="Extra Time">ET</label>
       <button class="rm-btn" onclick="rmGoal('${side}',${i})"><i class='fas fa-xmark'></i></button>
       <div class="gn-wrap">
         ${squadRow}
@@ -1545,7 +1566,7 @@ window.openGoalModal=function(id,isKO){
           ${pc?`· ${pc} জন স্কোয়াড`:'· স্কোয়াড নেই'}
         </span>
       </div>
-      <div id="glist_${side}">${goals.map((g,i)=>goalEntry(side,i,g.name,g.min,g.pen,g.og,g.assist||'')).join('')}</div>
+      <div id="glist_${side}">${goals.map((g,i)=>goalEntry(side,i,g.name,g.min,g.pen,g.og,g.assist||'',g.et||false)).join('')}</div>
       <button class="add-goal-btn" onclick="addGoal('${side}')">+ গোল যোগ</button>
     </div>`;
   }
@@ -1585,6 +1606,39 @@ window.openGoalModal=function(id,isKO){
     </div>`;
   }
   document.getElementById('modalCardsBody').innerHTML=cardSection('t1',en1,c1)+cardSection('t2',en2,c2);
+
+  // PSO panel — KO only
+  if(isKO){
+    const pso1=sc.pso1||[], pso2=sc.pso2||[];
+    const psoCode1=TEAMS[t1]?.code||'', psoCode2=TEAMS[t2]?.code||'';
+    function psoEntry(side,i,name='',scored=true){
+      const players=side==='t1'?p1:p2;
+      const hasSquad=players.length>0;
+      return`<div class="pso-entry" id="pe_${side}_${i}">
+        <button type="button" class="pso-res-btn ${scored?'goal':'miss'}" onclick="togglePSOResult('${side}',${i},this)">
+          <i class="fas fa-${scored?'futbol':'xmark'}"></i>
+        </button>
+        <input type="hidden" id="pg_${side}_${i}" value="${scored?'1':'0'}">
+        ${hasSquad
+          ?`<input class="pso-name-in" list="psosq_${side}_${i}" placeholder="খেলোয়াড়ের নাম" id="pn_${side}_${i}" value="${esc(name)}">
+            <datalist id="psosq_${side}_${i}">${players.map(p=>`<option value="${esc(p.name)}">`).join('')}</datalist>`
+          :`<input class="pso-name-in" placeholder="খেলোয়াড়ের নাম" id="pn_${side}_${i}" value="${esc(name)}">`}
+        <button type="button" class="rm-btn" onclick="rmPSO('${side}',${i})"><i class='fas fa-xmark'></i></button>
+      </div>`;
+    }
+    function psoSection(side,teamName,code,shots){
+      return`<div class="pso-section">
+        <div class="pso-team-hd">
+          ${code?`<img src="https://flagcdn.com/20x15/${code}.png" style="width:16px;height:12px;object-fit:cover;border-radius:2px" loading="lazy">`:''}
+          ${teamName}
+        </div>
+        <div id="psolist_${side}">${shots.map((s,i)=>psoEntry(side,i,s.n,s.g)).join('')}</div>
+        <button type="button" class="add-pso-btn" onclick="addPSO('${side}')">+ শট যোগ</button>
+      </div>`;
+    }
+    document.getElementById('modalPSOBody').innerHTML=psoSection('t1',en1,psoCode1,pso1)+psoSection('t2',en2,psoCode2,pso2);
+  }
+
   document.getElementById('goalModal').classList.remove('hide');
 };
 
@@ -1606,7 +1660,10 @@ window.addGoal=function(side){
     maxG=(inp&&inp.value!=='')?Number(inp.value):undefined;
   }else{
     const scd=dbSc[modalMatchId]||{};
-    maxG=scd[sKey]!==undefined?Number(scd[sKey]):undefined;
+    const etKey=side==='t1'?'et1':'et2';
+    const base=scd[sKey]!==undefined?Number(scd[sKey]):undefined;
+    const etG=scd[etKey]!==undefined?Number(scd[etKey]):0;
+    maxG=base!==undefined?base+etG:undefined;
   }
   if(maxG!==undefined&&c.children.length>=maxG){
     toast(`সর্বোচ্চ ${maxG}টি গোল যোগ করা যাবে (স্কোর: ${maxG})!`,'err');
@@ -1626,6 +1683,7 @@ window.addGoal=function(side){
     <input class="gm-in" type="number" min="1" max="130" placeholder="মি." id="gm_${side}_${i}">
     <input type="checkbox" class="pen-cb" id="gp_${side}_${i}"><label class="pen-lbl" for="gp_${side}_${i}">P</label>
     <input type="checkbox" class="og-cb" id="go_${side}_${i}"><label class="og-lbl" for="go_${side}_${i}" title="Own Goal">OG</label>
+    <input type="checkbox" class="et-cb" id="get_${side}_${i}"><label class="et-lbl" for="get_${side}_${i}" title="Extra Time">ET</label>
     <button class="rm-btn" onclick="rmGoal('${side}',${i})"><i class='fas fa-xmark'></i></button>
     <div class="gn-wrap">
       ${squadRow}
@@ -1669,6 +1727,31 @@ window.addCard=function(side){
   c.appendChild(d.firstElementChild);
 };
 window.rmCard=function(side,i){const el=document.getElementById(`ce_${side}_${i}`);if(el)el.remove();};
+window.addPSO=function(side){
+  const c=document.getElementById('psolist_'+side);if(!c)return;
+  const i=c.children.length;
+  const players=side==='t1'?modalP1:modalP2;
+  const hasSquad=players.length>0;
+  const d=document.createElement('div');
+  d.innerHTML=`<div class="pso-entry" id="pe_${side}_${i}">
+    <button type="button" class="pso-res-btn goal" onclick="togglePSOResult('${side}',${i},this)"><i class="fas fa-futbol"></i></button>
+    <input type="hidden" id="pg_${side}_${i}" value="1">
+    ${hasSquad
+      ?`<input class="pso-name-in" list="psosq_${side}_${i}" placeholder="খেলোয়াড়ের নাম" id="pn_${side}_${i}">
+        <datalist id="psosq_${side}_${i}">${players.map(p=>`<option value="${esc(p.name)}">`).join('')}</datalist>`
+      :`<input class="pso-name-in" placeholder="খেলোয়াড়ের নাম" id="pn_${side}_${i}">`}
+    <button type="button" class="rm-btn" onclick="rmPSO('${side}',${i})"><i class='fas fa-xmark'></i></button>
+  </div>`;
+  c.appendChild(d.firstElementChild);
+};
+window.rmPSO=function(side,i){const el=document.getElementById(`pe_${side}_${i}`);if(el)el.remove();};
+window.togglePSOResult=function(side,i,btn){
+  const inp=document.getElementById(`pg_${side}_${i}`);if(!inp)return;
+  const wasGoal=inp.value==='1';
+  inp.value=wasGoal?'0':'1';
+  btn.className=`pso-res-btn ${wasGoal?'miss':'goal'}`;
+  btn.innerHTML=wasGoal?`<i class="fas fa-xmark"></i>`:`<i class="fas fa-futbol"></i>`;
+};
 window.closeModal=function(){document.getElementById('goalModal').classList.add('hide');modalMatchId=null;};
 
 window.saveGoalsAndCards=async function(){
@@ -1683,8 +1766,9 @@ window.saveGoalsAndCards=async function(){
       const min=Number(document.getElementById(`gm_${s}_${i}`)?.value||0);
       const pen=document.getElementById(`gp_${s}_${i}`)?.checked||false;
       const og=document.getElementById(`go_${s}_${i}`)?.checked||false;
+      const et=document.getElementById(`get_${s}_${i}`)?.checked||false;
       const assist=document.getElementById(`ga_${s}_${i}`)?.value?.trim()||'';
-      return name?{name,min,pen,og,...(assist&&{assist})}:null;
+      return name?{name,min,pen,og,...(et&&{et}),...(assist&&{assist})}:null;
     }).filter(Boolean);
   }
   function collectCards(side){
@@ -1706,12 +1790,22 @@ window.saveGoalsAndCards=async function(){
       if(cs1!==undefined&&cs1!=='')scoreExtra.s1=Number(cs1);
       if(cs2!==undefined&&cs2!=='')scoreExtra.s2=Number(cs2);
     }
-    await set(ref(db,'scores/'+modalMatchId),{
-      ...ex,
-      ...scoreExtra,
-      goals1:collectGoals('t1'),goals2:collectGoals('t2'),
-      cards1:collectCards('t1'),cards2:collectCards('t2'),
-    });
+    function collectPSO(side){
+      const c=document.getElementById('psolist_'+side);if(!c)return[];
+      return Array.from(c.children).map(row=>{
+        const parts=row.id.split('_');const i=parts[parts.length-1];const s=parts[1];
+        const name=document.getElementById(`pn_${s}_${i}`)?.value?.trim()||'';
+        const scored=document.getElementById(`pg_${s}_${i}`)?.value==='1';
+        return name?{n:name,g:scored}:null;
+      }).filter(Boolean);
+    }
+    const newData={...ex,...scoreExtra,goals1:collectGoals('t1'),goals2:collectGoals('t2'),cards1:collectCards('t1'),cards2:collectCards('t2')};
+    if(modalIsKO){
+      const pso1=collectPSO('t1'),pso2=collectPSO('t2');
+      if(pso1.length)newData.pso1=pso1;else delete newData.pso1;
+      if(pso2.length)newData.pso2=pso2;else delete newData.pso2;
+    }
+    await set(ref(db,'scores/'+modalMatchId),newData);
     toast('গোল ও কার্ড তথ্য সেভ হয়েছে ✓','ok');
     closeModal();
   }catch(e){toast('সেভ ব্যর্থ: '+e.message,'err');}

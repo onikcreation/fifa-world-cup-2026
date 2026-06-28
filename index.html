@@ -177,11 +177,24 @@ body::after{content:'';position:fixed;inset:0;
 .mc-vs{font-family:"Google Sans",sans-serif;font-size:1.1rem;color:rgba(212,175,55,0.35);letter-spacing:3px}
 .mc-sc{font-family:"Google Sans",sans-serif;font-size:2.7rem;line-height:1;background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .mc-sc-sep{font-family:"Google Sans",sans-serif;font-size:2rem;color:rgba(212,175,55,0.5);margin:0 .1rem}
-.ko-sc-wrap{display:flex;flex-direction:column;align-items:center;gap:2px}
+.ko-sc-wrap{display:flex;flex-direction:column;align-items:center;gap:3px}
 .ko-sc-main{display:flex;align-items:center}
-.ko-aet-row{display:flex;align-items:center;gap:4px;font-size:.6rem;color:var(--neon);opacity:.75;font-style:italic;letter-spacing:.3px}
-.ko-aet-sc{font-style:normal;font-weight:700;font-size:.65rem;opacity:1}
-.ko-pen-row{font-size:.65rem;color:#ff9800;font-weight:600;background:rgba(255,152,0,.1);border:1px solid rgba(255,152,0,.35);border-radius:5px;padding:2px 8px;display:flex;align-items:center;gap:4px;font-family:"Google Sans",sans-serif}
+.ko-aet-row{display:flex;align-items:center;gap:5px;font-size:.7rem;color:var(--neon);font-weight:600;letter-spacing:.3px}
+.ko-aet-lbl{font-style:italic;opacity:.75}
+.ko-aet-sc{font-weight:700;font-size:.78rem}
+.ko-pen-row{font-size:.75rem;color:#ff9800;font-weight:700;background:rgba(255,152,0,.13);border:1px solid rgba(255,152,0,.4);border-radius:6px;padding:3px 10px;display:flex;align-items:center;gap:5px;font-family:"Google Sans",sans-serif}
+.pso-toggle-btn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;background:none;border:none;border-top:1px solid rgba(255,255,255,.06);color:rgba(212,175,55,.45);font-size:.68rem;cursor:pointer;padding:.4rem;font-family:"Google Sans",sans-serif;letter-spacing:.4px;transition:color .2s}
+.pso-toggle-btn:hover,.pso-toggle-btn.open{color:var(--neon)}
+.pso-toggle-btn .pso-chev{transition:transform .2s}
+.pso-toggle-btn.open .pso-chev{transform:rotate(180deg)}
+.pso-detail{padding:.45rem 1rem .55rem;display:none}
+.pso-teams-row{display:flex;gap:.5rem}
+.pso-team-col{flex:1;display:flex;flex-direction:column;gap:3px}
+.pso-team-col.right{align-items:flex-end}
+.pso-shot{display:flex;align-items:center;gap:5px;font-size:.72rem;font-family:"Google Sans",sans-serif;line-height:1.3}
+.pso-shot.goal{color:rgba(161,240,0,.85)}
+.pso-shot.miss{color:rgba(255,80,80,.7);text-decoration:line-through;text-decoration-color:rgba(255,80,80,.4)}
+.pso-shot-ic{font-size:.6rem;flex-shrink:0}
 /* Footer */
 .mc-footer{display:flex;align-items:center;justify-content:space-between;padding:.55rem 1rem;background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,0.06);margin-top:auto}
 .mc-footer-date{font-family:"Google Sans",sans-serif;font-size:.82rem;letter-spacing:.3px;color:var(--neon)}
@@ -1280,6 +1293,12 @@ function renderSchedFilters(){
   if(sel){sel.innerHTML=gs.map(g=>`<option value="${g}" ${schedGrp===g?'selected':''}>${g==='ALL'?S.allMatches:g==='KO'?'Knockout':'Group '+g}</option>`).join('');}
 }
 window._sfg=function(g){schedGrp=g;renderSchedFilters();renderMatches(g);};
+window.togglePSOView=function(id,btn){
+  const el=document.getElementById('psoV_'+id);if(!el)return;
+  const open=el.style.display==='block';
+  el.style.display=open?'none':'block';
+  if(btn)btn.classList.toggle('open',!open);
+};
 window.setPGTab=function(v){
   schedView=v;
   document.getElementById('pgPast').classList.toggle('on',v==='past');
@@ -1370,8 +1389,8 @@ function renderMatches(grp,grps=null){
     const scoreHTML=done
       ?`<div class="ko-sc-wrap">
           <div class="ko-sc-main"><span class="mc-sc">${sc.s1}</span><span class="mc-sc-sep">–</span><span class="mc-sc">${sc.s2}</span></div>
-          ${hasET?`<div class="ko-aet-row"><span>a.e.t.</span><span class="ko-aet-sc">${Number(sc.s1)+Number(sc.et1||0)} – ${Number(sc.s2)+Number(sc.et2||0)}</span></div>`:''}
-          ${hasPen?`<div class="ko-pen-row"><i class="fas fa-circle-dot" style="font-size:.55rem"></i> Pen <span>${sc.pen1} – ${sc.pen2}</span></div>`:''}
+          ${hasET?`<div class="ko-aet-row"><span class="ko-aet-lbl">a.e.t.</span><span class="ko-aet-sc">${Number(sc.s1)+Number(sc.et1||0)} – ${Number(sc.s2)+Number(sc.et2||0)}</span></div>`:''}
+          ${hasPen?`<div class="ko-pen-row"><i class="fas fa-circle-dot" style="font-size:.6rem"></i> Pen <span>${sc.pen1} – ${sc.pen2}</span></div>`:''}
         </div>`
       :`<span class="mc-vs">VS</span>`;
     const [yr,mo,dy]=m.date.split('-');
@@ -1388,10 +1407,17 @@ function renderMatches(grp,grps=null){
         <div class="mc-team">${koFlag(t2)}<div class="mc-tname">${TEAMS[t2]?tNameRanked(t2):esc(t2)}</div></div>
       </div>
       ${hasGoals?`<div class="mc-goals">
-        <div class="mc-goals-side">${g1.map(g=>`<div class="goal-item"><i class='fas fa-futbol'></i> ${esc(g.name)} <span class="gmin">${esc(g.min)}'</span>${g.pen?` <span class="gpen">(P)</span>`:''}${g.og?` <span class="gpen" style="color:#00bcd4">(OG)</span>`:''}</div>`).join('')}</div>
-        <div class="mc-goals-side right">${g2.map(g=>`<div class="goal-item">${g.pen?`<span class="gpen">(P) </span>`:''}${g.og?`<span class="gpen" style="color:#00bcd4">(OG) </span>`:''}<span class="gmin">${esc(g.min)}'</span> ${esc(g.name)} <i class='fas fa-futbol'></i></div>`).join('')}</div>
+        <div class="mc-goals-side">${g1.map(g=>`<div class="goal-item"><i class='fas fa-futbol'></i> ${esc(g.name)} <span class="gmin">${esc(g.min)}'</span>${g.pen?` <span class="gpen">(P)</span>`:''}${g.og?` <span class="gpen" style="color:#00bcd4">(OG)</span>`:''}${g.et?` <span class="gpen" style="color:var(--gold)">(ET)</span>`:''}</div>`).join('')}</div>
+        <div class="mc-goals-side right">${g2.map(g=>`<div class="goal-item">${g.pen?`<span class="gpen">(P) </span>`:''}${g.og?`<span class="gpen" style="color:#00bcd4">(OG) </span>`:''}${g.et?`<span class="gpen" style="color:var(--gold)">(ET) </span>`:''}<span class="gmin">${esc(g.min)}'</span> ${esc(g.name)} <i class='fas fa-futbol'></i></div>`).join('')}</div>
       </div>`:''}
       ${hasCards?`<div class="mc-cards"><div class="mc-cards-side">${cardIcons(c1)}</div><div class="mc-cards-side right">${cardIcons(c2)}</div></div>`:''}
+      ${(sc.pso1?.length||sc.pso2?.length)?`<button type="button" class="pso-toggle-btn" onclick="togglePSOView('${m.id}',this)"><i class="fas fa-circle-dot pso-shot-ic"></i> পেনাল্টি শুটআউট <i class="fas fa-chevron-down pso-chev pso-shot-ic"></i></button>
+      <div class="pso-detail" id="psoV_${m.id}">
+        <div class="pso-teams-row">
+          <div class="pso-team-col">${(sc.pso1||[]).map(s=>`<div class="pso-shot ${s.g?'goal':'miss'}"><i class="fas fa-${s.g?'futbol':'xmark'} pso-shot-ic"></i> <span>${esc(s.n)}</span></div>`).join('')}</div>
+          <div class="pso-team-col right">${(sc.pso2||[]).map(s=>`<div class="pso-shot ${s.g?'goal':'miss'}"><span>${esc(s.n)}</span> <i class="fas fa-${s.g?'futbol':'xmark'} pso-shot-ic"></i></div>`).join('')}</div>
+        </div>
+      </div>`:''}
       <div class="mc-footer">
         <span class="mc-footer-date"><i class='fas fa-clock'></i> ${fT(m.time)}</span>
         <span class="mc-footer-stadium"><i class='fas fa-landmark'></i> ${STADIUM_NAME[m.stadium]||m.stadium||''}</span>
