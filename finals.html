@@ -182,6 +182,18 @@ body.stadium-light-theme::before{background-image:url('https://images.unsplash.c
 .trophy-winner-name{font-weight:700;color:#fff;flex-shrink:0;min-width:90px}
 .trophy-winner-years{color:var(--neon);font-size:.65rem;opacity:.8}
 .trophy-card.rimet .trophy-winner-years{color:var(--silver)}
+/* NAV BAR */
+.nav{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.95);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;overflow-x:auto;padding:0 1rem}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{font-family:"Google Sans",sans-serif;font-size:.88rem;letter-spacing:2px;color:var(--gray);background:none;border:none;border-bottom:3px solid transparent;padding:.85rem 1.1rem;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;flex-shrink:0;text-decoration:none;display:inline-block}
+.nav-btn:hover{color:var(--text)}
+.nav-btn.on{color:var(--neon);border-bottom:3px solid;border-image:var(--gradient-primary) 1}
+@media(max-width:600px){
+  .nav{flex-wrap:wrap;overflow-x:visible;padding:.5rem;gap:.35rem}
+  .nav-btn{flex:1 1 calc(33.33% - .35rem);min-width:0;text-align:center;padding:.6rem .3rem;font-size:.7rem;letter-spacing:.8px;border:1px solid var(--border2);border-bottom:1px solid var(--border2)!important;border-radius:8px;margin-bottom:0;white-space:normal;line-height:1.3}
+  .nav-btn:hover{background:rgba(255,255,255,.04);border-color:rgba(212,175,55,.3)}
+  .nav-btn.on{background:rgba(212,175,55,.1);border-color:var(--neon)!important;color:var(--neon);border-image:none!important}
+}
 /* FOOTER */
 .page-footer{text-align:center;padding:2rem 1rem;font-size:.72rem;color:var(--gray);border-top:1px solid var(--border2);margin-top:1rem}
 .page-footer a{color:var(--neon);text-decoration:none}
@@ -202,6 +214,18 @@ body.stadium-light-theme::before{background-image:url('https://images.unsplash.c
     </div>
   </div>
 </header>
+
+<nav class="nav">
+  <a class="nav-btn" href="index.html#schedule"><i class="fas fa-calendar-days"></i> ম্যাচ সূচি</a>
+  <a class="nav-btn" href="index.html#groups"><i class="fas fa-chart-column"></i> Group Table</a>
+  <a class="nav-btn" href="index.html#thirdplace"><i class="fas fa-award"></i> গ্রুপের ৩য় স্থান</a>
+  <a class="nav-btn" href="index.html#knockout"><i class="fas fa-medal"></i> Knockout</a>
+  <a class="nav-btn" href="index.html#stats"><i class="fas fa-chart-line"></i> Stats</a>
+  <a class="nav-btn" href="index.html#squads"><i class="fas fa-shirt"></i> Squads</a>
+  <a class="nav-btn" href="index.html#venues"><i class="fas fa-location-dot"></i> Venues</a>
+  <a class="nav-btn" href="index.html#ranking"><i class="fas fa-ranking-star"></i> FIFA Ranking</a>
+  <a class="nav-btn on" href="finals.html"><i class="fas fa-trophy"></i> Finals History</a>
+</nav>
 
 <div class="wrap">
 
