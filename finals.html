@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIFA World Cup Finals History | Al Amin Onik</title>
+<link rel="icon" href="2026_FIFA_World_Cup_Emblem.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+<style>
+:root{
+  --bg:#0a0a0a;--bg2:#141414;--bg3:#1a1a1a;
+  --card:rgba(20,20,20,0.95);--card2:rgba(26,26,26,0.9);
+  --neon:#D4AF37;--neon-l:#e8c84d;--neon-d:#b8952a;
+  --text:#ffffff;--text2:rgba(255,255,255,0.75);--gray:#a0a0a0;
+  --border:rgba(212,175,55,0.25);--border2:rgba(255,255,255,0.08);
+  --shadow:rgba(0,0,0,0.85);
+  --maroon:#8B1538;--maroon-dark:#6B0F2B;
+  --gradient-primary:linear-gradient(135deg,#8B1538 0%,#D4AF37 100%);
+  --orange:#ffaa00;--silver:#c0c0c0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:"Google Sans","Hind Siliguri",sans-serif;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse 70% 55% at -5% -5%,rgba(139,21,56,.14) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 40% at 105% 105%,rgba(212,175,55,.05) 0%,transparent 55%),
+    radial-gradient(ellipse 35% 30% at 50% 50%,rgba(139,21,56,.06) 0%,transparent 65%);
+  pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;
+  background-image:radial-gradient(circle,rgba(212,175,55,.04) 1px,transparent 1px);
+  background-size:32px 32px;pointer-events:none;z-index:0}
+
+/* HEADER */
+.hdr{position:relative;z-index:50;background:rgba(10,10,10,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(212,175,55,0.15);padding:0 1rem}
+.hdr-in{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1rem;padding:.8rem 0}
+.hdr-logo img{height:46px;width:auto;display:block;filter:drop-shadow(0 0 10px rgba(212,175,55,.35))}
+.hdr-text{flex:1;min-width:0}
+.hdr-title{font-family:"Google Sans",sans-serif;font-size:clamp(1.1rem,2.5vw,1.8rem);letter-spacing:3px;background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.hdr-sub{font-size:.68rem;color:var(--gray);letter-spacing:1px;margin-top:1px}
+.hdr-right{display:flex;align-items:center;gap:.5rem;flex-shrink:0}
+.back-btn{font-size:.72rem;letter-spacing:1px;padding:.35rem .9rem;background:rgba(139,21,56,.12);border:1px solid rgba(212,175,55,.25);border-radius:6px;color:var(--neon);text-decoration:none;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:.4rem}
+.back-btn:hover{background:rgba(139,21,56,.28);box-shadow:0 0 10px rgba(139,21,56,.4)}
+.hdr-brand-logo{height:34px;border-radius:6px;opacity:.85}
+
+/* MAIN */
+.wrap{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:1.5rem 1rem 3rem}
+
+/* HERO */
+.hero{text-align:center;padding:2.5rem 1rem 2rem;position:relative}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;letter-spacing:2px;color:var(--neon);border:1px solid rgba(212,175,55,.3);border-radius:20px;padding:.3rem 1rem;margin-bottom:1rem;background:rgba(212,175,55,.06)}
+.hero-trophy{font-size:3.5rem;line-height:1;filter:drop-shadow(0 0 20px rgba(212,175,55,.6));margin-bottom:.5rem;display:block}
+.hero-title{font-family:"Google Sans",sans-serif;font-size:clamp(1.6rem,5vw,3rem);letter-spacing:3px;background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:.4rem}
+.hero-title-bn{font-family:"Hind Siliguri",sans-serif;font-size:clamp(1rem,2.5vw,1.5rem);color:rgba(255,255,255,.55);letter-spacing:1px;margin-bottom:1.2rem}
+.hero-divider{width:80px;height:2px;background:var(--gradient-primary);margin:0 auto 1.2rem;border-radius:2px}
+.hero-sub{font-size:.85rem;color:var(--gray);letter-spacing:.5px}
+
+/* STATS STRIP */
+.stats-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-bottom:2rem}
+@media(max-width:600px){.stats-strip{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:1rem .75rem;text-align:center;position:relative;overflow:hidden;transition:all .25s}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gradient-primary)}
+.stat-card:hover{border-color:rgba(212,175,55,.3);box-shadow:0 0 20px rgba(139,21,56,.2);transform:translateY(-2px)}
+.stat-n{font-family:"Google Sans",sans-serif;font-size:2rem;color:var(--neon);line-height:1;text-shadow:0 0 16px rgba(212,175,55,.3)}
+.stat-l{font-size:.62rem;letter-spacing:1px;color:var(--gray);margin-top:3px}
+
+/* SECTION TITLE */
+.sec-title{font-family:"Google Sans",sans-serif;font-size:1.3rem;letter-spacing:3px;background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1rem;display:flex;align-items:center;gap:.7rem}
+.sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--maroon),var(--neon),transparent)}
+
+/* CHAMPIONS LEADERBOARD */
+.champ-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.7rem;margin-bottom:2.5rem}
+.champ-card{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:.9rem 1rem;display:flex;align-items:center;gap:.8rem;transition:all .2s;position:relative;overflow:hidden}
+.champ-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gradient-primary)}
+.champ-card:hover{border-color:rgba(212,175,55,.3);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.5)}
+.champ-card.top3{border-color:rgba(212,175,55,.25);background:rgba(20,20,20,.98)}
+.champ-rank{font-family:"Google Sans",sans-serif;font-size:.75rem;color:var(--gray);min-width:18px;text-align:center;flex-shrink:0}
+.champ-rank.r1{color:#FFD700;font-weight:700;font-size:.9rem}
+.champ-rank.r2{color:#C0C0C0;font-weight:700}
+.champ-rank.r3{color:#CD7F32;font-weight:700}
+.champ-flag{width:36px;height:27px;object-fit:cover;border-radius:4px;flex-shrink:0;border:1px solid rgba(255,255,255,.1)}
+.champ-info{flex:1;min-width:0}
+.champ-name{font-size:.82rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.champ-medals{display:flex;align-items:center;gap:.4rem;margin-top:3px}
+.medal-gold{display:inline-flex;align-items:center;gap:.2rem;font-size:.65rem;color:#FFD700;font-family:"Google Sans",sans-serif}
+.medal-silver{display:inline-flex;align-items:center;gap:.2rem;font-size:.65rem;color:#C0C0C0;font-family:"Google Sans",sans-serif}
+.medal-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.medal-dot.gold{background:#FFD700;box-shadow:0 0 6px rgba(255,215,0,.5)}
+.medal-dot.silver{background:#C0C0C0}
+.champ-total{font-size:.62rem;color:var(--gray);margin-left:auto;flex-shrink:0}
+.champ-years{font-size:.58rem;color:rgba(212,175,55,.6);margin-top:2px}
+
+/* SORT TOGGLE */
+.sort-wrap{display:flex;align-items:center;justify-content:flex-end;margin-bottom:.8rem;gap:.5rem}
+.sort-label{font-size:.72rem;color:var(--gray)}
+.sort-btn{font-family:"Google Sans",sans-serif;font-size:.72rem;letter-spacing:.8px;padding:.3rem .8rem;border-radius:20px;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--gray);transition:all .2s}
+.sort-btn.on{background:rgba(212,175,55,.12);border-color:var(--neon);color:var(--neon)}
+.sort-btn:hover:not(.on){color:var(--text);border-color:rgba(255,255,255,.2)}
+
+/* FINALS GRID */
+.finals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+@media(max-width:900px){.finals-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:540px){.finals-grid{grid-template-columns:1fr}}
+
+/* FINAL CARD */
+.fc{background:var(--card);border:1px solid var(--border2);border-radius:14px;overflow:hidden;transition:all .25s;position:relative}
+.fc:hover{border-color:rgba(212,175,55,.35);box-shadow:0 6px 28px rgba(0,0,0,.7),0 0 20px rgba(139,21,56,.2);transform:translateY(-3px)}
+.fc-hdr{background:linear-gradient(135deg,rgba(139,21,56,.9) 0%,rgba(40,20,5,.95) 100%);padding:.6rem .8rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(212,175,55,.12)}
+.fc-num{font-family:"Google Sans",sans-serif;font-size:.58rem;letter-spacing:2px;color:rgba(255,255,255,.5);background:rgba(0,0,0,.3);border-radius:10px;padding:.1rem .5rem;border:1px solid rgba(255,255,255,.1)}
+.fc-year{font-family:"Google Sans",sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:2px;color:var(--neon);text-shadow:0 0 14px rgba(212,175,55,.5)}
+.fc-host{display:flex;align-items:center;gap:.35rem;font-size:.62rem;color:rgba(255,255,255,.6);letter-spacing:.5px}
+.fc-host-flag{width:20px;height:15px;object-fit:cover;border-radius:2px}
+.fc-body{padding:.9rem .8rem .5rem}
+.fc-teams{display:flex;align-items:center;gap:.4rem}
+.fc-team{display:flex;flex-direction:column;align-items:center;gap:.4rem;flex:1;min-width:0}
+.fc-flag{width:52px;height:39px;object-fit:cover;border-radius:6px;border:2px solid rgba(255,255,255,.1)}
+.fc-team.winner .fc-flag{border-color:var(--neon);box-shadow:0 0 12px rgba(212,175,55,.4)}
+.fc-tname{font-size:.65rem;letter-spacing:.5px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;color:var(--text2)}
+.fc-team.winner .fc-tname{color:#fff;font-weight:700}
+.fc-champ-lbl{font-family:"Google Sans",sans-serif;font-size:.52rem;letter-spacing:1px;color:var(--neon);background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.25);border-radius:8px;padding:.1rem .45rem;margin-top:1px;display:flex;align-items:center;gap:.2rem}
+.fc-score-wrap{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;min-width:70px}
+.fc-score{font-family:"Google Sans",sans-serif;font-size:1.6rem;font-weight:700;color:#fff;line-height:1;letter-spacing:1px}
+.fc-aet{font-size:.55rem;letter-spacing:1px;color:rgba(255,255,255,.45);font-style:italic}
+.fc-pen{font-family:"Google Sans",sans-serif;font-size:.72rem;font-weight:700;color:var(--orange);background:rgba(255,170,0,.1);border:1px solid rgba(255,170,0,.3);border-radius:8px;padding:.15rem .5rem;letter-spacing:.5px}
+.fc-home-win{font-size:.52rem;letter-spacing:.8px;color:#7dda7d;background:rgba(100,200,100,.1);border:1px solid rgba(100,200,100,.25);border-radius:8px;padding:.12rem .5rem;display:inline-block;margin-top:3px}
+.fc-footer{background:rgba(0,0,0,.25);border-top:1px solid rgba(255,255,255,.05);padding:.5rem .8rem;display:flex;flex-direction:column;gap:3px}
+.fc-venue{display:flex;align-items:center;gap:.4rem;font-size:.62rem;color:rgba(255,255,255,.5)}
+.fc-venue i{color:rgba(212,175,55,.5);font-size:.58rem;flex-shrink:0}
+.fc-att{display:flex;align-items:center;gap:.4rem;font-size:.62rem;color:rgba(255,255,255,.4)}
+.fc-att i{color:rgba(212,175,55,.4);font-size:.58rem;flex-shrink:0}
+.fc-note{font-size:.55rem;color:rgba(255,170,0,.7);font-style:italic;margin-top:2px}
+
+/* NO-FLAG PLACEHOLDER */
+.fc-flag-ph{width:52px;height:39px;border-radius:6px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:.55rem;color:var(--gray);text-align:center;padding:2px}
+
+/* FOOTER */
+.page-footer{text-align:center;padding:2rem 1rem;font-size:.72rem;color:var(--gray);border-top:1px solid var(--border2);margin-top:1rem}
+.page-footer a{color:var(--neon);text-decoration:none}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="hdr-logo"><img src="2026_FIFA_World_Cup_Emblem.png" alt="FIFA World Cup 2026"></div>
+    <div class="hdr-text">
+      <div class="hdr-title">FIFA WORLD CUP 2026</div>
+      <div class="hdr-sub">By: Al Amin Onik</div>
+    </div>
+    <div class="hdr-right">
+      <a href="https://onikcreation.com/" target="_blank" rel="noopener"><img src="BrandLogo.jpeg" alt="Onik Creation" class="hdr-brand-logo"></a>
+      <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> হোম</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge"><i class="fas fa-trophy"></i> HISTORY OF THE GAME</div>
+    <span class="hero-trophy">🏆</span>
+    <div class="hero-title">FIFA WORLD CUP FINALS</div>
+    <div class="hero-title-bn">বিশ্বকাপের ফাইনাল ইতিহাস</div>
+    <div class="hero-divider"></div>
+    <div class="hero-sub">১৯৩০ থেকে ২০২২ পর্যন্ত সকল বিশ্বকাপ ফাইনালের সম্পূর্ণ বিবরণ</div>
+  </div>
+
+  <!-- QUICK STATS -->
+  <div class="stats-strip">
+    <div class="stat-card">
+      <div class="stat-n">22</div>
+      <div class="stat-l">মোট ফাইনাল<br>TOTAL FINALS</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n" style="font-size:1.4rem">ব্রাজিল</div>
+      <div class="stat-l">সর্বাধিক শিরোপা (৫)<br>MOST TITLES</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n" style="font-size:1.5rem">1,73,850</div>
+      <div class="stat-l">সর্বোচ্চ দর্শক (১৯৫০)<br>RECORD ATTENDANCE</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n">1930</div>
+      <div class="stat-l">প্রথম ফাইনাল<br>FIRST FINAL</div>
+    </div>
+  </div>
+
+  <!-- CHAMPIONS LEADERBOARD -->
+  <div class="sec-title"><i class="fas fa-crown"></i> চ্যাম্পিয়ন দেশসমূহ</div>
+  <div class="champ-grid" id="champGrid"></div>
+
+  <!-- FINALS LIST -->
+  <div class="sec-title"><i class="fas fa-futbol"></i> সকল ফাইনালের বিবরণ</div>
+  <div class="sort-wrap">
+    <span class="sort-label">সাজানো:</span>
+    <button class="sort-btn on" id="sortNew" onclick="setSort('new')">নতুন → পুরনো</button>
+    <button class="sort-btn" id="sortOld" onclick="setSort('old')">পুরনো → নতুন</button>
+  </div>
+  <div class="finals-grid" id="finalsGrid"></div>
+
+</div>
+
+<footer class="page-footer">
+  ডাটা সংগ্রহ: <a href="https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals" target="_blank" rel="noopener">Wikipedia — List of FIFA World Cup finals</a>
+  &nbsp;·&nbsp; তৈরি করেছেন: <a href="https://onikcreation.com" target="_blank">Al Amin Onik</a>
+</footer>
+
+<script>
+const FINALS=[
+  {year:2022,num:22,winner:'Argentina',wc:'ar',runnerUp:'France',rc:'fr',ft:'3–3',pen:'4–2',et:true,host:'Qatar',hc:'qa',venue:'Lusail Stadium',city:'Lusail',att:'88,966'},
+  {year:2018,num:21,winner:'France',wc:'fr',runnerUp:'Croatia',rc:'hr',ft:'4–2',host:'Russia',hc:'ru',venue:'Luzhniki Stadium',city:'Moscow',att:'78,011'},
+  {year:2014,num:20,winner:'Germany',wc:'de',runnerUp:'Argentina',rc:'ar',ft:'1–0',et:true,host:'Brazil',hc:'br',venue:'Maracanã Stadium',city:'Rio de Janeiro',att:'74,738'},
+  {year:2010,num:19,winner:'Spain',wc:'es',runnerUp:'Netherlands',rc:'nl',ft:'1–0',et:true,host:'South Africa',hc:'za',venue:'Soccer City',city:'Johannesburg',att:'84,490'},
+  {year:2006,num:18,winner:'Italy',wc:'it',runnerUp:'France',rc:'fr',ft:'1–1',pen:'5–3',et:true,host:'Germany',hc:'de',venue:'Olympiastadion',city:'Berlin',att:'69,000'},
+  {year:2002,num:17,winner:'Brazil',wc:'br',runnerUp:'Germany',rc:'de',ft:'2–0',host:'Japan / S. Korea',hc:'jp',venue:'Int\'l Stadium Yokohama',city:'Yokohama',att:'69,029'},
+  {year:1998,num:16,winner:'France',wc:'fr',runnerUp:'Brazil',rc:'br',ft:'3–0',host:'France',hc:'fr',venue:'Stade de France',city:'Saint-Denis',att:'80,000',homeWin:true},
+  {year:1994,num:15,winner:'Brazil',wc:'br',runnerUp:'Italy',rc:'it',ft:'0–0',pen:'3–2',et:true,host:'USA',hc:'us',venue:'Rose Bowl',city:'Pasadena',att:'94,194'},
+  {year:1990,num:14,winner:'West Germany',wc:'de',runnerUp:'Argentina',rc:'ar',ft:'1–0',host:'Italy',hc:'it',venue:'Stadio Olimpico',city:'Rome',att:'73,603'},
+  {year:1986,num:13,winner:'Argentina',wc:'ar',runnerUp:'West Germany',rc:'de',ft:'3–2',host:'Mexico',hc:'mx',venue:'Estadio Azteca',city:'Mexico City',att:'114,600'},
+  {year:1982,num:12,winner:'Italy',wc:'it',runnerUp:'West Germany',rc:'de',ft:'3–1',host:'Spain',hc:'es',venue:'Santiago Bernabéu',city:'Madrid',att:'90,000'},
+  {year:1978,num:11,winner:'Argentina',wc:'ar',runnerUp:'Netherlands',rc:'nl',ft:'3–1',et:true,host:'Argentina',hc:'ar',venue:'Estadio Monumental',city:'Buenos Aires',att:'71,483',homeWin:true},
+  {year:1974,num:10,winner:'West Germany',wc:'de',runnerUp:'Netherlands',rc:'nl',ft:'2–1',host:'West Germany',hc:'de',venue:'Olympiastadion',city:'Munich',att:'78,200',homeWin:true},
+  {year:1970,num:9,winner:'Brazil',wc:'br',runnerUp:'Italy',rc:'it',ft:'4–1',host:'Mexico',hc:'mx',venue:'Estadio Azteca',city:'Mexico City',att:'107,412'},
+  {year:1966,num:8,winner:'England',wc:'gb',runnerUp:'West Germany',rc:'de',ft:'4–2',et:true,host:'England',hc:'gb',venue:'Wembley Stadium',city:'London',att:'96,924',homeWin:true},
+  {year:1962,num:7,winner:'Brazil',wc:'br',runnerUp:'Czechoslovakia',rc:'cz',ft:'3–1',host:'Chile',hc:'cl',venue:'Estadio Nacional',city:'Santiago',att:'68,679'},
+  {year:1958,num:6,winner:'Brazil',wc:'br',runnerUp:'Sweden',rc:'se',ft:'5–2',host:'Sweden',hc:'se',venue:'Råsunda Stadium',city:'Solna',att:'49,737'},
+  {year:1954,num:5,winner:'West Germany',wc:'de',runnerUp:'Hungary',rc:'hu',ft:'3–2',host:'Switzerland',hc:'ch',venue:'Wankdorf Stadium',city:'Bern',att:'62,500'},
+  {year:1950,num:4,winner:'Uruguay',wc:'uy',runnerUp:'Brazil',rc:'br',ft:'2–1',host:'Brazil',hc:'br',venue:'Maracanã Stadium',city:'Rio de Janeiro',att:'173,850',note:'Final round decisive match'},
+  {year:1938,num:3,winner:'Italy',wc:'it',runnerUp:'Hungary',rc:'hu',ft:'4–2',host:'France',hc:'fr',venue:'Stade Olym. de Colombes',city:'Colombes',att:'45,000'},
+  {year:1934,num:2,winner:'Italy',wc:'it',runnerUp:'Czechoslovakia',rc:'cz',ft:'2–1',et:true,host:'Italy',hc:'it',venue:'Stadio Nazionale PNF',city:'Rome',att:'55,000',homeWin:true},
+  {year:1930,num:1,winner:'Uruguay',wc:'uy',runnerUp:'Argentina',rc:'ar',ft:'4–2',host:'Uruguay',hc:'uy',venue:'Estadio Centenario',city:'Montevideo',att:'68,346',homeWin:true},
+];
+
+const CHAMPIONS=[
+  {name:'Brazil',code:'br',wins:5,ru:2,years:[1958,1962,1970,1994,2002]},
+  {name:'Germany',code:'de',wins:4,ru:4,years:[1954,1974,1990,2014],note:'incl. West Germany'},
+  {name:'Italy',code:'it',wins:4,ru:2,years:[1934,1938,1982,2006]},
+  {name:'Argentina',code:'ar',wins:3,ru:3,years:[1978,1986,2022]},
+  {name:'France',code:'fr',wins:2,ru:2,years:[1998,2018]},
+  {name:'Uruguay',code:'uy',wins:2,ru:0,years:[1930,1950]},
+  {name:'England',code:'gb',wins:1,ru:0,years:[1966]},
+  {name:'Spain',code:'es',wins:1,ru:0,years:[2010]},
+  {name:'Netherlands',code:'nl',wins:0,ru:3,years:[]},
+  {name:'Czechoslovakia',code:'cz',wins:0,ru:2,years:[]},
+  {name:'Hungary',code:'hu',wins:0,ru:2,years:[]},
+  {name:'Croatia',code:'hr',wins:0,ru:1,years:[]},
+  {name:'Sweden',code:'se',wins:0,ru:1,years:[]},
+];
+
+function flag(code,w,h){
+  return`<img src="https://flagcdn.com/${w}x${h}/${code}.png" loading="lazy" onerror="this.style.display='none'" style="display:block">`;
+}
+function flagOrPh(code,cls){
+  return`<div class="${cls}">${flag(code,80,60)}</div>`;
+}
+
+let sortDir='new';
+function setSort(dir){
+  sortDir=dir;
+  document.getElementById('sortNew').classList.toggle('on',dir==='new');
+  document.getElementById('sortOld').classList.toggle('on',dir==='old');
+  renderFinals();
+}
+
+function renderChampions(){
+  const grid=document.getElementById('champGrid');
+  const rankIcon=['r1','r2','r3'];
+  grid.innerHTML=CHAMPIONS.map((c,i)=>{
+    const rankCls=i<3?rankIcon[i]:'';
+    const rankTxt=i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`;
+    const winsHtml=c.wins>0?`<span class="medal-gold"><span class="medal-dot gold"></span>${c.wins}× চ্যাম্পিয়ন</span>`:'';
+    const ruHtml=c.ru>0?`<span class="medal-silver"><span class="medal-dot silver"></span>${c.ru}× রানার-আপ</span>`:'';
+    const yearsHtml=c.years.length?`<div class="champ-years">${c.years.join(' · ')}</div>`:'';
+    const noteHtml=c.note?`<div style="font-size:.54rem;color:rgba(255,255,255,.3);margin-top:1px">${c.note}</div>`:'';
+    return`<div class="champ-card${i<3?' top3':''}">
+      <span class="champ-rank ${rankCls}">${rankTxt}</span>
+      <img class="champ-flag" src="https://flagcdn.com/40x30/${c.code}.png" alt="${c.name}" onerror="this.style.display='none'">
+      <div class="champ-info">
+        <div class="champ-name">${c.name}</div>
+        <div class="champ-medals">${winsHtml}${ruHtml}</div>
+        ${yearsHtml}${noteHtml}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderFinals(){
+  const grid=document.getElementById('finalsGrid');
+  const list=sortDir==='new'?[...FINALS]:[...FINALS].reverse();
+  grid.innerHTML=list.map(f=>{
+    const scoreDisp=f.pen
+      ?(f.ft==='0–0'?`0–0`:f.ft)
+      :f.ft;
+    return`<div class="fc">
+      <div class="fc-hdr">
+        <span class="fc-num">FINAL · #${f.num}</span>
+        <span class="fc-year">${f.year}</span>
+        <span class="fc-host">
+          <img class="fc-host-flag" src="https://flagcdn.com/24x18/${f.hc}.png" onerror="this.style.display='none'">
+          ${f.host}
+        </span>
+      </div>
+      <div class="fc-body">
+        <div class="fc-teams">
+          <div class="fc-team winner">
+            <img class="fc-flag" src="https://flagcdn.com/80x60/${f.wc}.png" alt="${f.winner}" onerror="this.parentNode.querySelector('.fc-flag')?.remove()">
+            <div class="fc-tname">${f.winner}</div>
+            <div class="fc-champ-lbl"><i class="fas fa-trophy" style="font-size:.5rem"></i> CHAMPION</div>
+          </div>
+          <div class="fc-score-wrap">
+            <div class="fc-score">${scoreDisp}</div>
+            ${f.et?`<div class="fc-aet">a.e.t.</div>`:''}
+            ${f.pen?`<div class="fc-pen">Pen ${f.pen}</div>`:''}
+            ${f.homeWin?`<div class="fc-home-win"><i class="fas fa-house"></i> Host Win</div>`:''}
+          </div>
+          <div class="fc-team">
+            <img class="fc-flag" src="https://flagcdn.com/80x60/${f.rc}.png" alt="${f.runnerUp}" onerror="this.parentNode.querySelector('.fc-flag')?.remove()">
+            <div class="fc-tname">${f.runnerUp}</div>
+            <div style="font-size:.52rem;color:var(--gray);margin-top:1px">Runner-up</div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-footer">
+        <div class="fc-venue"><i class="fas fa-landmark"></i>${f.venue}, ${f.city}</div>
+        <div class="fc-att"><i class="fas fa-users"></i>${f.att} দর্শক</div>
+        ${f.note?`<div class="fc-note">* ${f.note}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+renderChampions();
+renderFinals();
+</script>
+</body>
+</html>
