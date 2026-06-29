@@ -23,13 +23,18 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:"Google Sans","Hind Siliguri",sans-serif;min-height:100vh}
 body::before{content:'';position:fixed;inset:0;
-  background:radial-gradient(ellipse 70% 55% at -5% -5%,rgba(139,21,56,.14) 0%,transparent 55%),
-    radial-gradient(ellipse 50% 40% at 105% 105%,rgba(212,175,55,.05) 0%,transparent 55%),
-    radial-gradient(ellipse 35% 30% at 50% 50%,rgba(139,21,56,.06) 0%,transparent 65%);
+  background:radial-gradient(ellipse 70% 55% at -5% -5%,rgba(139,21,56,.22) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 40% at 105% 105%,rgba(212,175,55,.09) 0%,transparent 55%),
+    radial-gradient(ellipse 35% 30% at 50% 50%,rgba(139,21,56,.1) 0%,transparent 65%);
   pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;inset:0;
-  background-image:radial-gradient(circle,rgba(212,175,55,.04) 1px,transparent 1px);
+  background-image:radial-gradient(circle,rgba(212,175,55,.06) 1px,transparent 1px);
   background-size:32px 32px;pointer-events:none;z-index:0}
+/* Stadium themes */
+body.stadium-theme{background:linear-gradient(135deg,#08111e,#0d1b3e)}
+body.stadium-theme::before{background-image:url('https://images.unsplash.com/photo-1629217855633-79a6925d6c47?w=1920&q=80')!important;background-size:cover!important;background-position:center!important;opacity:.15!important}
+body.stadium-light-theme{background:linear-gradient(135deg,#041020,#071535)}
+body.stadium-light-theme::before{background-image:url('https://images.unsplash.com/photo-1629217855633-79a6925d6c47?w=1920&q=80')!important;background-size:cover!important;background-position:center!important;opacity:.22!important}
 
 /* HEADER */
 .hdr{position:relative;z-index:50;background:rgba(10,10,10,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(212,175,55,0.15);padding:0 1rem}
@@ -69,26 +74,28 @@ body::after{content:'';position:fixed;inset:0;
 .sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--maroon),var(--neon),transparent)}
 
 /* CHAMPIONS LEADERBOARD */
-.champ-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.7rem;margin-bottom:2.5rem}
-.champ-card{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:.9rem 1rem;display:flex;align-items:center;gap:.8rem;transition:all .2s;position:relative;overflow:hidden}
-.champ-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gradient-primary)}
-.champ-card:hover{border-color:rgba(212,175,55,.3);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.5)}
-.champ-card.top3{border-color:rgba(212,175,55,.25);background:rgba(20,20,20,.98)}
-.champ-rank{font-family:"Google Sans",sans-serif;font-size:.75rem;color:var(--gray);min-width:18px;text-align:center;flex-shrink:0}
-.champ-rank.r1{color:#FFD700;font-weight:700;font-size:.9rem}
-.champ-rank.r2{color:#C0C0C0;font-weight:700}
-.champ-rank.r3{color:#CD7F32;font-weight:700}
-.champ-flag{width:36px;height:27px;object-fit:cover;border-radius:4px;flex-shrink:0;border:1px solid rgba(255,255,255,.1)}
+.champ-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin-bottom:2.5rem}
+@media(max-width:700px){.champ-grid{grid-template-columns:1fr}}
+.champ-card{background:var(--card);border:1px solid rgba(212,175,55,.15);border-radius:14px;padding:1rem 1.1rem 1rem 1.3rem;display:flex;align-items:flex-start;gap:.9rem;transition:all .22s;position:relative;overflow:hidden}
+.champ-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gradient-primary)}
+.champ-card:hover{border-color:rgba(212,175,55,.38);box-shadow:0 6px 26px rgba(0,0,0,.65);transform:translateY(-2px)}
+.champ-card.rank-1{border-color:rgba(255,215,0,.3);background:linear-gradient(120deg,rgba(255,215,0,.06) 0%,rgba(20,20,20,.98) 55%)}
+.champ-card.rank-2{border-color:rgba(192,192,192,.22)}
+.champ-card.rank-3{border-color:rgba(205,127,50,.22)}
+.champ-medal-icon{font-size:1.6rem;line-height:1;flex-shrink:0;width:32px;text-align:center;margin-top:2px}
+.champ-flag-lg{width:54px;height:40px;object-fit:cover;border-radius:7px;flex-shrink:0;border:2px solid rgba(255,255,255,.12)}
+.champ-card.rank-1 .champ-flag-lg{border-color:rgba(255,215,0,.45);box-shadow:0 0 14px rgba(255,215,0,.25)}
+.champ-card.rank-2 .champ-flag-lg{border-color:rgba(192,192,192,.35)}
+.champ-card.rank-3 .champ-flag-lg{border-color:rgba(205,127,50,.35)}
 .champ-info{flex:1;min-width:0}
-.champ-name{font-size:.82rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.champ-medals{display:flex;align-items:center;gap:.4rem;margin-top:3px}
-.medal-gold{display:inline-flex;align-items:center;gap:.2rem;font-size:.65rem;color:#FFD700;font-family:"Google Sans",sans-serif}
-.medal-silver{display:inline-flex;align-items:center;gap:.2rem;font-size:.65rem;color:#C0C0C0;font-family:"Google Sans",sans-serif}
-.medal-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.medal-dot.gold{background:#FFD700;box-shadow:0 0 6px rgba(255,215,0,.5)}
-.medal-dot.silver{background:#C0C0C0}
-.champ-total{font-size:.62rem;color:var(--gray);margin-left:auto;flex-shrink:0}
-.champ-years{font-size:.58rem;color:rgba(212,175,55,.6);margin-top:2px}
+.champ-name-lg{font-family:"Google Sans",sans-serif;font-size:.92rem;font-weight:700;letter-spacing:.3px;color:#fff}
+.champ-note{font-size:.55rem;color:rgba(255,255,255,.3);margin-left:.4rem}
+.champ-wins-row{display:flex;align-items:baseline;gap:.4rem;margin:.25rem 0 .5rem}
+.champ-wins-num{font-family:"Google Sans",sans-serif;font-size:2rem;color:#FFD700;line-height:1;text-shadow:0 0 18px rgba(255,215,0,.45)}
+.champ-wins-lbl{font-family:"Google Sans",sans-serif;font-size:.58rem;letter-spacing:1.5px;color:rgba(255,215,0,.65);text-transform:uppercase}
+.champ-year-pills{display:flex;flex-wrap:wrap;gap:.28rem;margin-bottom:.45rem}
+.champ-year-pill{font-family:"Google Sans",sans-serif;font-size:.68rem;font-weight:700;color:#1a0a00;background:linear-gradient(135deg,#FFD700 0%,#D4AF37 100%);border-radius:20px;padding:.18rem .58rem;box-shadow:0 2px 6px rgba(255,215,0,.3)}
+.champ-ru-badge{display:inline-flex;align-items:center;gap:.28rem;font-size:.63rem;color:rgba(192,192,192,.75);background:rgba(192,192,192,.07);border:1px solid rgba(192,192,192,.18);border-radius:12px;padding:.15rem .58rem}
 
 /* SORT TOGGLE */
 .sort-wrap{display:flex;align-items:center;justify-content:flex-end;margin-bottom:.8rem;gap:.5rem}
@@ -207,6 +214,33 @@ body::after{content:'';position:fixed;inset:0;
 </footer>
 
 <script>
+// Apply saved theme from main site
+(function(){
+  try{
+    const s=JSON.parse(localStorage.getItem('siteSettings')||'{}');
+    if(s.colors){
+      const r=document.documentElement.style;
+      const isStadium=s.colors.bg==='#0a1628';
+      document.body.classList.toggle('stadium-theme',isStadium);
+      if(isStadium){
+        r.setProperty('--bg2','#0d1b3e');r.setProperty('--bg3','#112244');
+        r.setProperty('--card','rgba(10,20,50,0.85)');
+        r.setProperty('--border','rgba(212,175,55,0.3)');r.setProperty('--border2','rgba(212,175,55,0.12)');
+        r.setProperty('--gray','rgba(255,255,255,0.5)');
+      }
+      const isStadiumLight=s.colors.bg==='#daeaf5';
+      document.body.classList.toggle('stadium-light-theme',isStadiumLight);
+      if(isStadiumLight){
+        r.setProperty('--bg2','#071535');r.setProperty('--bg3','#0a1c3e');
+        r.setProperty('--card','rgba(8,18,45,0.5)');r.setProperty('--neon','#A1F000');
+        r.setProperty('--border','rgba(255,255,255,0.14)');r.setProperty('--border2','rgba(255,255,255,0.08)');
+        r.setProperty('--gray','rgba(255,255,255,0.5)');
+      }
+    }
+    document.body.classList.toggle('flat-cards',s.cardGradient===false);
+  }catch(e){}
+})();
+
 const FINALS=[
   {year:2022,num:22,winner:'Argentina',wc:'ar',runnerUp:'France',rc:'fr',ft:'3–3',pen:'4–2',et:true,host:'Qatar',hc:'qa',venue:'Lusail Stadium',city:'Lusail',att:'88,966'},
   {year:2018,num:21,winner:'France',wc:'fr',runnerUp:'Croatia',rc:'hr',ft:'4–2',host:'Russia',hc:'ru',venue:'Luzhniki Stadium',city:'Moscow',att:'78,011'},
@@ -241,11 +275,6 @@ const CHAMPIONS=[
   {name:'Uruguay',code:'uy',wins:2,ru:0,years:[1930,1950]},
   {name:'England',code:'gb',wins:1,ru:0,years:[1966]},
   {name:'Spain',code:'es',wins:1,ru:0,years:[2010]},
-  {name:'Netherlands',code:'nl',wins:0,ru:3,years:[]},
-  {name:'Czechoslovakia',code:'cz',wins:0,ru:2,years:[]},
-  {name:'Hungary',code:'hu',wins:0,ru:2,years:[]},
-  {name:'Croatia',code:'hr',wins:0,ru:1,years:[]},
-  {name:'Sweden',code:'se',wins:0,ru:1,years:[]},
 ];
 
 function flag(code,w,h){
@@ -265,21 +294,23 @@ function setSort(dir){
 
 function renderChampions(){
   const grid=document.getElementById('champGrid');
-  const rankIcon=['r1','r2','r3'];
+  const medals=['🥇','🥈','🥉'];
   grid.innerHTML=CHAMPIONS.map((c,i)=>{
-    const rankCls=i<3?rankIcon[i]:'';
-    const rankTxt=i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`;
-    const winsHtml=c.wins>0?`<span class="medal-gold"><span class="medal-dot gold"></span>${c.wins}× চ্যাম্পিয়ন</span>`:'';
-    const ruHtml=c.ru>0?`<span class="medal-silver"><span class="medal-dot silver"></span>${c.ru}× রানার-আপ</span>`:'';
-    const yearsHtml=c.years.length?`<div class="champ-years">${c.years.join(' · ')}</div>`:'';
-    const noteHtml=c.note?`<div style="font-size:.54rem;color:rgba(255,255,255,.3);margin-top:1px">${c.note}</div>`:'';
-    return`<div class="champ-card${i<3?' top3':''}">
-      <span class="champ-rank ${rankCls}">${rankTxt}</span>
-      <img class="champ-flag" src="https://flagcdn.com/40x30/${c.code}.png" alt="${c.name}" onerror="this.style.display='none'">
+    const medal=medals[i]||`#${i+1}`;
+    const yearPills=c.years.map(y=>`<span class="champ-year-pill"><i class="fas fa-trophy" style="font-size:.48rem;margin-right:2px"></i>${y}</span>`).join('');
+    const ruHtml=c.ru>0?`<div><span class="champ-ru-badge"><i class="fas fa-medal" style="font-size:.55rem;color:rgba(192,192,192,.55)"></i> ${c.ru}× রানার-আপ</span></div>`:'';
+    const noteHtml=c.note?`<span class="champ-note">(${c.note})</span>`:'';
+    return`<div class="champ-card rank-${i+1}">
+      <div class="champ-medal-icon">${medal}</div>
+      <img class="champ-flag-lg" src="https://flagcdn.com/64x48/${c.code}.png" alt="${c.name}" loading="lazy" onerror="this.style.opacity='.3'">
       <div class="champ-info">
-        <div class="champ-name">${c.name}</div>
-        <div class="champ-medals">${winsHtml}${ruHtml}</div>
-        ${yearsHtml}${noteHtml}
+        <div class="champ-name-lg">${c.name}${noteHtml}</div>
+        <div class="champ-wins-row">
+          <div class="champ-wins-num">${c.wins}</div>
+          <div class="champ-wins-lbl">× চ্যাম্পিয়ন</div>
+        </div>
+        <div class="champ-year-pills">${yearPills}</div>
+        ${ruHtml}
       </div>
     </div>`;
   }).join('');
